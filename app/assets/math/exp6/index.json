@@ -1,0 +1,226 @@
+{
+  "generated": "2026-10-30T11:35:29.644Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "bell_state": {
+      "file": "bell_state.svg",
+      "width": 537.17,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Phi^{+}} = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\right)",
+      "hash": "fc23ba54e8801e37",
+      "png": "bell_state.png"
+    },
+    "bell_as_list": {
+      "file": "bell_as_list.svg",
+      "width": 734.03,
+      "height": 39.07,
+      "baseline": 11.12,
+      "tex": "\\ket{\\V}_1\\ket{\\V}_2 \\;=\\; \\text{``photon 1 is } \\updownarrow \\text{ and photon 2 is } \\updownarrow\\text{''}",
+      "hash": "521a854faf44bf5e",
+      "png": "bell_as_list.png"
+    },
+    "psi_after_slits": {
+      "file": "psi_after_slits.svg",
+      "width": 625.41,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\left(\\ket{A}\\ket{\\V}_1\\ket{\\V}_2 + \\ket{B}\\ket{\\H}_1\\ket{\\H}_2\\right)",
+      "hash": "085207f79d57bab2",
+      "png": "psi_after_slits.png"
+    },
+    "p1_projection": {
+      "file": "p1_projection.svg",
+      "width": 424.91,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\braket{\\diag}{\\V} = \\braket{\\diag}{\\H} = \\frac{1}{\\sqrt{2}}",
+      "hash": "57f732f0164b2254",
+      "png": "p1_projection.png"
+    },
+    "psi_after_p1": {
+      "file": "psi_after_p1.svg",
+      "width": 839.41,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi} = \\frac{1}{2\\sqrt{2}}\\left(e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2\\right)\\ket{y}_1\\ket{D}_2",
+      "hash": "7ac5e7fb41c99fca",
+      "png": "psi_after_p1.png"
+    },
+    "idler_hv_in_diagonal": {
+      "file": "idler_hv_in_diagonal.svg",
+      "width": 1019.07,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\V}_2 = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\diag}_2 + \\ket{\\antidiag}_2\\right), \\qquad \\ket{\\H}_2 = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\diag}_2 - \\ket{\\antidiag}_2\\right)",
+      "hash": "0fb34b1e0e4bec6b",
+      "png": "idler_hv_in_diagonal.png"
+    },
+    "psi_diagonal_rewrite": {
+      "file": "psi_diagonal_rewrite.svg",
+      "width": 1022.98,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\ket{\\psi} = \\frac{1}{4}\\left[\\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag}_2 + \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag}_2\\right]\\ket{\\diag}_1\\ket{y}_1\\ket{D}_2",
+      "hash": "41d76faf872860ce",
+      "png": "psi_diagonal_rewrite.png"
+    },
+    "p2_state": {
+      "file": "p2_state.svg",
+      "width": 442.67,
+      "height": 39.07,
+      "baseline": 11.12,
+      "tex": "\\ket{\\gamma}_2 = \\cos\\gamma\\,\\ket{\\V}_2 + \\sin\\gamma\\,\\ket{\\H}_2",
+      "hash": "238767b10a0050bc",
+      "png": "p2_state.png"
+    },
+    "coincidence_amplitude": {
+      "file": "coincidence_amplitude.svg",
+      "width": 727.95,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "A(y,\\gamma) = \\braket{\\gamma}{\\psi}_2 = \\frac{1}{2\\sqrt{2}}\\left(e^{ika}\\cos\\gamma + e^{ikb}\\sin\\gamma\\right)",
+      "hash": "adca8f0d392ad2a1",
+      "png": "coincidence_amplitude.png"
+    },
+    "coincidence_law_derivation": {
+      "file": "coincidence_law_derivation.svg",
+      "width": 801.57,
+      "height": 165.63,
+      "baseline": 73.76,
+      "tex": "\\begin{aligned} |A|^{2} &= \\tfrac{1}{8}\\left|e^{ika}\\cos\\gamma + e^{ikb}\\sin\\gamma\\right|^{2}\\\\ &= \\tfrac{1}{8}\\left[\\cos^{2}\\gamma + \\sin^{2}\\gamma + 2\\sin\\gamma\\cos\\gamma\\,\\cos\\kD\\right]\\\\ &= \\tfrac{1}{8}\\left[1 + \\sin(2\\gamma)\\cos\\kD\\right] \\end{aligned}",
+      "hash": "565b1073a7796daa",
+      "png": "coincidence_law_derivation.png"
+    },
+    "double_angle": {
+      "file": "double_angle.svg",
+      "width": 708.06,
+      "height": 41.04,
+      "baseline": 9.06,
+      "tex": "\\cos^{2}\\gamma + \\sin^{2}\\gamma = 1, \\qquad 2\\sin\\gamma\\cos\\gamma = \\sin(2\\gamma)",
+      "hash": "1fd6536bd03592ef",
+      "png": "double_angle.png"
+    },
+    "coincidence_law": {
+      "file": "coincidence_law.svg",
+      "width": 493.63,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "I(\\gamma) \\propto 1 + \\sin(2\\gamma)\\,\\cos\\!\\left[\\kD\\right]",
+      "hash": "373ca273304733da",
+      "png": "coincidence_law.png"
+    },
+    "p2_0": {
+      "file": "p2_0.svg",
+      "width": 900.42,
+      "height": 39.07,
+      "baseline": 11.12,
+      "tex": "P_2 = 0^{\\circ}:\\qquad \\ket{\\V}_2 \\text{ (slit A only)},\\quad \\sin 2\\gamma = 0 \\quad\\Rightarrow\\quad I \\propto 1",
+      "hash": "ec1c72733381d787",
+      "png": "p2_0.png"
+    },
+    "p2_90": {
+      "file": "p2_90.svg",
+      "width": 935.09,
+      "height": 37.47,
+      "baseline": 10.34,
+      "tex": "P_2 = 90^{\\circ}:\\qquad \\ket{\\H}_2 \\text{ (slit B only)},\\quad \\sin 2\\gamma = 0 \\quad\\Rightarrow\\quad I \\propto 1",
+      "hash": "de732fc44112642a",
+      "png": "p2_90.png"
+    },
+    "p2_45": {
+      "file": "p2_45.svg",
+      "width": 1202.69,
+      "height": 37.47,
+      "baseline": 10.34,
+      "tex": "P_2 = 45^{\\circ}:\\qquad \\ket{\\diag}_2 \\text{ (both slits)},\\quad \\sin 2\\gamma = +1 \\quad\\Rightarrow\\quad I \\propto 1 + \\cos\\kD",
+      "hash": "d20c8d3512cb9fce",
+      "png": "p2_45.png"
+    },
+    "p2_m45": {
+      "file": "p2_m45.svg",
+      "width": 1230.85,
+      "height": 37.47,
+      "baseline": 10.34,
+      "tex": "P_2 = -45^{\\circ}:\\qquad \\ket{\\antidiag}_2 \\text{ (both slits)},\\quad \\sin 2\\gamma = -1 \\quad\\Rightarrow\\quad I \\propto 1 - \\cos\\kD",
+      "hash": "826cda3d70f89bc1",
+      "png": "p2_m45.png"
+    },
+    "complementary_sum": {
+      "file": "complementary_sum.svg",
+      "width": 636.42,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\left[1 + \\cos\\kD\\right] + \\left[1 - \\cos\\kD\\right] = 2",
+      "hash": "832c865f59e38cf0",
+      "png": "complementary_sum.png"
+    },
+    "complementary_sum_hv": {
+      "file": "complementary_sum_hv.svg",
+      "width": 311.78,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\left[1 + 0\\right] + \\left[1 + 0\\right] = 2",
+      "hash": "cccad556d34bf6ad",
+      "png": "complementary_sum_hv.png"
+    },
+    "singles_average": {
+      "file": "singles_average.svg",
+      "width": 294.38,
+      "height": 89.44,
+      "baseline": 33.01,
+      "tex": "\\int_{0}^{2\\pi} \\sin(2\\gamma)\\, d\\gamma = 0",
+      "hash": "29e0e95d979e38d0",
+      "png": "singles_average.png"
+    },
+    "singles_trace": {
+      "file": "singles_trace.svg",
+      "width": 743.86,
+      "height": 89.44,
+      "baseline": 33.01,
+      "tex": "I_{1}(y) \\propto \\frac{1}{2\\pi}\\int_{0}^{2\\pi}\\left[1 + \\sin(2\\gamma)\\cos\\kD\\right] d\\gamma = 1",
+      "hash": "da6c0fba25647204",
+      "png": "singles_trace.png"
+    },
+    "singles_as_sum": {
+      "file": "singles_as_sum.svg",
+      "width": 686.85,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "I_{1} = I(45^{\\circ}) + I(-45^{\\circ}) = I(0^{\\circ}) + I(90^{\\circ}) \\propto 2",
+      "hash": "cc92a35f0d4231ea",
+      "png": "singles_as_sum.png"
+    },
+    "fringe_period": {
+      "file": "fringe_period.svg",
+      "width": 1101.84,
+      "height": 82.64,
+      "baseline": 32.66,
+      "tex": "k(a-b) \\approx \\frac{2\\pi\\, d\\, y}{\\lambda f}, \\qquad \\text{fringe period } \\frac{\\lambda f}{d} = \\frac{810\\,\\text{nm}\\times 500\\,\\text{mm}}{400\\,\\mu\\text{m}} \\approx 1\\,\\text{mm}",
+      "hash": "b3cec24b2f6b555c",
+      "png": "fringe_period.png"
+    },
+    "visibility_p2": {
+      "file": "visibility_p2.svg",
+      "width": 788.74,
+      "height": 36.16,
+      "baseline": 9.02,
+      "tex": "V = \\left|\\sin 2\\gamma\\right|, \\qquad \\gamma = 22.5^{\\circ} \\;\\Rightarrow\\; V = \\sin 45^{\\circ} \\approx 0.71",
+      "hash": "4e3b6df4e62f48e2",
+      "png": "visibility_p2.png"
+    },
+    "eraser_general": {
+      "file": "eraser_general.svg",
+      "width": 1123.63,
+      "height": 44.48,
+      "baseline": 12.5,
+      "tex": "I(\\varphi_1,\\gamma) \\propto \\cos^{2}\\varphi_1\\cos^{2}\\gamma + \\sin^{2}\\varphi_1\\sin^{2}\\gamma + \\tfrac{1}{2}\\sin(2\\varphi_1)\\sin(2\\gamma)\\cos\\kD",
+      "hash": "ac72f760496a79ad",
+      "png": "eraser_general.png"
+    }
+  }
+}

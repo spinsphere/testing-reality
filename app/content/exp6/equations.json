@@ -1,0 +1,32 @@
+{
+  "$comment": "Experiment 6 (delayed-choice quantum eraser) equations E1-E5 transcribed from docs/content/07-experiment-6-delayed-choice-eraser.md: bell_state (E1), psi_after_p1 (E2), idler_hv_in_diagonal (E3), coincidence_law (E4), singles_average (E5); the four rows of the P2 table (p2_0, p2_90, p2_45, p2_m45); and helper equations for the maths check-ins and the lab hand-off (bell_as_list, psi_after_slits, p1_projection, psi_diagonal_rewrite, p2_state, coincidence_amplitude, coincidence_law_derivation, double_angle, complementary_sum, complementary_sum_hv, singles_trace, singles_as_sum, fringe_period, visibility_p2, eraser_general). Rendered by tools/mathgen into app/assets/math/exp6/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "kD": "k(a-b)"
+  },
+  "equations": {
+    "bell_state": "\\ket{\\Phi^{+}} = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\right)",
+    "bell_as_list": "\\ket{\\V}_1\\ket{\\V}_2 \\;=\\; \\text{``photon 1 is } \\updownarrow \\text{ and photon 2 is } \\updownarrow\\text{''}",
+    "psi_after_slits": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\left(\\ket{A}\\ket{\\V}_1\\ket{\\V}_2 + \\ket{B}\\ket{\\H}_1\\ket{\\H}_2\\right)",
+    "p1_projection": "\\braket{\\diag}{\\V} = \\braket{\\diag}{\\H} = \\frac{1}{\\sqrt{2}}",
+    "psi_after_p1": "\\ket{\\psi} = \\frac{1}{2\\sqrt{2}}\\left(e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2\\right)\\ket{y}_1\\ket{D}_2",
+    "idler_hv_in_diagonal": "\\ket{\\V}_2 = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\diag}_2 + \\ket{\\antidiag}_2\\right), \\qquad \\ket{\\H}_2 = \\frac{1}{\\sqrt{2}}\\left(\\ket{\\diag}_2 - \\ket{\\antidiag}_2\\right)",
+    "psi_diagonal_rewrite": "\\ket{\\psi} = \\frac{1}{4}\\left[\\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag}_2 + \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag}_2\\right]\\ket{\\diag}_1\\ket{y}_1\\ket{D}_2",
+    "p2_state": "\\ket{\\gamma}_2 = \\cos\\gamma\\,\\ket{\\V}_2 + \\sin\\gamma\\,\\ket{\\H}_2",
+    "coincidence_amplitude": "A(y,\\gamma) = \\braket{\\gamma}{\\psi}_2 = \\frac{1}{2\\sqrt{2}}\\left(e^{ika}\\cos\\gamma + e^{ikb}\\sin\\gamma\\right)",
+    "coincidence_law_derivation": "\\begin{aligned} |A|^{2} &= \\tfrac{1}{8}\\left|e^{ika}\\cos\\gamma + e^{ikb}\\sin\\gamma\\right|^{2}\\\\ &= \\tfrac{1}{8}\\left[\\cos^{2}\\gamma + \\sin^{2}\\gamma + 2\\sin\\gamma\\cos\\gamma\\,\\cos\\kD\\right]\\\\ &= \\tfrac{1}{8}\\left[1 + \\sin(2\\gamma)\\cos\\kD\\right] \\end{aligned}",
+    "double_angle": "\\cos^{2}\\gamma + \\sin^{2}\\gamma = 1, \\qquad 2\\sin\\gamma\\cos\\gamma = \\sin(2\\gamma)",
+    "coincidence_law": "I(\\gamma) \\propto 1 + \\sin(2\\gamma)\\,\\cos\\!\\left[\\kD\\right]",
+    "p2_0": "P_2 = 0^{\\circ}:\\qquad \\ket{\\V}_2 \\text{ (slit A only)},\\quad \\sin 2\\gamma = 0 \\quad\\Rightarrow\\quad I \\propto 1",
+    "p2_90": "P_2 = 90^{\\circ}:\\qquad \\ket{\\H}_2 \\text{ (slit B only)},\\quad \\sin 2\\gamma = 0 \\quad\\Rightarrow\\quad I \\propto 1",
+    "p2_45": "P_2 = 45^{\\circ}:\\qquad \\ket{\\diag}_2 \\text{ (both slits)},\\quad \\sin 2\\gamma = +1 \\quad\\Rightarrow\\quad I \\propto 1 + \\cos\\kD",
+    "p2_m45": "P_2 = -45^{\\circ}:\\qquad \\ket{\\antidiag}_2 \\text{ (both slits)},\\quad \\sin 2\\gamma = -1 \\quad\\Rightarrow\\quad I \\propto 1 - \\cos\\kD",
+    "complementary_sum": "\\left[1 + \\cos\\kD\\right] + \\left[1 - \\cos\\kD\\right] = 2",
+    "complementary_sum_hv": "\\left[1 + 0\\right] + \\left[1 + 0\\right] = 2",
+    "singles_average": "\\int_{0}^{2\\pi} \\sin(2\\gamma)\\, d\\gamma = 0",
+    "singles_trace": "I_{1}(y) \\propto \\frac{1}{2\\pi}\\int_{0}^{2\\pi}\\left[1 + \\sin(2\\gamma)\\cos\\kD\\right] d\\gamma = 1",
+    "singles_as_sum": "I_{1} = I(45^{\\circ}) + I(-45^{\\circ}) = I(0^{\\circ}) + I(90^{\\circ}) \\propto 2",
+    "fringe_period": "k(a-b) \\approx \\frac{2\\pi\\, d\\, y}{\\lambda f}, \\qquad \\text{fringe period } \\frac{\\lambda f}{d} = \\frac{810\\,\\text{nm}\\times 500\\,\\text{mm}}{400\\,\\mu\\text{m}} \\approx 1\\,\\text{mm}",
+    "visibility_p2": "V = \\left|\\sin 2\\gamma\\right|, \\qquad \\gamma = 22.5^{\\circ} \\;\\Rightarrow\\; V = \\sin 45^{\\circ} \\approx 0.71",
+    "eraser_general": "I(\\varphi_1,\\gamma) \\propto \\cos^{2}\\varphi_1\\cos^{2}\\gamma + \\sin^{2}\\varphi_1\\sin^{2}\\gamma + \\tfrac{1}{2}\\sin(2\\varphi_1)\\sin(2\\gamma)\\cos\\kD"
+  }
+}

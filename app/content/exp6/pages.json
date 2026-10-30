@@ -1,0 +1,729 @@
+{
+  "$comment": "Experiment 6: Delayed-choice quantum eraser. Transcribed from docs/content/07-experiment-6-delayed-choice-eraser.md following docs/design/content-authoring.md. Angle convention of this page of the site: 0° = vertical |↕⟩, 90° = horizontal |↔⟩ (P_A = 0° on slit A, P_B = 90° on slit B); the 3D lab measures its dials from horizontal, so there PA reads 90° and PB 0° — slit A ↔ |↕⟩ and slit B ↔ |↔⟩ in both.",
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "Delayed choice quantum eraser",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This experiment is the delayed-choice quantum eraser."
+            },
+            {
+              "type": "text",
+              "text": "The experiment was first performed in 1998 and repeated in Brazil in 2008 with a slightly different setup (see the Literature section), more similar to ours. On one path, a double slit produces interference for non-entangled photons. With entangled photons, detector D1 alone [b]never shows interference[/b], even though the photons pass through the double slit. In the simulator on the next page this is the singles curve."
+            },
+            {
+              "type": "text",
+              "text": "However, when we examine [b]coincidences[/b] between D1 and D2, the results depend on the polarizer angles. By rotating the idler polarizer P2, we can make interference fringes appear or disappear in the coincidence data. This is the coincidence curve in the simulator."
+            },
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "Can a choice made now change a pattern recorded earlier?",
+              "text": "The idler polarizer P2 can be set [i]after[/i] the signal photon has already been detected at D1. Yet its angle decides whether the coincidence record shows fringes or not. At first glance, it may appear that a measurement made in the present can alter one made in the past. Hold on to this question: the answer is in the Theory section, and it is less spooky, and more interesting, than it sounds."
+            },
+            {
+              "type": "text",
+              "text": "The key insight is that the [b]which-path information is encoded in the idler photon[/b]. Measuring the idler at 0° or 90° preserves this information, yielding no interference. Measuring at ±45° erases the information, and interference reappears in the coincidences."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Angles on this page",
+              "text": "On this page of the site, polarizer angles are measured from the vertical: 0° is |↕⟩ and 90° is |↔⟩. The slit polarizers are P_A = 0° on slit A and P_B = 90° on slit B. The 3D lab measures its dials from the horizontal instead, so there you will read PA = 90° and PB = 0°. In both cases slit A is tagged |↕⟩ and slit B is tagged |↔⟩, and that is all that matters."
+            }
+          ]
+        },
+        {
+          "title": "Try it yourself!",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Use the simulator to explore the experiment. It is the Experiment 3 eraser with an [b]entangled[/b] source: the signal photon goes through the marked double slit and the eraser P1, the idler photon goes through P2. The lower curve is what D1 sees on its own (the singles); the upper curve is what the coincidence counter sees (D1 clicks that have a partner click at D2)."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/eraser_widget.tscn",
+              "params": {
+                "p1_angle": 45,
+                "entangled": true,
+                "p2_angle": 45
+              },
+              "height": 400
+            },
+            {
+              "type": "text",
+              "text": "Things to try: leave P1 at 45° and turn P2. At 45° the coincidences show fringes; at −45° the fringes flip (maxima become minima); at 0° and 90° they vanish into a single bump. Now watch the singles curve while you do this. It never moves. Whatever you do to the idler, D1 alone sees the same smooth diffraction envelope."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "Our setup",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Curious about what an entanglement optical setup looks like? Here are photos of our apparatus."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/optical_table.png",
+              "height": 340,
+              "caption": "The optical bench seen from above. The solid purple line is the 405 nm pump, folded by two mirrors into the BBO crystal. The two dashed lines are the down-converted pair: the signal (upper) goes through the double slit and P1 to the scanning detector D1; the idler (lower) goes through P2 to the stationary detector D2. The red boxes at the back are the single-photon detection modules."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/double_slit.png",
+              "height": 320,
+              "caption": "The double slit, made in-house, with the two slit polarizers P_A and P_B glued over the slits (close-up on the right). The two polarizer films are perpendicular, so each slit tags its photons with a different polarization."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/detectors.png",
+              "height": 340,
+              "caption": "The D1 detection head. From the beam side: the adjustable single slit (200 μm), a long-pass filter that rejects the pump, the fibre collimator (orange fibre to the detector module). The whole head rides on a motorised linear actuator that scans it across the pattern. The rotation motor is not used in this experiment."
+            }
+          ]
+        },
+        {
+          "title": "Technical set-up and equipment",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The image below shows a schematic of the apparatus. All components are shown, but not to scale."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/exp6_MontageT.png",
+              "height": 330,
+              "caption": "Full schematic. Pump preparation (solid red): LASER → λ/2 → BS (with beam dump) → L1 = 10 cm → L2 = 2.5 cm → mirror → L3 = 25 cm → mirror → λ/2 → Berek compensator → BBO. Signal (upper dashed): double slit with PA/PB → L4 = 50 cm → P1 → single slit → D1 on a translation stage. Idler (lower dashed): L5 = 50 cm → P2 → D2."
+            },
+            {
+              "type": "text",
+              "text": "The BBO crystal produces photon pairs in the Bell state:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_state"
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Reading a two-photon ket",
+              "text": "As in Experiment 4, two kets side by side are an \"and\" list, exactly like the |pol⟩|path⟩ lists of Experiment 3, but now the two entries belong to two different photons. The subscript says which photon: 1 is the signal, 2 is the idler. The Bell state is a superposition of two such lists, \"both vertical\" and \"both horizontal\", with nothing in between: whatever polarization one photon turns out to have, its partner has the same."
+            },
+            {
+              "type": "equation",
+              "id": "bell_as_list"
+            },
+            {
+              "type": "text",
+              "text": "[b]Signal path (path 1):[/b] A double slit (b = 200 μm slit width, d = 400 μm separation) with polarizers P_A = 0° and P_B = 90° covering each slit. A 500 mm focal length lens is placed midway between the slits and detector (500 mm from each). A third polarizer P1 at 45° acts as the eraser. Detector D1 is mounted on a linear actuator with a 200 μm slit in front."
+            },
+            {
+              "type": "text",
+              "text": "[b]Idler path (path 2):[/b] A 500 mm lens (500 mm from the detector) and a rotatable polarizer P2."
+            },
+            {
+              "type": "text",
+              "text": "[b]Detection system:[/b] Single-photon detectors coupled to optical fibers. Each fiber input requires a collimator and bandpass filter. The detectors count photons over a fixed integration time. We scan D1 across the beam to reconstruct the spatial pattern. D2 remains stationary since the idler beam has no spatial structure."
+            },
+            {
+              "type": "table",
+              "header": [
+                "Name",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "LASER",
+                  "Diode laser (405 nm)"
+                ],
+                [
+                  "BBO",
+                  "Two thin BBO crystals of type 1 placed at 90°"
+                ],
+                [
+                  "Double slit",
+                  "Dimension (200-200-200 μm), made in-house"
+                ],
+                [
+                  "Polarizers",
+                  "Mounted linear polarizers"
+                ],
+                [
+                  "Lenses",
+                  "Plano-convex lenses, L4 and L5 have f = 50 cm"
+                ],
+                [
+                  "Single slit",
+                  "Adjustable slit (placed near 200 μm)"
+                ],
+                [
+                  "Detectors",
+                  "Single photon detection module"
+                ]
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "The components placed before the BBO (the beam preparation optics) are listed and explained in Experiment 4. The down-converted photons are at 810 nm, twice the pump wavelength; the long-pass filter in front of each detector removes any stray 405 nm light."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "We recorded one data file for each P2 configuration: 45°, −45°, 0° and 90°. To reconstruct each pattern, we scanned the actuator across the beam. At each position, we recorded multiple samples to compute an average and standard deviation. We performed several sweeps to further reduce noise. Each file contains 7 columns:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Polarizer angle 1 (fixed in this experiment)",
+                "Polarizer angle 2 (fixed in this experiment)",
+                "Actuator position (μm)",
+                "Sweep number",
+                "Counts at D1 (signal path)",
+                "Counts at D2 (idler path)",
+                "Coincidences between D1 and D2"
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Post-selection: sorting the D1 clicks by what the partner did",
+              "text": "The last column is the whole trick of this experiment, so let us be precise about what it holds. D1 clicks whenever a signal photon arrives: that is the fifth column, the [b]singles[/b]. The coincidence counter looks at each D1 click and asks one question: did D2 click within a few nanoseconds of it? If yes, the click is copied into the seventh column; if no, it is not.\n\nSo the coincidence column is not a new kind of measurement on the signal photon. It is the [i]same[/i] D1 clicks, [b]sorted[/b] by the outcome of the partner. P2 decides which idler photons reach D2, so P2 decides which subset of D1's clicks gets kept. Changing P2 changes the sorting rule, not the clicks. Keep this picture in mind for the Theory section: a pile of clicks, and a rule for splitting it."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "The raw data in the lab",
+              "text": "The four data files are loaded into this chapter's lab as overlays on the two plots: [i]P2 45° coincidences[/i], [i]P2 −45° coincidences[/i], [i]P2 0° coincidences[/i], [i]P2 90° coincidences[/i] on the coincidence plot, and [i]P2 45° singles[/i], [i]P2 0° singles[/i] on the singles plot. Run your own scan over them to compare."
+            }
+          ]
+        },
+        {
+          "title": "P2 at 45° and −45°",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Each row below is one P2 setting. Left: the counts on D1 alone (singles). Right: the coincidences between D1 and D2. Grey dashed: theory. Blue: fit of the data. Black dots: our data."
+            },
+            {
+              "type": "subheading",
+              "text": "P2 = 45°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/45_A.png",
+              "height": 300,
+              "caption": "Counts on D1 per second, P2 = 45°. A single broad bell: the diffraction envelope, no fringes."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/45_AB.png",
+              "height": 300,
+              "caption": "Coincidences D1–D2 per second, P2 = 45°. A central peak at 0 and two side peaks near ±900 μm: interference fringes about 1 mm apart, inside the same envelope. The fit has reduced visibility; the theory curve has full visibility."
+            },
+            {
+              "type": "subheading",
+              "text": "P2 = −45°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/-45_A.png",
+              "height": 300,
+              "caption": "Counts on D1 per second, P2 = −45°. The same bell as at 45°."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/-45_AB.png",
+              "height": 300,
+              "caption": "Coincidences D1–D2 per second, P2 = −45°. Two peaks near ±450 μm with a dip at the centre: the complementary pattern. Where the 45° scan has a maximum, this one has a minimum."
+            }
+          ]
+        },
+        {
+          "title": "P2 at 0° and 90°",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "P2 = 0°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/0_A.png",
+              "height": 300,
+              "caption": "Counts on D1 per second, P2 = 0°. The same bell again (this run was taken in a different session, at a lower overall rate; the shape is identical)."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/0_AB.png",
+              "height": 300,
+              "caption": "Coincidences D1–D2 per second, P2 = 0°. No fringes: a single hump, its centre shifted to the left of 0."
+            },
+            {
+              "type": "subheading",
+              "text": "P2 = 90°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/90_A.png",
+              "height": 300,
+              "caption": "Counts on D1 per second, P2 = 90°. Same bell."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/90_AB.png",
+              "height": 300,
+              "caption": "Coincidences D1–D2 per second, P2 = 90°. No fringes: a single hump, shifted to the right relative to the 0° curve."
+            },
+            {
+              "type": "subheading",
+              "text": "What the eight plots say"
+            },
+            {
+              "type": "text",
+              "text": "[b]Singles (left column):[/b] All four curves are identical (within experimental error). The D1 singles show only diffraction, regardless of P2. This confirms that no local measurement at D1 can reveal interference."
+            },
+            {
+              "type": "text",
+              "text": "[b]Coincidences (right column):[/b]"
+            },
+            {
+              "type": "list",
+              "items": [
+                "P2 = ±45°: Clear interference fringes. The two patterns are complementary (peaks and troughs swap).",
+                "P2 = 0° or 90°: No interference, only diffraction. The two curves are slightly shifted because each selects photons from a different slit. The diffraction maxima are centered on each slit."
+              ]
+            },
+            {
+              "type": "text",
+              "text": "This is the quantum eraser effect: interference appears only in coincidences, and only when P2 is set to erase which-path information."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Is that real?",
+              "text": "The measured fringes at ±45° do not reach the floor between the peaks: the visibility is partial, around 25 % at the centre instead of the 100 % of the theory curve. Imperfect polarizers, a slight phase offset in the entangled source and the finite width of the scanning slit all wash out contrast. The data are shown as they were taken. The fringes are nevertheless unmistakable, and they flip exactly as predicted between 45° and −45°."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Conceptual overview",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The BBO crystal generates entangled photon pairs in the Bell state:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_state"
+            },
+            {
+              "type": "text",
+              "text": "The photons travel along two paths."
+            },
+            {
+              "type": "text",
+              "text": "[b]Signal path:[/b] A double slit where each slit is covered by a polarizer (P_A = 0°, P_B = 90°). This encodes which-path information in the polarization. A third polarizer P1 at 45° projects both polarizations onto the diagonal basis."
+            },
+            {
+              "type": "text",
+              "text": "[b]Idler path:[/b] A single rotatable polarizer P2 at angle γ. The key physics:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "After the slit polarizers, measuring the idler's polarization reveals which slit the signal passed through (vertical ⇒ slit A, horizontal ⇒ slit B).",
+                "If P2 = 0° or 90°, it selects one polarization, preserving which-path information. Coincidences show only diffraction.",
+                "If P2 = ±45°, it projects onto the diagonal basis, erasing which-path information. Coincidences show interference.",
+                "Singles at D1 never show interference, regardless of P2. The which-path information exists in the idler, even if we choose not to access it."
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The \"delayed choice\" aspect: the idler can be measured [i]after[/i] the signal is detected. The choice of P2 angle determines whether interference appears in the coincidence record, even though the signal detection already occurred."
+            }
+          ]
+        },
+        {
+          "title": "The whole argument in one picture",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Before the algebra, here is the argument as a poster. Read it top to bottom: the setup, what D1 alone sees, how P2 chooses a basis, the four coincidence patterns, and the delayed choice."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/exp6-photo_(1).png",
+              "height": 1100,
+              "caption": "Delayed-choice quantum eraser setup. The two \"WE KNOW\" cards (P2 = 0°, 90°) carry I ∝ 1, no cosine; the two \"WE DON'T KNOW\" cards (P2 = ±45°) carry I ∝ 1 ± cos. All pairs sum to the same envelope: P2 picks a decomposition."
+            },
+            {
+              "type": "text",
+              "text": "The delayed-choice quantum eraser follows the same logic as Experiment 3, but with entangled photons. The idler polarizer P2 plays the role that P1 played before: it chooses which basis to use, and that choice determines whether interference appears."
+            }
+          ]
+        },
+        {
+          "title": "The state after the slit polarizers",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The BBO produces entangled pairs. At the double slit the signal photon takes path |A⟩ or |B⟩. Slit A only passes |↕⟩₁ and slit B only passes |↔⟩₁, so each term of the Bell state goes through exactly one slit, and the path label becomes locked to the idler's polarization (photons blocked by a slit polarizer are dropped, as the |lost⟩ terms of Experiment 3):"
+            },
+            {
+              "type": "equation",
+              "id": "psi_after_slits",
+              "caption": "Idler ↕ ⇒ the signal went through slit A; idler ↔ ⇒ slit B. The idler now carries the which-path tag."
+            },
+            {
+              "type": "text",
+              "text": "Next the signal picks up its propagation phases e^{ika} and e^{ikb} on the way to the screen point y (as in Experiment 2), and then meets the eraser polarizer P1 at 45°. P1 projects both |↕⟩₁ and |↔⟩₁ onto the same diagonal state, each with amplitude 1/√2:"
+            },
+            {
+              "type": "equation",
+              "id": "p1_projection"
+            },
+            {
+              "type": "text",
+              "text": "After the signal passes through the double slit (with P_A = 0° on slit A, P_B = 90° on slit B) and the eraser polarizer P1 at 45°, the state is:"
+            },
+            {
+              "type": "equation",
+              "id": "psi_after_p1",
+              "caption": "|y⟩₁ is the signal's position on the screen, |D⟩₂ the idler's spatial mode at D2. The extra 1/2 comes from the two P1 projections."
+            },
+            {
+              "type": "text",
+              "text": "The signal polarization is now diagonal for both paths — P1 has done its job. But the [b]idler polarizations are still orthogonal[/b]: |↕⟩₂ vs |↔⟩₂."
+            },
+            {
+              "type": "text",
+              "text": "This is why D1 alone sees no interference: the two paths are still distinguishable via the idler. Compare with Experiment 3, where the two terms carried orthogonal [i]signal[/i] polarizations and added in intensity, not amplitude. Here the orthogonal tag has simply moved to the other photon."
+            }
+          ]
+        },
+        {
+          "title": "Choosing a basis",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Here is the key insight: [i]the idler polarizer P2 chooses which basis to express the idler in.[/i]"
+            },
+            {
+              "type": "text",
+              "text": "[b]In the H/V basis (P2 = 0° or 90°):[/b] The idler states |↕⟩₂ and |↔⟩₂ are orthogonal → the two terms cannot combine → no interference."
+            },
+            {
+              "type": "text",
+              "text": "Setting P2 = 0° selects only |↕⟩₂ photons (from slit A). Setting P2 = 90° selects only |↔⟩₂ photons (from slit B). Either way, we know which slit."
+            },
+            {
+              "type": "text",
+              "text": "[b]In the diagonal basis (P2 = ±45°):[/b] We can rewrite the idler states as:"
+            },
+            {
+              "type": "equation",
+              "id": "idler_hv_in_diagonal"
+            },
+            {
+              "type": "text",
+              "text": "Now both paths contribute to |↗↙⟩₂ and both contribute to |↘↖⟩₂. Substituting into the state and collecting terms:"
+            },
+            {
+              "type": "equation",
+              "id": "psi_diagonal_rewrite",
+              "caption": "The same state, written in the idler's diagonal basis. Nothing physical has changed; only the bookkeeping."
+            },
+            {
+              "type": "text",
+              "text": "When P2 selects one diagonal component, it mixes amplitudes from [i]both[/i] slits → interference is possible."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Choosing a basis is choosing how to split a pile",
+              "text": "In Experiment 3 we saw that rewriting a state in another basis is a free choice: the state is the same arrow, described with different component axes. Here is what that choice means for the data.\n\nThink of all the D1 clicks as one pile. P2 does not add to the pile or take from it; the pile is the singles. P2 only decides [i]how the pile is split in two[/i]: the clicks whose partner got through P2, and the clicks whose partner did not. In the H/V basis the split is \"slit A clicks\" versus \"slit B clicks\": each half is a single-slit pattern. In the diagonal basis the split is \"(A + B) clicks\" versus \"(A − B) clicks\": each half is a fringe pattern, and the two halves have opposite fringes. Same pile, two ways of sorting it. Neither sorting is more real than the other, and neither one is visible until you sort."
+            }
+          ]
+        },
+        {
+          "title": "What P2 does",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The idler polarizer projects onto angle γ. A polarizer at angle γ transmits the state"
+            },
+            {
+              "type": "equation",
+              "id": "p2_state",
+              "caption": "γ = 0° gives |↕⟩₂, γ = 90° gives |↔⟩₂, γ = ±45° gives the two diagonals."
+            },
+            {
+              "type": "text",
+              "text": "A coincidence is a D1 click at y [i]and[/i] a D2 click behind P2. Its amplitude is the overlap of |γ⟩₂ with the state above: cos γ picks out the slit A term, sin γ the slit B term."
+            },
+            {
+              "type": "equation",
+              "id": "coincidence_amplitude"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Squaring a weighted sum of two arrows",
+              "text": "In Experiment 2 we squared the sum of two rotating arrows of equal length and got 2(1 + cos kΔ). Now the two arrows have lengths cos γ and sin γ. The square of the sum is the sum of the squares plus the cross term 2 cos γ sin γ cos kΔ. Two identities from trigonometry tidy this up: the squares add to 1 (Pythagoras again), and twice the product is the sine of the double angle."
+            },
+            {
+              "type": "equation",
+              "id": "double_angle"
+            },
+            {
+              "type": "equation",
+              "id": "coincidence_law_derivation"
+            },
+            {
+              "type": "text",
+              "text": "So the coincidence intensity is:"
+            },
+            {
+              "type": "equation",
+              "id": "coincidence_law",
+              "caption": "The whole experiment in one line. sin(2γ) is the [b]visibility[/b] of the fringes; cos[k(a − b)] is the fringe pattern itself."
+            },
+            {
+              "type": "table",
+              "header": [
+                "P2 angle",
+                "Selects idler",
+                "sin(2γ)",
+                "Result"
+              ],
+              "rows": [
+                [
+                  "0°",
+                  "|↕⟩₂ (slit A only)",
+                  "0",
+                  "no interference"
+                ],
+                [
+                  "90°",
+                  "|↔⟩₂ (slit B only)",
+                  "0",
+                  "no interference"
+                ],
+                [
+                  "45°",
+                  "|↗↙⟩₂ (both slits)",
+                  "+1",
+                  "[b]interference[/b]"
+                ],
+                [
+                  "−45°",
+                  "|↘↖⟩₂ (both slits)",
+                  "−1",
+                  "[b]anti-interference[/b]"
+                ]
+              ]
+            },
+            {
+              "type": "equation",
+              "id": "p2_0"
+            },
+            {
+              "type": "equation",
+              "id": "p2_90"
+            },
+            {
+              "type": "equation",
+              "id": "p2_45"
+            },
+            {
+              "type": "equation",
+              "id": "p2_m45"
+            }
+          ]
+        },
+        {
+          "title": "Why does ±45° restore interference?",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "At 0° or 90°, the polarizer selects idler photons from [i]one slit only[/i]. The coincidence record contains only single-slit photons → no interference."
+            },
+            {
+              "type": "text",
+              "text": "At 45°, the polarizer accepts idler photons from [i]both[/i] slits with equal amplitude. A coincidence event could have come from either path — we cannot tell. The which-way information has been [b]erased[/b], and interference reappears."
+            },
+            {
+              "type": "text",
+              "text": "This is the delayed-choice quantum eraser: the choice of P2 can be made [i]after[/i] the signal is detected, yet it determines whether interference appears in the coincidence record."
+            },
+            {
+              "type": "equation",
+              "id": "fringe_period",
+              "caption": "With the lens at 500 mm from the slits and from D1, the path difference grows linearly across the screen and the fringes repeat every λf/d ≈ 1 mm: the spacing of the three peaks in the 45° data."
+            },
+            {
+              "type": "subheading",
+              "text": "Complementary pairs"
+            },
+            {
+              "type": "text",
+              "text": "The 45° and −45° patterns are opposite (maxima ↔ minima). The 0° and 90° patterns are shifted copies of each other (centered on each slit)."
+            },
+            {
+              "type": "equation",
+              "id": "complementary_sum",
+              "caption": "45° plus −45°."
+            },
+            {
+              "type": "equation",
+              "id": "complementary_sum_hv",
+              "caption": "0° plus 90°."
+            },
+            {
+              "type": "text",
+              "text": "In all cases, summing the complementary pair recovers the same diffraction envelope. The idler polarizer does not create or destroy photons — it picks a [b]decomposition[/b]."
+            }
+          ]
+        },
+        {
+          "title": "Why no interference in singles?",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The D1 singles count all signal photons, regardless of what happens to the idler. This is equivalent to averaging over all possible P2 angles:"
+            },
+            {
+              "type": "equation",
+              "id": "singles_average"
+            },
+            {
+              "type": "equation",
+              "id": "singles_trace",
+              "caption": "The envelope survives the average; the fringe term does not."
+            },
+            {
+              "type": "text",
+              "text": "The interference terms cancel. Only by selecting a specific idler outcome (via coincidences) can interference appear."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Why timing cannot matter",
+              "text": "Now we can answer the question from the Abstract. Suppose P2 is set, or even changed, long after every signal photon has been detected. Could that reach back and alter the D1 record?\n\nIt cannot, and the reason is the sum rule. Whatever P2 is set to, the two complementary subsets it sorts the D1 clicks into always add up to the [i]same[/i] total: the singles. The singles were fixed the moment the signal photons hit D1, and no sorting rule applied later can change a total. What P2 changes is only [i]which half[/i] of the record you are looking at. Set P2 to 45° and you will find fringes in the half you selected; set it to 0° and you will find a single-slit hump in the half you selected. Both halves were always sitting in the singles, cancelling each other. The past isn't changed — the correlation was always there, waiting to be revealed."
+            },
+            {
+              "type": "equation",
+              "id": "singles_as_sum",
+              "caption": "Every way of splitting the pile gives the same pile. Timing drops out because a total does not care when it is split."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Why \"erasing\" is the right word",
+              "text": "The fringes at 45° are not created by P2 and the fringes were never destroyed by the slit polarizers. They were [i]hidden[/i]: the 45° subset and the −45° subset of the D1 clicks carry opposite fringes, and in the singles they sit on top of each other and cancel. Erasing the which-path information means choosing a sorting that separates the two subsets again. Keeping it means choosing a sorting (0° versus 90°) where each subset is a single-slit pattern with no fringes to begin with."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "literature",
+      "title": "Literature and video",
+      "pages": [
+        {
+          "title": "Literature and video",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "If you want to check out some papers that did the same experiment, here are the two best resources we have found:"
+            },
+            {
+              "type": "callout",
+              "kind": "history",
+              "title": "Kim et al. 1999 and Walborn et al. 2002",
+              "text": "The delayed-choice quantum eraser was proposed by Marlan Scully and Kai Drühl in 1982 and first realised by [b]Yoon-Ho Kim, R. Yu, S. P. Kulik, Y. H. Shih and M. O. Scully[/b] (preprint 1999, published in Physical Review Letters 84, 1, in 2000). They used entangled pairs from a BBO crystal and a double slit, but erased the which-path information with beam splitters and mirrors on the idler side, with the idler path made longer so that its detection came after the signal's. In 2002 [b]S. P. Walborn, M. O. Terra Cunha, S. Pádua and C. H. Monken[/b] in Belo Horizonte, Brazil, published the version our setup follows (Physical Review A 65, 033818): quarter-wave plates on the two slits to tag the paths and a single polarizer on the idler to choose the basis. Our experiment replaces the wave plates with the two slit polarizers P_A, P_B and the eraser P1, which is why it needs the extra polarizer on the signal side."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/scully.PNG",
+              "height": 220,
+              "caption": "Y.-H. Kim, R. Yu, S. P. Kulik, Y. H. Shih and M. O. Scully, \"A Delayed Choice Quantum Eraser\", Phys. Rev. Lett. 84, 1 (2000)."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp6/walborn.PNG",
+              "height": 220,
+              "caption": "S. P. Walborn, M. O. Terra Cunha, S. Pádua and C. H. Monken, \"A double-slit quantum eraser\", Phys. Rev. A 65, 033818 (2002)."
+            },
+            {
+              "type": "text",
+              "text": "If you want a more interactive resource, here is a YouTube video we found to be accurate and insightful. It takes the same line we did: the delayed choice does not rewrite the past, it chooses how an already recorded data set is sorted."
+            },
+            {
+              "type": "video",
+              "title": "The Delayed Choice Quantum Eraser, Debunked — Sabine Hossenfelder",
+              "url": "https://www.youtube.com/watch?v=RQv5CVELG3U"
+            }
+          ]
+        },
+        {
+          "title": "Into the laboratory",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The 3D lab is the bench from the photos: the Experiment 4 source (405 nm pump, half-wave plates, Berek compensator, BBO), the signal arm L4 → double slit with PA and PB → eraser P1 (45°) → scanning D1, and the idler arm L5 → rotatable P2 → D2. Two plots build up as D1 scans: the [b]singles[/b] and the [b]coincidences[/b]. Each of our four CSV files can be overlaid on the matching plot."
+            },
+            {
+              "type": "equation",
+              "id": "visibility_p2",
+              "caption": "What to expect at an angle we did not measure: the fringe visibility is |sin 2γ|."
+            },
+            {
+              "type": "equation",
+              "id": "eraser_general",
+              "caption": "And if the eraser P1 is moved off 45° to an angle φ₁: the fringe term is now scaled by sin(2φ₁) as well. At φ₁ = 0° or 90° P1 itself reveals the slit and no P2 setting brings the fringes back."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "Task list",
+              "text": "[b]1.[/b] Choose the preset [b]P2 45°[/b] and scan D1. Switch on the overlay [i]P2 45° coincidences[/i]: three peaks about 1 mm apart in the coincidence plot. Now look at the singles plot and overlay [i]P2 45° singles[/i]: one smooth bell, no fringes.\n[b]2.[/b] Preset [b]P2 −45°[/b], scan, overlay [i]P2 −45° coincidences[/i]. The central peak has become a dip. The singles plot has not changed.\n[b]3.[/b] Presets [b]P2 0°[/b] and [b]P2 90°[/b], with their overlays. A single hump each time, and the two humps are shifted relative to one another: each is centred on its own slit. Overlay [i]P2 0° singles[/i] and confirm the singles still look the same.\n[b]4.[/b] The sum rule: read the 45° and −45° coincidence curves at the centre and at ±450 μm and add them point by point. The sum is flat where the fringes were, and follows the envelope of the singles. Do the same with 0° + 90°.\n[b]5.[/b] Set P2 to [b]22.5°[/b], an angle we did not measure, and predict before you scan: visibility sin 45° ≈ 0.71, fringes with the same spacing but shallower minima. Check the \"Coincidence law\" row in the summary panel: it shows sin 2γ for your angle.\n[b]6.[/b] Put P2 back to 45° and rotate the eraser [b]P1[/b] off 45°: try 20°, then 0°. The coincidence fringes fade and at 0° they are gone for every P2 angle. Explain why with the equation above: at 0°, P1 only passes |↕⟩₁, so the signal itself tells us the slit, and there is no which-path information left on the idler to erase.\n[b]7.[/b] Finally, notice what is not in the lab: a clock. The plots are built from D1 clicks sorted by D2 clicks, and nothing in them depends on which detector fired first."
+            },
+            {
+              "type": "lab",
+              "label": "Open the Experiment 6 lab"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
