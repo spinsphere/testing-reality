@@ -28,10 +28,10 @@ page-by-page source material.
 |---|-------|--------|--------|
 | 0 | Ingest source PDFs, research, plan | `docs/content/*.md`, this plan, architecture doc | done |
 | 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | done |
-| 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | pending |
-| 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | pending |
-| 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | pending |
-| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | pending |
+| 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | done |
+| 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | mostly done (widgets in progress) |
+| 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | in progress (agent) |
+| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | in progress (exp1 lab done; intro/exp1/exp2/exp3 text via agents) |
 | 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
 
 Phases 1, 3 and 4 are independent and run in parallel where agents allow. Phase 5 chapters are
@@ -47,7 +47,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Verify MathJax (node) TeX → SVG works offline
 - [x] Content specs written: `docs/content/00-home.md` … `08-experiment-7-detecting-not-recording.md`
 - [ ] Review content specs, fix gaps, write `docs/design/physics-model.md` (unified model of all 7 experiments)
-- [ ] Try to fetch the site's lab CSV files (nice-to-have; "lab data overlay" feature)
+- [x] Try to fetch the site's lab CSV files (nice-to-have; "lab data overlay" feature)
 - [x] Write `docs/PLAN.md`, `docs/design/architecture.md`
 - [x] Commit Phase 0
 
@@ -64,18 +64,18 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [ ] Commit
 
 ### Phase 2 — Quagmire SDK for Godot
-- [ ] Crate `quagmire-godot` (gdext 0.5, `api-4-7`), classes `QuagmireSystem`, `QuagmireOptics`, `QuagmireScreen`
-- [ ] `app/addons/quagmire/quagmire.gdextension` + build script `tools/build-sdk.sh` (copies `.so` into addon)
-- [ ] Headless Godot smoke test (`godot --headless -s`) that computes the 12.5 % result through the extension
+- [x] Crate `quagmire-godot` (gdext 0.5, `api-4-7`), classes `QuagmireSystem`, `QuagmireOptics`, `QuagmireScreen`
+- [x] `app/addons/quagmire/quagmire.gdextension` + build script `tools/build-sdk.sh` (copies `.so` into addon)
+- [x] Headless Godot smoke test (`godot --headless -s`) that computes the 12.5 % result through the extension
 - [ ] Commit
 
 ### Phase 3 — App framework (Godot)
-- [ ] `app/project.godot` (Forward+ or Compatibility renderer — pick Compatibility for broad desktop GPUs; verify visuals), window 1600×900, blue/purple theme resource, fonts
-- [ ] Navigation: `Main` → `Hub` (experiment cards like the site's grid) → `Chapter` (TOC sidebar + page stack) → `Lab` (3D)
-- [ ] Story page system: data-driven pages (`.tres`/JSON) with blocks: text, equation (SVG), figure, interactive widget, "enter lab" button
-- [ ] Math pipeline: `tools/mathgen` (MathJax → SVG into `app/assets/math/`), equation manifest per chapter
+- [x] `app/project.godot` (Forward+ or Compatibility renderer — pick Compatibility for broad desktop GPUs; verify visuals), window 1600×900, blue/purple theme resource, fonts
+- [x] Navigation: `Main` → `Hub` (experiment cards like the site's grid) → `Chapter` (TOC sidebar + page stack) → `Lab` (3D)
+- [x] Story page system: data-driven pages (`.tres`/JSON) with blocks: text, equation (SVG), figure, interactive widget, "enter lab" button
+- [x] Math pipeline: `tools/mathgen` (MathJax → SVG into `app/assets/math/`), equation manifest per chapter
 - [ ] Math primers (reusable widgets): 2D vector playground, Pythagoras/unit-length, projection = cosine, phasor/complex number, adding phasors (interference), "and" (tensor) lists, probability bars
-- [ ] Lab framework: orbit/pan/zoom camera, click-to-select apparatus, inspector panel (sliders/dials/presets), live state ket display, pattern plot widget, photon-by-photon mode, lab-data overlay hooks
+- [x] Lab framework: orbit/pan/zoom camera, click-to-select apparatus, inspector panel (sliders/dials/presets), live state ket display, pattern plot widget, photon-by-photon mode, lab-data overlay hooks
 - [ ] Commit
 
 ### Phase 4 — Blender apparatus
@@ -87,7 +87,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 ### Phase 5 — Chapters
 - [ ] 00 Home / hub
 - [ ] 01 Introduction (quantum apple, kets as arrows, superposition, R45, measurement; interactive)
-- [ ] 02 Experiment 1 — Polarizers (template chapter; lab with 0–3 polarizers, lab-table comparison)
+- [~] 02 Experiment 1 — Polarizers: LAB DONE (`app/labs/exp1`); story pages being written by an agent into `app/content/exp1/`
 - [ ] 03 Experiment 2 — Single/double slit (N, w, d, λ sliders; scanning detector)
 - [ ] 04 Experiment 3 — Polarized double slit (eraser P1)
 - [ ] 05 Experiment 4 — Entanglement (SPDC source, two polarizers, coincidence surface plot)
@@ -101,6 +101,20 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [ ] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
 - [ ] README with screenshots, engine docs ready for split-off
 - [ ] Final commit
+
+## Resume notes (2026-10-30, end of session 1 — usage limit hit)
+
+Background agents were still running when the session ended; their files land in the repo
+uncommitted. On resume: check `git status`, review and commit each of these if present:
+- `blender/` + `app/assets/models/*.glb` (Blender pipeline agent; verify with `tools/build-models.sh`
+  and a lab screenshot: `xvfb-run -a -s "-screen 0 1600x900x24" ~/.local/bin/godot --path app -- --go=lab:exp1 --shot=/tmp/x.png`)
+- `app/ui/widgets/*.tscn|gd` + `app/tests/smoke_widgets.gd` (widgets agent)
+- `app/content/{intro,exp1,exp2,exp3}/` + `app/assets/math/*` + `app/assets/figures/*` (content agents)
+Then: run `~/.local/bin/godot --headless --path app --import`, screenshot every chapter page
+(`--go=chapter:exp1:N`) and fix layout issues; write labs exp2/exp3 (scanning detector +
+PatternPlot + CSV overlay from `app/data/lab/`), generalise LabController/BeamRenderer for the
+two-arm SPDC layouts, then labs exp4–exp7; then launch content agents for exp4–exp7.
+Headless screenshots work via Xvfb + Mesa llvmpipe (see `app/scripts/main.gd` `--shot`).
 
 ## Conventions
 
