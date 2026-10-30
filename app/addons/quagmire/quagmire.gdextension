@@ -1,0 +1,12 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.7
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 = "res://addons/quagmire/bin/linux/libquagmire_godot.so"
+linux.release.x86_64 = "res://addons/quagmire/bin/linux/libquagmire_godot.so"
+windows.debug.x86_64 = "res://addons/quagmire/bin/windows/quagmire_godot.dll"
+windows.release.x86_64 = "res://addons/quagmire/bin/windows/quagmire_godot.dll"
+macos.debug = "res://addons/quagmire/bin/macos/libquagmire_godot.dylib"
+macos.release = "res://addons/quagmire/bin/macos/libquagmire_godot.dylib"

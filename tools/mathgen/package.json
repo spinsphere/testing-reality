@@ -4,6 +4,10 @@
   "private": true,
   "description": "Renders the chapters' LaTeX equations to SVG with MathJax for the Godot app.",
   "type": "module",
-  "scripts": { "build": "node mathgen.mjs" },
+  "scripts": {
+    "build": "node mathgen.mjs --all",
+    "build:png": "node mathgen.mjs --all --png",
+    "rebuild": "node mathgen.mjs --all --force"
+  },
   "dependencies": { "mathjax-full": "^3.2.2" }
 }
