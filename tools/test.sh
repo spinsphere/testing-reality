@@ -16,7 +16,7 @@ QUICK=0
 [ "${1:-}" = "--quick" ] && QUICK=1
 
 # Benign lines from the platform layer under Xvfb / no audio device.
-IGNORE='XDG_|ALSA|PulseAudio|pulseaudio|jack|libdecor|Xlib:|DRI|MESA|libEGL|GLX|glx|xkbcommon|Fontconfig|No such audio|Set Audio|audio driver|Unable to open|XOpenIM|vk_|Vulkan|godot-rust|Godot Engine|TextServer|OpenGL API'
+IGNORE='XDG_|ALSA|PulseAudio|pulseaudio|jack|libdecor|Xlib:|DRI|MESA|libEGL|GLX|glx|xkbcommon|Fontconfig|No such audio|Set Audio|audio driver|Unable to open|XOpenIM|vk_|Vulkan|godot-rust|Godot Engine|TextServer|OpenGL API|V-Sync'
 
 status=0
 step() {  # step <name> <command...>   (runs in app/ unless the command cd's)
@@ -52,7 +52,8 @@ step "smoke: quagmire"      timeout 120 "$GODOT" --headless --path . -s tests/sm
 step "smoke: widgets"       timeout 120 "$GODOT" --headless --path . -s tests/smoke_widgets.gd
 step "run_all (headless)"   timeout 600 "$GODOT" --headless --path . -s tests/run_all.gd
 if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
-	step "run_all (xvfb, GL)" timeout 900 xvfb-run -a -s "-screen 0 1600x900x24" "$GODOT" --path . -s tests/run_all.gd
+	# llvmpipe is slow: a smaller screen for the long harness run, the full size for screenshots
+	step "run_all (xvfb, GL)" timeout 3600 xvfb-run -a -s "-screen 0 1280x720x24" "$GODOT" --path . -s tests/run_all.gd
 	for route in hub chapter:intro:0 chapter:exp1:2 lab:exp1 lab:exp2 lab:exp3 lab:exp4 lab:exp5 lab:exp6 lab:exp7; do
 		step "shot $route" timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" "$GODOT" --path . -- "--go=$route" "--shot=$LOG/shot-${route//:/-}.png"
 	done

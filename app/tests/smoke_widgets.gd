@@ -67,6 +67,8 @@ func _run() -> void:
 		host.remove_child(w)
 		w.free()
 	host.free()
+	# drop the theme (and the fonts it holds) before quitting so nothing leaks at exit
+	root.theme = null
 	print("SMOKE_WIDGETS ", "OK" if _failures == 0 else "FAILED (%d)" % _failures)
 	quit(0 if _failures == 0 else 1)
 
