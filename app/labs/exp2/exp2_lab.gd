@@ -9,7 +9,9 @@ func _init() -> void:
 func build() -> void:
 	var laser := place(Optics.Laser.new(808.0, 0.0, "LASER", 3000.0), -0.54)
 	laser.model = "laser_808"
-	place(Optics.BeamSplitterCube.new("BS"), -0.44)
+	var bs := place(Optics.BeamSplitterCube.new("BS"), -0.44)
+	var bd := place_decor(Optics.BeamDump.new("BD"), -0.44, -0.10, 90.0)
+	add_stray_beam(bs, bd, 808.0)
 	place(Optics.HalfWavePlate.new("λ/2", 22.5), -0.34)
 	place(Optics.Lens.new("L1", 500.0), -0.20)
 	var m := place(Optics.SlitMask.new("SLIT", 200.0, 400.0), -0.02)

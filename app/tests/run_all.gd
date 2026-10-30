@@ -372,6 +372,40 @@ func _drive_lab(ch: Dictionary) -> void:
 		_ok(controller.result.has("profile"), "lab %s: no screen profile in result" % id)
 	for app in controller.components:
 		_ok(is_instance_valid(app.get("model_root")) or is_instance_valid(app.get("_placeholder")), "lab %s: %s has no model" % [id, app.label])
+	# bench consistency: nothing floats, "out" means set aside on the table, films sit on the
+	# mask, the slit → detector distance on the table is the one the physics uses, every
+	# beam splitter has its dump
+	var mask: Node = lab.get("mask")
+	var scanner_node: Node = lab.get("scanner")
+	for app in controller.components:
+		var mr: Node3D = app.get("model_root")
+		_ok(is_zero_approx(mr.position.y), "lab %s: %s's model floats %.3f m above its base" % [id, app.label, mr.position.y])
+		_ok(is_zero_approx((app as Node3D).position.y), "lab %s: %s is placed %.3f m above the table" % [id, app.label, (app as Node3D).position.y])
+		if (app.params as Dictionary).has("enabled") and (app.params as Dictionary).has("angle"):
+			var was: bool = app.get_param("enabled")
+			app.set_param("enabled", false, false)
+			app.refresh_visual()
+			_ok(is_zero_approx(mr.position.y) and absf(mr.position.z) > 0.01, "lab %s: %s taken out of the beam is not set aside on the table (offset %s)" % [id, app.label, mr.position])
+			app.set_param("enabled", was, false)
+			app.refresh_visual()
+		if str(app.model) == "polarizer_film" and mask != null:
+			var gap: float = (app as Node3D).global_position.distance_to((mask as Node3D).global_position)
+			_ok(gap < 0.02, "lab %s: film %s is %.3f m from the slit mask" % [id, app.label, gap])
+	if mask != null and scanner_node != null:
+		var table_l: float = (mask as Node3D).global_position.distance_to((scanner_node as Node3D).global_position)
+		var model_l: float = scanner_node.get_param("distance")
+		_ok(absf(table_l - model_l) < 0.03, "lab %s: slit → D1 is %.2f m on the table but L = %.2f m in the physics" % [id, table_l, model_l])
+	var has_bs := false
+	for app in controller.components:
+		if str(app.model) == "pbs_cube":
+			has_bs = true
+	if has_bs:
+		var dumps := 0
+		for c in (lab.get("apparatus_root") as Node).get_children():
+			if str(c.get("model")) == "beam_dump" and str(c.get("label")) == "BD":
+				dumps += 1
+		_ok(dumps >= 1, "lab %s: the beam splitter has no beam dump" % id)
+		_ok((lab.get("stray_beams") as Array).size() >= 1, "lab %s: no stray beam for the splitter's reflection" % id)
 	var hud_texts := _texts(lab.get("hud"))
 	_ok(hud_texts.size() > 5, "lab %s: HUD is empty" % id)
 

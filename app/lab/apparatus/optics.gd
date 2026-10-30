@@ -43,10 +43,18 @@ class Polarizer extends Apparatus:
 	## A linear polarizer in a rotation mount. Blocked light goes to `lost@<label>`.
 	var when: Dictionary = {}  # optional predicate (e.g. only on path A)
 
-	func _init(p_label: String = "P1", p_angle: float = 0.0, p_when: Dictionary = {}) -> void:
+	## Sideways slide (metres, along the table's z) that represents "taken out of the beam":
+	## a rotation mount is lifted off its post and set down beside the beam; a film glued on
+	## the slit mask is moved to the side of the plate.
+	var out_offset := 0.09
+
+	func _init(p_label: String = "P1", p_angle: float = 0.0, p_when: Dictionary = {}, p_model: String = "polarizer_rotation_mount") -> void:
 		label = p_label
 		display_name = "Linear polarizer %s" % p_label
-		model = "polarizer_rotation_mount"
+		model = p_model
+		if p_model == "polarizer_film":
+			out_offset = 0.02
+			display_name = "Polarizer film %s" % p_label
 		when = p_when
 		description = "Transmits the component of the light polarized along its axis and absorbs the perpendicular component. Rotate it with the slider."
 		add_param("angle", {"label": "Axis angle", "type": "float", "min": -90.0, "max": 90.0, "step": 0.5, "unit": "°", "value": p_angle,
@@ -68,7 +76,8 @@ class Polarizer extends Apparatus:
 		var rotor := _find_rotor()
 		if rotor:
 			rotor.rotation_degrees.x = -float(get_param("angle"))
-		model_root.position.y = 0.0 if bool(get_param("enabled")) else 0.06
+		# out of the beam = set down beside it on the table (never floating above it)
+		model_root.position = Vector3(0.0, 0.0, 0.0 if bool(get_param("enabled")) else out_offset)
 		model_root.visible = true
 
 	func _find_rotor() -> Node3D:
@@ -331,4 +340,5 @@ class Wall extends Apparatus:
 
 	func refresh_visual() -> void:
 		super()
-		model_root.visible = bool(get_param("enabled"))
+		# the wall is slid aside, not conjured away
+		model_root.position = Vector3(0.0, 0.0, 0.0 if bool(get_param("enabled")) else 0.09)

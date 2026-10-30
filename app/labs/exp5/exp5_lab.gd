@@ -7,7 +7,7 @@ func _init() -> void:
 
 
 func build() -> void:
-	build_entangled_slit(false, false)
+	build_entangled_slit(false, false, 0.43)  # 5.1 coincidences: 875 µm fringes → L ≈ 0.43 m
 	set_overlays([
 		{"name": "5.1 singles", "target": "singles", "file": "res://data/lab/experiment-5/Data4_1_-_Feuille_1.csv", "pos_col": 2, "count_col": 4, "window": 20.0, "centre_um": 18600.0, "average": true},
 		{"name": "5.1 coincidences", "target": "coinc", "file": "res://data/lab/experiment-5/Data4_1_-_Feuille_1.csv", "pos_col": 2, "count_col": 6, "window": 20.0, "centre_um": 18600.0, "average": true},

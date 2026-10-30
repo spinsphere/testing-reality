@@ -7,7 +7,7 @@ func _init() -> void:
 
 
 func build() -> void:
-	build_entangled_slit(true, false)
+	build_entangled_slit(true, false, 0.32)  # P2 ±45° coincidences: 600–660 µm fringes → L ≈ 0.32 m
 	var d1 := [3, 6, 9, 12, 15]
 	var cc := [5, 8, 11, 14, 17]
 	set_overlays([

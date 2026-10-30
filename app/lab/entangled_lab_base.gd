@@ -21,6 +21,8 @@ func build_pump() -> void:
 	var laser := place(Optics.Laser.new(405.0, 0.0, "LASER"), -0.55, z)
 	laser.model = "laser_405"
 	var bs := place(Optics.BeamSplitterCube.new("BS"), -0.45, z)
+	var bd := place_decor(Optics.BeamDump.new("BD"), -0.45, z + 0.075, -90.0)
+	add_stray_beam(bs, bd, 405.0)
 	var hwp1 := place(Optics.HalfWavePlate.new("λ/2", 0.0), -0.37, z)
 	hwp1.description = "First half-wave plate: with the beam splitter it controls the pump intensity."
 	var l1 := place(Optics.Lens.new("L1", 100.0), -0.28, z)
@@ -36,15 +38,28 @@ func build_pump() -> void:
 	var berek := place_on(Optics.Berek.new("Berek"), Vector2(0.48, 0.0), BBO_POS, 0.78)
 	bbo = place(Optics.SPDCSource.new("BBO"), BBO_POS.x, BBO_POS.y)
 	aim(bbo, Vector2(-1.0, 0.0))
+	# almost all pump photons pass the crystal unconverted and must be stopped
+	var pump_dump := place_decor(Optics.BeamDump.new("PD"), BBO_POS.x - 0.20, 0.0, 180.0)
+	pump_dump.description = "Beam dump for the pump: only about one pump photon in a billion is converted into a pair, so the violet beam continues straight through the crystal and has to be stopped here."
+	add_stray_beam(bbo, pump_dump, 405.0, "fixed", 0.85)
 	pump_path = [laser, bs, hwp1, l1, l2, m1, m2, l3, pump_hwp, berek, bbo]
 
 
-## Place an element on the signal arm at fraction `t` of the way from the BBO to the arm end.
-func on_signal(app: Apparatus, t: float) -> Apparatus:
+## Place an element on the signal arm at fraction `t` of the way from the BBO to the arm end;
+## `side` shifts it across the arm (metres) for parts that sit next to each other.
+func on_signal(app: Apparatus, t: float, side: float = 0.0) -> Apparatus:
 	app.ctx_overrides = {"pol": "pol1"}
 	place_on(app, BBO_POS, SIGNAL_END, t)
+	if side != 0.0:
+		var dir := (SIGNAL_END - BBO_POS).normalized()
+		app.position += Vector3(-dir.y, 0.0, dir.x) * side
 	signal_path.append(app)
 	return app
+
+
+## Length of the signal arm from the crystal to the detector (metres).
+func signal_arm_length() -> float:
+	return BBO_POS.distance_to(SIGNAL_END)
 
 
 func on_idler(app: Apparatus, t: float) -> Apparatus:

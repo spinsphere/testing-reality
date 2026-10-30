@@ -14,19 +14,23 @@ func _init() -> void:
 func build() -> void:
 	var laser := place(Optics.Laser.new(405.0, 0.0, "LASER", 3000.0), -0.54)
 	laser.model = "laser_405"
-	place(Optics.BeamSplitterCube.new("BS"), -0.44)
-	place(Optics.HalfWavePlate.new("λ/2", 22.5), -0.36)
-	place(Optics.Lens.new("L1", 500.0), -0.24)
-	var m := place(Optics.SlitMask.new("SLIT", 200.0, 400.0), -0.06)
-	pa = place(Optics.Polarizer.new("PA", 0.0, {"is": {"path": "A"}}), -0.03, 0.03)
-	pb = place(Optics.Polarizer.new("PB", 90.0, {"is": {"path": "B"}}), -0.03, -0.03)
-	pa.display_name = "Polarizer on slit A"
-	pb.display_name = "Polarizer on slit B"
-	place(Optics.Lens.new("L2", 500.0), 0.12)
-	p1 = place(Optics.Polarizer.new("P1", 45.0), 0.26)
+	var bs := place(Optics.BeamSplitterCube.new("BS"), -0.44)
+	var bd := place_decor(Optics.BeamDump.new("BD"), -0.44, -0.10, 90.0)
+	add_stray_beam(bs, bd, 405.0)
+	place(Optics.HalfWavePlate.new("λ/2", 22.5), -0.37)
+	place(Optics.Lens.new("L1", 500.0), -0.29)
+	# slit → D1 = 0.70 m: the site's 45° / −45° scans show 700 µm fringes (λL/d with
+	# λ = 405 nm, d = 400 µm → L ≈ 0.69 m)
+	var m := place(Optics.SlitMask.new("SLIT", 200.0, 400.0), -0.20)
+	pa = place(Optics.Polarizer.new("PA", 0.0, {"is": {"path": "A"}}, "polarizer_film"), -0.188, 0.0045)
+	pb = place(Optics.Polarizer.new("PB", 90.0, {"is": {"path": "B"}}, "polarizer_film"), -0.188, -0.0045)
+	pa.display_name = "Polarizer film on slit A"
+	pb.display_name = "Polarizer film on slit B"
+	place(Optics.Lens.new("L2", 500.0), 0.0)
+	p1 = place(Optics.Polarizer.new("P1", 45.0), 0.20)
 	p1.display_name = "Third polarizer (eraser)"
 	var d := place(Optics.ScanningDetector.new("D1", 3.0), 0.50)
-	setup_slit_lab(m, d, 405.0, 0.9)
+	setup_slit_lab(m, d, 405.0, 0.70)
 	set_overlays([
 		{"name": "lab: P1 = 45°", "file": "res://data/lab/experiment-3/Data_exp3_-_data_45.csv", "pos_col": 2, "count_col": 3, "window": 2.0, "centre_um": 20000.0},
 		{"name": "lab: P1 = −45°", "file": "res://data/lab/experiment-3/Data_exp3_-_data_-45.csv", "pos_col": 2, "count_col": 3, "window": 2.0, "centre_um": 20000.0},

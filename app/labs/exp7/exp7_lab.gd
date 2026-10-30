@@ -10,7 +10,7 @@ func _init() -> void:
 
 
 func build() -> void:
-	build_entangled_slit(true, true)
+	build_entangled_slit(true, true, 0.36)  # eraser reference scan: ≈730 µm fringes → L ≈ 0.36 m
 	set_overlays([
 		{"name": "wall: singles", "target": "singles", "file": "res://data/lab/experiment-7/6.1_wall_-_Feuille_1_(2).csv", "pos_col": 2, "count_col": 4, "window": 20.0, "centre_um": 18600.0, "average": true},
 		{"name": "wall: coincidences", "target": "coinc", "file": "res://data/lab/experiment-7/6.1_wall_-_Feuille_1_(2).csv", "pos_col": 2, "count_col": 6, "window": 20.0, "centre_um": 18600.0, "average": true},

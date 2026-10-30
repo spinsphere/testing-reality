@@ -18,6 +18,9 @@ var selected: Apparatus
 ## Explicit beam paths for multi-arm layouts: an Array of Arrays of Apparatus. When empty,
 ## the controller's linear chain is used.
 var beam_paths: Array = []
+## Beams that leave the chain: the PBS reflection into its dump, the undepleted pump behind
+## the crystal. [{from: Apparatus, to: Apparatus, wavelength, mode: "blocked"|"fixed", intensity}]
+var stray_beams: Array = []
 
 # HUD
 var hud: CanvasLayer
@@ -204,6 +207,13 @@ func place_decor(app: Apparatus, x: float, z: float, yaw_deg: float = 0.0) -> Ap
 	app.rotation_degrees.y = yaw_deg
 	apparatus_root.add_child(app)
 	return app
+
+
+## A beam that leaves the chain at `from_app` and ends on `to_app` (a beam dump).
+## mode "blocked": its brightness is the fraction `from_app` removed from the main beam;
+## mode "fixed": constant `intensity` while the source is on (e.g. the undepleted pump).
+func add_stray_beam(from_app: Apparatus, to_app: Apparatus, wavelength_nm: float, mode: String = "blocked", intensity: float = 0.85) -> void:
+	stray_beams.append({"from": from_app, "to": to_app, "wavelength": wavelength_nm, "mode": mode, "intensity": intensity})
 
 
 func add_preset(text: String, fn: Callable, tooltip: String = "") -> void:
@@ -472,6 +482,16 @@ func _refresh_beams(_snapshots: Array) -> void:
 			if beyond_focus(b):
 				intensity *= 0.08  # following the beam only up to the focused stage
 			segs.append({"from": from, "to": to, "intensity": intensity, "wavelength": path_nm})
+	for sb in stray_beams:
+		var a: Apparatus = sb["from"]
+		var i := controller.components.find(a)
+		var intensity: float
+		if sb["mode"] == "blocked":
+			var before := controller.alive_after(i - 1) if i > 0 else (1.0 if controller.source_on else 0.0)
+			intensity = maxf(0.0, before - controller.alive_after_apparatus(a))
+		else:
+			intensity = float(sb["intensity"]) if controller.source_on else 0.0
+		segs.append({"from": _beam_point(a), "to": _beam_point(sb["to"]), "intensity": intensity, "wavelength": float(sb["wavelength"])})
 	beams.set_segments(segs)
 
 
