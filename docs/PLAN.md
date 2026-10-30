@@ -30,7 +30,7 @@ page-by-page source material.
 | 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | done |
 | 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | done |
 | 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | done |
-| 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | in progress (agent) |
+| 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | done |
 | 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | done |
 | 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
 
@@ -46,7 +46,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Install Rust toolchain (rustup), verify gdext 0.5.5 has `api-4-7`
 - [x] Verify MathJax (node) TeX → SVG works offline
 - [x] Content specs written: `docs/content/00-home.md` … `08-experiment-7-detecting-not-recording.md`
-- [ ] Review content specs, fix gaps, write `docs/design/physics-model.md` (unified model of all 7 experiments)
+- [x] Review content specs, fix gaps, write `docs/design/physics-model.md` (unified model of all 7 experiments)
 - [x] Try to fetch the site's lab CSV files (nice-to-have; "lab data overlay" feature)
 - [x] Write `docs/PLAN.md`, `docs/design/architecture.md`
 - [x] Commit Phase 0
@@ -61,13 +61,13 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Optics screen: `intensity_profile(path_property, geometry, ys)` with Fraunhofer envelope + exact path phases; coincidence post-selection; box convolution (detector slit); inverse-CDF photon sampling
 - [x] Golden tests from the site: 3-polarizer 12.5 %, cos² law, Exp 3 table (0/90/±45), Exp 4 table, Exp 5.x constants, Exp 6 `1 + sin 2γ cos kΔ`
 - [x] `quagmire-core` README + rustdoc
-- [ ] Commit
+- [x] Commit
 
 ### Phase 2 — Quagmire SDK for Godot
 - [x] Crate `quagmire-godot` (gdext 0.5, `api-4-7`), classes `QuagmireSystem`, `QuagmireOptics`, `QuagmireScreen`
 - [x] `app/addons/quagmire/quagmire.gdextension` + build script `tools/build-sdk.sh` (copies `.so` into addon)
 - [x] Headless Godot smoke test (`godot --headless -s`) that computes the 12.5 % result through the extension
-- [ ] Commit
+- [x] Commit
 
 ### Phase 3 — App framework (Godot)
 - [x] `app/project.godot` (Forward+ or Compatibility renderer — pick Compatibility for broad desktop GPUs; verify visuals), window 1600×900, blue/purple theme resource, fonts
@@ -76,13 +76,13 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Math pipeline: `tools/mathgen` (MathJax → SVG into `app/assets/math/`), equation manifest per chapter
 - [x] Math primers (reusable widgets): 2D vector playground, Pythagoras/unit-length, projection = cosine, phasor/complex number, adding phasors (interference), "and" (tensor) lists, probability bars
 - [x] Lab framework: orbit/pan/zoom camera, click-to-select apparatus, inspector panel (sliders/dials/presets), live state ket display, pattern plot widget, photon-by-photon mode, lab-data overlay hooks
-- [ ] Commit
+- [x] Commit
 
 ### Phase 4 — Blender apparatus
-- [ ] `blender/lib/` shared helpers (materials, posts/mounts, breadboard, export)
-- [ ] Models: optical table, laser module (405 nm / 808 nm), polarizer in rotation mount, HWP in rotation mount, PBS cube, plano-convex lens in mount, mirror in kinematic mount, beam dump, double-slit mask, adjustable single slit, BBO crystal mount, Berek compensator, SPCM detector on translation stage (+ 200 µm slit, filters, fibre collimator), coincidence counter box
-- [ ] Export glTF (`.glb`) with baked textures where procedural; import check in Godot headless
-- [ ] Commit
+- [x] `blender/lib/` shared helpers (materials, posts/mounts, breadboard, export)
+- [x] Models: optical table, laser module (405 nm / 808 nm), polarizer in rotation mount, HWP in rotation mount, PBS cube, plano-convex lens in mount, mirror in kinematic mount, beam dump, double-slit mask, adjustable single slit, BBO crystal mount, Berek compensator, SPCM detector on translation stage (+ 200 µm slit, filters, fibre collimator), coincidence counter box
+- [x] Export glTF (`.glb`) with baked textures where procedural; import check in Godot headless
+- [x] Commit
 
 ### Phase 5 — Chapters
 - [x] 00 Home / hub
@@ -94,7 +94,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] 06 Experiment 5 — lab done; pages done
 - [x] 07 Experiment 6 — lab done; pages done
 - [x] 08 Experiment 7 — lab done; pages done
-- [ ] Commit after each chapter
+- [x] Commit after each chapter
 
 ### Phase 6 — Polish and release
 - [x] Settings (reduce motion, quality), save progress, keyboard map
