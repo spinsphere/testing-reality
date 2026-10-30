@@ -52,8 +52,10 @@ step "smoke: quagmire"      timeout 120 "$GODOT" --headless --path . -s tests/sm
 step "smoke: widgets"       timeout 120 "$GODOT" --headless --path . -s tests/smoke_widgets.gd
 step "run_all (headless)"   timeout 600 "$GODOT" --headless --path . -s tests/run_all.gd
 if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
-	# llvmpipe is slow: a smaller screen for the long harness run, the full size for screenshots
-	step "run_all (xvfb, GL)" timeout 3600 xvfb-run -a -s "-screen 0 1280x720x24" "$GODOT" --path . -s tests/run_all.gd
+	# This pass exists to catch shader/renderer errors, so it runs small: software GL (llvmpipe)
+	# manages about a frame a second on the 3D labs, so it runs at 640x360 with the harness's
+	# --quick sweeps (the headless pass above does the full sweep). Screenshots use the full size.
+	step "run_all (xvfb, GL)" timeout 5400 xvfb-run -a -s "-screen 0 640x360x24" "$GODOT" --path . -s tests/run_all.gd -- --quick
 	for route in hub chapter:intro:0 chapter:exp1:2 lab:exp1 lab:exp2 lab:exp3 lab:exp4 lab:exp5 lab:exp6 lab:exp7; do
 		step "shot $route" timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" "$GODOT" --path . -- "--go=$route" "--shot=$LOG/shot-${route//:/-}.png"
 	done

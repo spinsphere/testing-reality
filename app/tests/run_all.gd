@@ -17,6 +17,9 @@ extends SceneTree
 ## ERROR, WARNING) go to stderr and are counted by tools/test.sh.
 
 var _fail := 0
+## `--quick` (after `--`): fewer frames and shorter parameter sweeps, for the slow software-GL pass.
+var _quick := false
+var _f := 2  # frames to wait after a UI change
 var _checks := 0
 var _app_state: Node
 var _main: Node
@@ -29,6 +32,8 @@ func _init() -> void:
 
 func _run() -> void:
 	await process_frame
+	_quick = "--quick" in OS.get_cmdline_user_args()
+	_f = 1 if _quick else 2
 	_root = get_root()
 	_app_state = _root.get_node_or_null("AppState")
 	if _app_state == null:
@@ -193,7 +198,7 @@ func _drive_app() -> void:
 		if str(ch.get("lab", "")) != "":
 			await _drive_lab(ch)
 	_app_state.go_hub()
-	await _frames(2)
+	await _frames(_f)
 	_ok(_screen_kind() == "hub", "did not return to hub at the end")
 	_main.queue_free()
 	await process_frame
@@ -205,7 +210,7 @@ func _drive_hub() -> void:
 	var settings := _find_button(hub, "⚙")
 	if _ok(settings != null, "hub has no settings button"):
 		settings.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		var overlay: Node = null
 		for c in _descendants(hub):
 			if _is_a(c, "SettingsOverlay"):
@@ -226,15 +231,15 @@ func _drive_hub() -> void:
 			var close := _find_button(overlay, "Close")
 			if _ok(close != null, "settings overlay has no Close"):
 				close.pressed.emit()
-				await _frames(2)
+				await _frames(_f)
 			_ok(not is_instance_valid(overlay) or overlay.is_queued_for_deletion(), "settings overlay did not close")
 		# open again, Esc closes it
 		settings.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		await _action("ui_cancel")
 		# open again, reset progress
 		settings.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		var reset := _find_button(hub, "Reset progress")
 		if _ok(reset != null, "settings overlay has no Reset progress"):
 			reset.pressed.emit()
@@ -254,11 +259,11 @@ func _drive_hub() -> void:
 		ev.button_index = MOUSE_BUTTON_LEFT
 		ev.pressed = true
 		card.gui_input.emit(ev)
-		await _frames(2)
+		await _frames(_f)
 		_ok(_screen_kind() == "chapter" and _app_state.current_route.get("id") == _app_state.CHAPTERS[i]["id"],
 			"card %d did not open chapter %s" % [i, _app_state.CHAPTERS[i]["id"]])
 		_app_state.go_hub()
-		await _frames(2)
+		await _frames(_f)
 		hub = _screen()
 		cards.clear()
 		for c in _descendants(hub):
@@ -270,7 +275,7 @@ func _drive_hub() -> void:
 func _drive_chapter(ch: Dictionary) -> void:
 	var id: String = ch["id"]
 	_app_state.go_chapter(id, 0)
-	await _frames(2)
+	await _frames(_f)
 	var scr := _screen()
 	if not _ok(_screen_kind() == "chapter" and scr != null, "chapter %s did not open" % id):
 		return
@@ -300,7 +305,7 @@ func _drive_chapter(ch: Dictionary) -> void:
 	var toc: Dictionary = scr.get("_toc_buttons")
 	for sid in toc:
 		(toc[sid] as Button).pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 	# keyboard: first page, prev (clamped), next, prev
 	scr.call("_show_page", 0)
 	await process_frame
@@ -317,14 +322,14 @@ func _drive_chapter(ch: Dictionary) -> void:
 	_ok(prevb.disabled, "chapter %s: prev button enabled on first page" % id)
 	if pages.size() > 1:
 		nextb.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		prevb.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 	# last page → "Next" goes to the next chapter or the hub
 	scr.call("_show_page", pages.size() - 1)
-	await _frames(2)
+	await _frames(_f)
 	nextb.pressed.emit()
-	await _frames(2)
+	await _frames(_f)
 	var nxt: String = _app_state.next_chapter_id(id)
 	if nxt != "":
 		_ok(_screen_kind() == "chapter" and _app_state.current_route.get("id") == nxt, "chapter %s: Next did not open %s" % [id, nxt])
@@ -332,20 +337,20 @@ func _drive_chapter(ch: Dictionary) -> void:
 		_ok(_screen_kind() == "hub", "chapter %s: Next did not return to hub" % id)
 	# L enters the lab (if any) and Esc comes back; Esc from a chapter → hub
 	_app_state.go_chapter(id, 0)
-	await _frames(2)
+	await _frames(_f)
 	if str(ch.get("lab", "")) != "":
 		await _action("lab_toggle")
-		await _frames(2)
+		await _frames(_f)
 		_ok(_screen_kind() == "lab", "chapter %s: L did not enter the lab" % id)
 		await _action("ui_cancel")
-		await _frames(2)
+		await _frames(_f)
 		_ok(_screen_kind() == "chapter", "lab %s: Esc did not return to the chapter" % id)
 		var enter := _find_button(_screen(), "◆  Enter the lab")
 		_ok(enter != null, "chapter %s has no Enter-the-lab button" % id)
 	var home := _find_button(_screen(), "‹  All experiments")
 	if _ok(home != null, "chapter %s has no home button" % id):
 		home.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		_ok(_screen_kind() == "hub", "chapter %s: home button did not return to hub" % id)
 	# progress was recorded
 	_ok(_app_state.completion(id) > 0.99, "chapter %s: completion %.2f after reading every page" % [id, _app_state.completion(id)])
@@ -416,19 +421,19 @@ func _drive_lab(ch: Dictionary) -> void:
 		for s in sliders:
 			var sl: HSlider = s
 			var orig := sl.value
-			for v in [sl.min_value, sl.max_value, (sl.min_value + sl.max_value) * 0.5, orig]:
+			for v in ([sl.max_value, orig] if _quick else [sl.min_value, sl.max_value, (sl.min_value + sl.max_value) * 0.5, orig]):
 				sl.value = v
-				await _frames(2)
+				await _frames(_f)
 			n_params += 1
-		for b in small_buttons:
+		for b in ([] if _quick else small_buttons):
 			(b as Button).pressed.emit()
-			await _frames(2)
+			await _frames(_f)
 		for c in checks:
 			var cb: CheckBox = c
 			cb.button_pressed = not cb.button_pressed
-			await _frames(2)
+			await _frames(_f)
 			cb.button_pressed = not cb.button_pressed
-			await _frames(2)
+			await _frames(_f)
 			n_params += 1
 		for o in options:
 			var ob: OptionButton = o
@@ -436,10 +441,10 @@ func _drive_lab(ch: Dictionary) -> void:
 			for i in ob.item_count:
 				ob.select(i)
 				ob.item_selected.emit(i)
-				await _frames(2)
+				await _frames(_f)
 			ob.select(orig)
 			ob.item_selected.emit(orig)
-			await _frames(2)
+			await _frames(_f)
 			n_params += 1
 		_ok(controller.snapshots.size() == controller.components.size(), "lab %s: rebuild broke while editing %s" % [id, app.label])
 		var look := _find_button(inspector, "Look at it")
@@ -483,11 +488,11 @@ func _drive_lab(ch: Dictionary) -> void:
 
 	# photons, keys, camera, picking
 	lab.call("toggle_photons")
-	await _frames(45)
+	await _frames(10 if _quick else 45)
 	lab.call("toggle_photons")
-	await _frames(2)
+	await _frames(_f)
 	await _action("lab_run")
-	await _frames(20)
+	await _frames(5 if _quick else 20)
 	await _action("lab_run")
 	await _action("lab_reset")
 	await _frames(3)
@@ -528,12 +533,12 @@ func _drive_lab(ch: Dictionary) -> void:
 	var back := _find_button(lab.get("hud"), "‹  Back to reading")
 	if _ok(back != null, "lab %s has no back button" % id):
 		back.pressed.emit()
-		await _frames(2)
+		await _frames(_f)
 		_ok(_screen_kind() == "chapter", "lab %s: back button did not return to the chapter" % id)
 	_app_state.go_lab(id)
 	await _frames(3)
 	await _action("ui_cancel")
-	await _frames(2)
+	await _frames(_f)
 	_ok(_screen_kind() == "chapter", "lab %s: Esc did not return to the chapter" % id)
 
 
@@ -559,4 +564,4 @@ func _mouse_drag(from: Vector2, to: Vector2, button: MouseButton, shift: bool) -
 	up.position = to
 	up.shift_pressed = shift
 	Input.parse_input_event(up)
-	await _frames(2)
+	await _frames(_f)
