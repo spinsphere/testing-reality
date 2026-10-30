@@ -17,6 +17,7 @@ extends SceneTree
 ## ERROR, WARNING) go to stderr and are counted by tools/test.sh.
 
 var _fail := 0
+var _labs_completed := 0
 ## `--quick` (after `--`): fewer frames and shorter parameter sweeps, for the slow software-GL pass.
 var _quick := false
 var _f := 2  # frames to wait after a UI change
@@ -203,6 +204,7 @@ func _drive_app() -> void:
 			li += 1
 			await _drive_lab(ch)
 	_app_state.settings["quality"] = 1
+	_ok(_labs_completed == li, "only %d of %d labs ran to the end (a runtime error aborts a lab's checks silently)" % [_labs_completed, li])
 	_app_state.go_hub()
 	await _frames(_f)
 	_ok(_screen_kind() == "hub", "did not return to hub at the end")
@@ -724,8 +726,10 @@ func _drive_lab(ch: Dictionary) -> void:
 	cam.pitch = cam._pitch_goal
 	cam._apply(true)
 	await process_frame
+	# only the fixed HUD panels (direct children of the HUD root): inspector contents are
+	# rebuilt on every selection, so anything deeper may be freed while we iterate
 	var panels: Array = []
-	for c in _descendants(lab.get("hud")):
+	for c in ((lab.get("hud") as Node).get_child(0) as Node).get_children():
 		if c is PanelContainer:
 			panels.append(c)
 	var picked := 0
@@ -737,7 +741,7 @@ func _drive_lab(ch: Dictionary) -> void:
 		var vp_pos: Vector2 = cam.camera.unproject_position(pos3)
 		var covered := false
 		for pnl in panels:
-			if (pnl as Control).get_global_rect().has_point(vp_pos):
+			if is_instance_valid(pnl) and (pnl as Control).get_global_rect().has_point(vp_pos):
 				covered = true
 		if covered:
 			continue
@@ -774,6 +778,7 @@ func _drive_lab(ch: Dictionary) -> void:
 	await _action("ui_cancel")
 	await _frames(_f)
 	_ok(_screen_kind() == "chapter", "lab %s: Esc did not return to the chapter" % id)
+	_labs_completed += 1
 
 
 func _mouse_drag(from: Vector2, to: Vector2, button: MouseButton, shift: bool) -> void:
