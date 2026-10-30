@@ -1,0 +1,15 @@
+# Godot
+.godot/
+*.import
+export/
+builds/
+# Blender
+*.blend1
+*.blend2
+__pycache__/
+# Python
+*.pyc
+.venv/
+# OS / editors
+.DS_Store
+*.swp

@@ -1,0 +1,112 @@
+# Testing Reality — Project Plan
+
+Living plan for building the *Testing Reality* quantum-optics site as an educational desktop
+game. **If you are resuming work (new session, token reset): read this file, find the first
+unchecked item under "Status", and continue from there. Do not wait for the user.**
+
+See `docs/design/architecture.md` for the system design and `docs/content/` for the
+page-by-page source material.
+
+## Goals
+
+1. **Quagmire Engine** (`quagmire-engine/`): a reusable quantum physics engine for games,
+   written in Rust with a C ABI, independent of any game engine. Will be split into its own
+   repository after this project.
+2. **Quagmire SDK for Godot** (`quagmire-engine/sdk-godot/`): a GDExtension exposing the engine
+   to GDScript as `Quagmire*` classes, shipped as a Godot addon.
+3. **Testing Reality app** (`app/`): a Godot 4.7 desktop app. One narrated chapter per site page
+   (Home, Introduction, Experiments 1–7), each mixing story pages (text + equations, teaching the
+   maths from scratch) with an interactive 3D laboratory that reproduces the real apparatus and
+   gives physically accurate results.
+4. **3D apparatus** (`blender/` → `app/assets/models/`): built with headless Blender scripts,
+   realistic PBR materials, real-lab look (optical breadboard, anodised mounts, glass optics),
+   physically correct laser colour (405 nm violet; 808 nm shown as "invisible infrared").
+
+## Phases
+
+| # | Phase | Output | Status |
+|---|-------|--------|--------|
+| 0 | Ingest source PDFs, research, plan | `docs/content/*.md`, this plan, architecture doc | in progress |
+| 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | pending |
+| 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | pending |
+| 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | pending |
+| 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | pending |
+| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | pending |
+| 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
+
+Phases 1, 3 and 4 are independent and run in parallel where agents allow. Phase 5 chapters are
+independent of each other once Phases 2–4 exist; Experiment 1 is built first as the template.
+
+## Status (checklist — keep updated, tick as you go)
+
+### Phase 0 — Ingest and plan
+- [x] Extract text + render all 198 PDF pages, contact sheets (scratchpad)
+- [x] Confirm `C-Quantum formalism.pdf` is a duplicate of `A-Introduction New.pdf`
+- [x] Install Blender 4.3.2 (apt), Godot 4.7.2 (`~/.local/bin/godot`) + export templates
+- [x] Install Rust toolchain (rustup), verify gdext 0.5.5 has `api-4-7`
+- [x] Verify MathJax (node) TeX → SVG works offline
+- [ ] Content specs written: `docs/content/00-home.md` … `08-experiment-7-detecting-not-recording.md`
+- [ ] Review content specs, fix gaps, write `docs/design/physics-model.md` (unified model of all 7 experiments)
+- [ ] Try to fetch the site's lab CSV files (nice-to-have; "lab data overlay" feature)
+- [x] Write `docs/PLAN.md`, `docs/design/architecture.md`
+- [ ] Commit Phase 0
+
+### Phase 1 — Quagmire Engine core (Rust)
+- [ ] Workspace `quagmire-engine/Cargo.toml`, crate `quagmire-core`
+- [ ] `Complex`, labelled `Property` (qudit with named basis + dynamic sink labels), `System` (sparse state vector over tuples)
+- [ ] Operators: unitary on one property (Jones matrices: rotation, HWP, QWP, general retarder), diagonal phase, relabel/permutation conditioned on predicates (PBS), beam splitter, `project_or_sink` (polarizer with |lost⟩)
+- [ ] Sources: single photon with polarization, SPDC pair `cos χ|HH⟩ + e^{iφ} sin χ|VV⟩`, double-slit path split
+- [ ] Queries: `probability(predicate)`, `marginals`, `conditional(predicate)`, `amplitudes`, pretty ket string (Unicode + LaTeX)
+- [ ] Measurement: Born sampling with seedable PCG RNG, forced outcomes, `measure_in_basis(angle)`
+- [ ] Optics screen: `intensity_profile(path_property, geometry, ys)` with Fraunhofer envelope + exact path phases; coincidence post-selection; box convolution (detector slit); inverse-CDF photon sampling
+- [ ] Golden tests from the site: 3-polarizer 12.5 %, cos² law, Exp 3 table (0/90/±45), Exp 4 table, Exp 5.x constants, Exp 6 `1 + sin 2γ cos kΔ`
+- [ ] `quagmire-core` README + rustdoc
+- [ ] Commit
+
+### Phase 2 — Quagmire SDK for Godot
+- [ ] Crate `quagmire-godot` (gdext 0.5, `api-4-7`), classes `QuagmireSystem`, `QuagmireOptics`, `QuagmireScreen`
+- [ ] `app/addons/quagmire/quagmire.gdextension` + build script `tools/build-sdk.sh` (copies `.so` into addon)
+- [ ] Headless Godot smoke test (`godot --headless -s`) that computes the 12.5 % result through the extension
+- [ ] Commit
+
+### Phase 3 — App framework (Godot)
+- [ ] `app/project.godot` (Forward+ or Compatibility renderer — pick Compatibility for broad desktop GPUs; verify visuals), window 1600×900, blue/purple theme resource, fonts
+- [ ] Navigation: `Main` → `Hub` (experiment cards like the site's grid) → `Chapter` (TOC sidebar + page stack) → `Lab` (3D)
+- [ ] Story page system: data-driven pages (`.tres`/JSON) with blocks: text, equation (SVG), figure, interactive widget, "enter lab" button
+- [ ] Math pipeline: `tools/mathgen` (MathJax → SVG into `app/assets/math/`), equation manifest per chapter
+- [ ] Math primers (reusable widgets): 2D vector playground, Pythagoras/unit-length, projection = cosine, phasor/complex number, adding phasors (interference), "and" (tensor) lists, probability bars
+- [ ] Lab framework: orbit/pan/zoom camera, click-to-select apparatus, inspector panel (sliders/dials/presets), live state ket display, pattern plot widget, photon-by-photon mode, lab-data overlay hooks
+- [ ] Commit
+
+### Phase 4 — Blender apparatus
+- [ ] `blender/lib/` shared helpers (materials, posts/mounts, breadboard, export)
+- [ ] Models: optical table, laser module (405 nm / 808 nm), polarizer in rotation mount, HWP in rotation mount, PBS cube, plano-convex lens in mount, mirror in kinematic mount, beam dump, double-slit mask, adjustable single slit, BBO crystal mount, Berek compensator, SPCM detector on translation stage (+ 200 µm slit, filters, fibre collimator), coincidence counter box
+- [ ] Export glTF (`.glb`) with baked textures where procedural; import check in Godot headless
+- [ ] Commit
+
+### Phase 5 — Chapters
+- [ ] 00 Home / hub
+- [ ] 01 Introduction (quantum apple, kets as arrows, superposition, R45, measurement; interactive)
+- [ ] 02 Experiment 1 — Polarizers (template chapter; lab with 0–3 polarizers, lab-table comparison)
+- [ ] 03 Experiment 2 — Single/double slit (N, w, d, λ sliders; scanning detector)
+- [ ] 04 Experiment 3 — Polarized double slit (eraser P1)
+- [ ] 05 Experiment 4 — Entanglement (SPDC source, two polarizers, coincidence surface plot)
+- [ ] 06 Experiment 5 — Putting it all together (5.1–5.3)
+- [ ] 07 Experiment 6 — Delayed-choice eraser (P2 basis choice, singles vs coincidences)
+- [ ] 08 Experiment 7 — Detecting but not recording (wall / unplugged; FAQ)
+- [ ] Commit after each chapter
+
+### Phase 6 — Polish and release
+- [ ] Settings (volume, quality), save progress, keyboard map
+- [ ] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
+- [ ] README with screenshots, engine docs ready for split-off
+- [ ] Final commit
+
+## Conventions
+
+- Commit small, often: `feat(engine): …`, `feat(app): …`, `feat(blender): …`, `docs: …`, `chore: …`.
+- Rust: `cargo fmt`, `cargo clippy -D warnings`, tests next to code; no `unsafe` in `quagmire-core`.
+- GDScript: typed, `snake_case`, one scene = one script, signals up / calls down.
+- Blender scripts: one file per instrument in `blender/models/`, run with `blender -b -P <file>`; never commit `.blend` files, only scripts and exported `.glb`.
+- Keep the repo tidy: scratch work in the session scratchpad, not in the repo.
+- Autonomous resume: a cron wake-up in the Claude session re-reads this plan after a token reset.
