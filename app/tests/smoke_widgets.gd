@@ -26,8 +26,8 @@ func _init() -> void:
 
 func _run() -> void:
 	var root := get_root()
-	root.theme = ThemeBuilder.build()
 	var host := PanelContainer.new()
+	host.theme = ThemeBuilder.build()
 	host.position = Vector2(20, 20)
 	host.size = Vector2(860, 360)
 	root.add_child(host)
@@ -67,8 +67,7 @@ func _run() -> void:
 		host.remove_child(w)
 		w.free()
 	host.free()
-	# drop the theme (and the fonts it holds) before quitting so nothing leaks at exit
-	root.theme = null
+	await process_frame  # let the freed controls release their resources before the exit leak check
 	print("SMOKE_WIDGETS ", "OK" if _failures == 0 else "FAILED (%d)" % _failures)
 	quit(0 if _failures == 0 else 1)
 

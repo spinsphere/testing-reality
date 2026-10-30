@@ -66,11 +66,11 @@ func build() -> void:
 
 func _update() -> void:
 	var s := QuagmireSystem.new()
-	s.add_property("pol", WidgetKit.HV)
-	s.set_linear_polarization("pol", WidgetKit.HV, _input)
+	s.add_property("pol", WidgetKit.hv())
+	s.set_linear_polarization("pol", WidgetKit.hv(), _input)
 	_stage_probs.resize(_angles.size())
 	for i in _angles.size():
-		s.polarizer("pol", WidgetKit.HV, _angles[i], "lost@P%d" % (i + 1), {})
+		s.polarizer("pol", WidgetKit.hv(), _angles[i], "lost@P%d" % (i + 1), {})
 		_stage_probs[i] = s.probability({"alive": PackedStringArray(["pol"])})
 	_final = s.probability({"alive": PackedStringArray(["pol"])})
 	_ket = s.ket_text()

@@ -2,7 +2,10 @@ class_name WidgetKit
 ## Shared building blocks for the interactive teaching widgets: a callback canvas,
 ## a draggable polarizer dial, control-row builders and small drawing primitives.
 
-static var HV := PackedStringArray(["↔", "↕"])
+## Horizontal/vertical labels (a function, not a `static var`: scripts holding static state are
+## kept alive until exit and show up as leaked resources).
+static func hv() -> PackedStringArray:
+	return PackedStringArray(["↔", "↕"])
 const PANEL_WIDTH := 250.0
 const FONT_SMALL := 13
 const FONT_TEXT := 15

@@ -3,7 +3,7 @@ extends WidgetBase
 ## by θ = t·90° while the eaten amplitude 1/√3 stays put. Bars show the probabilities,
 ## the ket text comes from QuagmireSystem.ket_text() (nice fractions).
 
-static var LABELS := PackedStringArray(["red", "rotten", "eaten"])
+var LABELS := PackedStringArray(["red", "rotten", "eaten"])
 const COLORS := [Color("#f87171"), Color("#b4873b"), Color("#a78bfa")]
 const SNAPSHOTS := [0.0, 0.25, 0.75, 1.0]
 

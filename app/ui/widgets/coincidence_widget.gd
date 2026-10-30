@@ -61,11 +61,11 @@ func build() -> void:
 
 func _pair(alpha: float, beta: float) -> QuagmireSystem:
 	var s := QuagmireSystem.new()
-	s.add_property("pump", WidgetKit.HV)
-	s.set_linear_polarization("pump", WidgetKit.HV, 45.0)
-	s.spdc("pump", WidgetKit.HV, "pol1", "pol2", WidgetKit.HV, 0.0)
-	s.polarizer("pol1", WidgetKit.HV, alpha, "lost@A", {})
-	s.polarizer("pol2", WidgetKit.HV, beta, "lost@B", {})
+	s.add_property("pump", WidgetKit.hv())
+	s.set_linear_polarization("pump", WidgetKit.hv(), 45.0)
+	s.spdc("pump", WidgetKit.hv(), "pol1", "pol2", WidgetKit.hv(), 0.0)
+	s.polarizer("pol1", WidgetKit.hv(), alpha, "lost@A", {})
+	s.polarizer("pol2", WidgetKit.hv(), beta, "lost@B", {})
 	return s
 
 
@@ -82,9 +82,9 @@ func _update() -> void:
 	_p_a = s.probability({"alive": PackedStringArray(["pol1"])})
 	_p_b = s.probability({"alive": PackedStringArray(["pol2"])})
 	var before := QuagmireSystem.new()
-	before.add_property("pump", WidgetKit.HV)
-	before.set_linear_polarization("pump", WidgetKit.HV, 45.0)
-	before.spdc("pump", WidgetKit.HV, "pol1", "pol2", WidgetKit.HV, 0.0)
+	before.add_property("pump", WidgetKit.hv())
+	before.set_linear_polarization("pump", WidgetKit.hv(), 45.0)
+	before.spdc("pump", WidgetKit.hv(), "pol1", "pol2", WidgetKit.hv(), 0.0)
 	_ket = before.ket_text()
 	var diff := _alpha - _beta
 	_out_prob.text = "P(both) = ½cos²(α−β)\n        = ½cos²(%d°) = %s" % [roundi(diff), WidgetKit.fmt_pct(_p_both)]
