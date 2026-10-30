@@ -27,6 +27,8 @@ func set_segments(segments: Array) -> void:
 		var from: Vector3 = seg["from"]
 		var to: Vector3 = seg["to"]
 		var intensity := clampf(float(seg.get("intensity", 1.0)), 0.0, 1.0)
+		if intensity <= 0.0:
+			continue  # shutter closed or nothing left: no beam at all
 		var nm := float(seg.get("wavelength", 405.0))
 		var color := Palette.wavelength_to_color(nm)
 		if not Palette.is_visible(nm):

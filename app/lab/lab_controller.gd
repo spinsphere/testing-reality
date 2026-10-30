@@ -16,6 +16,10 @@ var alive_by_apparatus: Dictionary = {}
 var result: Dictionary = {}  # free-form, filled by hooks (e.g. {"detector_probability": 0.125})
 ## Optional hook called after the chain: `Callable(sys, ctx) -> Dictionary` to compute profiles etc.
 var finish_hook: Callable
+## Source state read from the chain: the laser's shutter and power, and the SPDC source's
+## pair rate when there is one. `rate_scale()` is what every count rate is multiplied by.
+var source_on := true
+var power := 1000.0
 var _dirty := false
 var _seed := 1234
 
@@ -43,14 +47,19 @@ func rebuild() -> void:
 		label_map["%s/%s" % [ctx["pol"], l]] = l
 	var stage := 0
 	var alive := 1.0
+	source_on = true
 	for app in components:
 		var c := ctx.duplicate()
 		c.merge(app.ctx_overrides, true)
 		app.apply(system, c)
 		if app is Optics.Laser:
 			alive = 1.0
+			source_on = (app as Optics.Laser).is_on()
+			power = float(app.get_param("power"))
 		elif _has_property(c["pol"]):
 			alive = system.probability({"alive": PackedStringArray([c["pol"]])})
+		if app is Optics.SPDCSource:
+			power = float(app.get_param("pairs"))
 		alive_by_apparatus[app] = alive
 		snapshots.append({
 			"label": app.label,
@@ -85,13 +94,20 @@ func _has_property(name: String) -> bool:
 	return false
 
 
-## Probability that the photon is still alive after `app` (1 if unknown).
+## Fraction of the source's photons still in the beam after `app` (0 with the shutter closed).
 func alive_after_apparatus(app: Apparatus) -> float:
-	return float(alive_by_apparatus.get(app, 1.0))
+	return float(alive_by_apparatus.get(app, 1.0)) if source_on else 0.0
 
 
-## Probability that a photon survives up to and including `index`.
+## Fraction of the source's photons that survive up to and including `index`.
 func alive_after(index: int) -> float:
+	if not source_on:
+		return 0.0
 	if index < 0 or index >= snapshots.size():
 		return 1.0
 	return float(snapshots[index]["alive"])
+
+
+## Photons (or pairs) per second entering the experiment; 0 while the shutter is closed.
+func rate_scale() -> float:
+	return power if source_on else 0.0

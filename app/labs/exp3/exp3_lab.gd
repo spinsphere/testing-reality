@@ -12,7 +12,7 @@ func _init() -> void:
 
 
 func build() -> void:
-	var laser := place(Optics.Laser.new(405.0, 0.0, "LASER"), -0.54)
+	var laser := place(Optics.Laser.new(405.0, 0.0, "LASER", 3000.0), -0.54)
 	laser.model = "laser_405"
 	place(Optics.BeamSplitterCube.new("BS"), -0.44)
 	place(Optics.HalfWavePlate.new("λ/2", 22.5), -0.36)

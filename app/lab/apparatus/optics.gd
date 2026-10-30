@@ -5,17 +5,24 @@ class_name Optics
 
 class Laser extends Apparatus:
 	## Prepares the photon: sets the polarization property and (optionally) the path property.
+	## `on` is the shutter; `power` the photon rate the source delivers (photons / s), which every
+	## count rate in the lab scales with.
 	var wavelength_nm := 405.0
 	var polarization_deg := 45.0
 	var power_photons_per_s := 1159.0
 
-	func _init(p_wavelength: float = 405.0, p_pol: float = 45.0, p_label: String = "LASER") -> void:
+	func _init(p_wavelength: float = 405.0, p_pol: float = 45.0, p_label: String = "LASER", p_power: float = 1159.0) -> void:
 		label = p_label
 		display_name = "Diode laser (%d nm)" % int(p_wavelength)
 		model = "laser_405"
 		wavelength_nm = p_wavelength
 		polarization_deg = p_pol
-		description = "A laser diode. Its light is prepared with a definite polarization before it reaches the first element."
+		power_photons_per_s = p_power
+		description = "A laser diode. Its light is prepared with a definite polarization before it reaches the first element. Close the shutter to stop the experiment; the power sets how many photons per second go down the beam."
+		add_param("on", {"label": "Shutter open", "type": "bool", "value": true,
+			"help": "Close the shutter to stop the beam: no photons, no counts. Every other setting is kept."})
+		add_param("power", {"label": "Power", "type": "float", "min": 50.0, "max": 5000.0, "step": 10.0, "unit": " photons/s", "value": p_power,
+			"help": "Photons per second leaving the preparation stage. All predicted rates and the live counts scale with it."})
 		add_param("polarization", {"label": "Prepared polarization", "type": "float", "min": -90.0, "max": 90.0, "step": 0.5, "unit": "°", "value": p_pol,
 			"help": "The polarization angle of the photons leaving the preparation stage (0° = horizontal ↔, 90° = vertical ↕, 45° = diagonal ↗↙)."})
 
@@ -23,8 +30,13 @@ class Laser extends Apparatus:
 		sys.add_property(ctx["pol"], ctx["live"])
 		sys.set_linear_polarization(ctx["pol"], ctx["live"], float(get_param("polarization")))
 
+	func is_on() -> bool:
+		return bool(get_param("on"))
+
 	func summary() -> String:
-		return "%s · %d nm" % [label, int(wavelength_nm)]
+		if not is_on():
+			return "%s · shutter closed" % label
+		return "%s · %d nm · %d /s" % [label, int(wavelength_nm), roundi(float(get_param("power")))]
 
 
 class Polarizer extends Apparatus:
@@ -120,6 +132,9 @@ class BeamSplitterCube extends Apparatus:
 class Detector extends Apparatus:
 	## Single-photon counting module. Reports the probability that a photon arrives.
 	var last_probability := 0.0
+	## Extra properties that must also be "alive" for a click (e.g. the idler path, which a wall
+	## can send to a sink).
+	var extra_alive := PackedStringArray()
 
 	func _init(p_label: String = "D1") -> void:
 		label = p_label
@@ -131,7 +146,9 @@ class Detector extends Apparatus:
 		return true
 
 	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
-		last_probability = sys.probability({"alive": PackedStringArray([ctx["pol"]])})
+		var props := PackedStringArray([ctx["pol"]])
+		props.append_array(extra_alive)
+		last_probability = sys.probability({"alive": props})
 
 	func summary() -> String:
 		return "%s · %d %%" % [label, roundi(last_probability * 100.0)]
@@ -220,6 +237,8 @@ class SPDCSource extends Apparatus:
 		model = "bbo_crystal"
 		description = "Two thin beta-barium-borate crystals glued with their axes at 90°. Very rarely, a 405 nm pump photon splits into two 810 nm photons whose polarizations are entangled: both vertical or both horizontal, with the amplitudes set by the pump polarization."
 		add_param("phase", {"label": "Relative phase φ", "type": "float", "min": -180.0, "max": 180.0, "step": 5.0, "unit": "°", "value": 0.0, "help": "The phase between the |↕↕⟩ and |↔↔⟩ parts. The Berek compensator before the crystal is used to set it to zero (|Φ⁺⟩)."})
+		add_param("pairs", {"label": "Detected pair rate", "type": "float", "min": 50.0, "max": 5000.0, "step": 50.0, "unit": " pairs/s", "value": 1500.0,
+			"help": "Photon pairs per second that reach the detectors when nothing blocks them. A real source makes many more singles than pairs (most partners miss the detectors); here both are counted per pair so the ratios are exact."})
 
 	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
 		sys.spdc(ctx["pol"], ctx["live"], "pol1", "pol2", ctx["live"], float(get_param("phase")))
@@ -268,6 +287,29 @@ class BeamDump extends Apparatus:
 
 	func summary() -> String:
 		return label
+
+
+class CoincidenceCounter extends Apparatus:
+	## Counting electronics beside the table: its display shows the live acquisition.
+	var counts: Dictionary = {}
+
+	func _init(p_label: String = "CC") -> void:
+		label = p_label
+		display_name = "Coincidence counter"
+		model = "coincidence_counter"
+		description = "The detectors' pulses come here. Each channel is counted, and two pulses arriving within a 10 ns window are counted as a coincidence: both photons of one pair were detected. Press Run in the COUNTING panel to start an acquisition."
+
+	func set_counts(p_counts: Dictionary) -> void:
+		counts = p_counts
+		refresh_visual()
+
+	func summary() -> String:
+		if counts.is_empty():
+			return "%s · idle" % label
+		var parts: PackedStringArray = []
+		for k in counts:
+			parts.append("%s %d" % [k, int(counts[k])])
+		return "%s\n%s" % [label, "   ".join(parts)]
 
 
 class Wall extends Apparatus:

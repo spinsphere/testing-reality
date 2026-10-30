@@ -459,6 +459,60 @@ func _drive_lab(ch: Dictionary) -> void:
 			break
 	lab.call("select", null)
 
+	# shutter and power: closing the shutter kills every rate, the beam and every channel
+	var laser: Node = null
+	for app in controller.components:
+		if (app.params as Dictionary).has("on") and (app.params as Dictionary).has("power"):
+			laser = app
+	if _ok(laser != null, "lab %s has no laser with a shutter" % id):
+		var rate_before: float = controller.rate_scale()
+		_ok(rate_before > 0.0, "lab %s: rate scale is %.1f with the shutter open" % [id, rate_before])
+		laser.set_param("on", false)
+		await _frames(3)
+		_ok(controller.rate_scale() == 0.0, "lab %s: shutter closed but rate scale %.1f" % [id, controller.rate_scale()])
+		var banner := false
+		for t in _texts(lab.get("hud")):
+			if str(t).begins_with("SHUTTER CLOSED"):
+				banner = true
+		_ok(banner, "lab %s: no shutter banner in the state panel" % id)
+		var any_beam := false
+		for c in (lab.get("beams") as Node).get_children():
+			if (c as Node3D).visible:
+				any_beam = true
+		_ok(not any_beam, "lab %s: beam still drawn with the shutter closed" % id)
+		for chan in lab.call("acquisition_channels"):
+			_ok(float(chan["rate"]) == 0.0, "lab %s: channel %s has rate %.1f with the shutter closed" % [id, chan["name"], chan["rate"]])
+		laser.set_param("on", true)
+		await _frames(3)
+		_ok(is_equal_approx(controller.rate_scale(), rate_before), "lab %s: rate scale did not recover after reopening the shutter" % id)
+	# acquisition: 4 s of counting must give Poisson-compatible counts on every channel
+	var channels: Array = lab.call("acquisition_channels")
+	_ok(channels.size() >= 1, "lab %s has no acquisition channels" % id)
+	lab.call("acquisition_toggle")
+	_ok(bool(lab.get("acq_running")), "lab %s: Run did not start the acquisition" % id)
+	await _frames(3)   # a few real frames through _process
+	lab.call("acquisition_advance", 4.0)
+	await process_frame
+	var t_acq: float = lab.get("acq_time")
+	_ok(t_acq >= 4.0, "lab %s: acquisition time %.2f after 4 s" % [id, t_acq])
+	var counts: Dictionary = lab.get("acq_counts")
+	var any_count := false
+	for chan in channels:
+		var expected := float(chan["rate"]) * t_acq
+		var n := int(counts.get(chan["name"], 0))
+		var tol := 6.0 * sqrt(maxf(expected, 1.0)) + 2.0
+		_ok(absf(n - expected) <= tol, "lab %s: channel %s counted %d, expected %.0f ± %.0f" % [id, chan["name"], n, expected, tol])
+		if n > 0:
+			any_count = true
+	_ok(any_count, "lab %s: nothing counted in %.1f s" % [id, t_acq])
+	var acq_texts := _texts(lab.get("acq_box"))
+	_ok(acq_texts.size() >= channels.size() * 2, "lab %s: counting panel shows %d labels for %d channels" % [id, acq_texts.size(), channels.size()])
+	var counter: Node = lab.get("counter_display")
+	if counter != null:
+		_ok(str((counter.get("_label3d") as Label3D).text).contains("D1"), "lab %s: counter display does not show the counts" % id)
+	lab.call("acquisition_reset")
+	_ok(not bool(lab.get("acq_running")) and (lab.get("acq_counts") as Dictionary).is_empty(), "lab %s: reset did not clear the acquisition" % id)
+
 	# lab-data overlays
 	var n_overlays := 0
 	if has_slits:

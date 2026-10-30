@@ -62,4 +62,6 @@ func finish_layout() -> void:
 		if app._label3d:
 			app._label3d.position.y = BEAM_HEIGHT + 0.06 + 0.03 * (i % 3)
 		i += 1
+	# counting electronics beside the idler arm; its display mirrors the acquisition
+	counter_display = place_decor(Optics.CoincidenceCounter.new("CC"), 0.52, -0.26, 180.0)
 	camera_rig.set_home(Vector3(-0.05, BEAM_HEIGHT, 0.0), 1.5, 150.0, 26.0)

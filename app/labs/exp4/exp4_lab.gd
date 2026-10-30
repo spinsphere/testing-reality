@@ -60,12 +60,15 @@ func on_rebuilt(_snapshots: Array, _result: Dictionary) -> void:
 			lab_xs.append(float(row["b"]))
 			lab_ys.append(float(row["coinc"]))
 			lab_peak = maxf(lab_peak, float(row["coinc"]))
-	var scale := 1.0
+	# model in pairs / s from the source's pair rate; the lab's points are scaled to its peak
+	var scale := controller.rate_scale()
 	var best := 0.0
 	for row in _grid:
 		best = maxf(best, float(row["coinc"]))
-	if best > 0.0:
-		scale = best / 0.5
+	if best > 0.0 and scale > 0.0:
+		var k := 0.5 * scale / best
+		for i in lab_ys.size():
+			lab_ys[i] *= k
 	for i in 73:
 		var b := -90.0 + i * 2.5
 		var probe := QuagmireSystem.with_seed(1)
@@ -97,6 +100,12 @@ func on_rebuilt(_snapshots: Array, _result: Dictionary) -> void:
 
 
 ## The two-photon state right after the BBO, from the pump wave plate and crystal phase.
+func acquisition_channels() -> Array:
+	var out := super()
+	out.append({"name": "D1·D2", "rate": controller.rate_scale() * controller.system.probability({"alive": PackedStringArray(["pol1", "pol2"])})})
+	return out
+
+
 func _pair_state() -> QuagmireSystem:
 	var probe := QuagmireSystem.with_seed(1)
 	probe.add_property("pump", PackedStringArray(["↔", "↕"]))

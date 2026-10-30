@@ -34,6 +34,17 @@ var _ray_length := 20.0
 ## Width of the bottom-right results panel (labs with two plots use a wider one).
 var results_width := 640.0
 
+# acquisition: real-time counting of every channel (detectors, coincidences)
+var acq_running := false
+var acq_time := 0.0
+var acq_counts: Dictionary = {}   # channel name -> counts so far
+var acq_box: VBoxContainer
+var _acq_time_label: Label
+var _acq_run_btn: Button
+## Optional counting electronics on the table whose display mirrors the acquisition.
+var counter_display: Apparatus
+var _rng := RandomNumberGenerator.new()
+
 
 func _ready() -> void:
 	_build_world()
@@ -57,6 +68,16 @@ func build() -> void:
 ## Fill the results panel from `controller.result`; default shows detector probabilities.
 func on_rebuilt(_snapshots: Array, _result: Dictionary) -> void:
 	pass
+
+
+## Channels counted while an acquisition runs: [{name, rate}] with rates in counts / s.
+## Default: every point detector on the chain. Labs add coincidences or scanning detectors.
+func acquisition_channels() -> Array:
+	var out: Array = []
+	for app in controller.components:
+		if app is Optics.Detector:
+			out.append({"name": app.label, "rate": controller.rate_scale() * (app as Optics.Detector).last_probability})
+	return out
 
 
 # ---------------------------------------------------------------- world
@@ -168,6 +189,16 @@ func place_on(app: Apparatus, a: Vector2, b: Vector2, t: float) -> Apparatus:
 	return app
 
 
+## Put a piece of equipment on the table without adding it to the beam chain (counters,
+## power supplies): it is visible, selectable and labelled, but has no optical effect.
+func place_decor(app: Apparatus, x: float, z: float, yaw_deg: float = 0.0) -> Apparatus:
+	app.beam_height = BEAM_HEIGHT
+	app.position = Vector3(x, 0.0, z)
+	app.rotation_degrees.y = yaw_deg
+	apparatus_root.add_child(app)
+	return app
+
+
 func add_preset(text: String, fn: Callable, tooltip: String = "") -> void:
 	var b := Button.new()
 	b.text = text
@@ -254,13 +285,59 @@ func _build_hud() -> void:
 	state_box.add_theme_constant_override("separation", 6)
 	scroll.add_child(state_box)
 
+	# right, top: counting (acquisition)
+	var acq := PanelContainer.new()
+	acq.theme_type_variation = "Hud"
+	acq.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	acq.offset_left = -360
+	acq.offset_right = -16
+	acq.offset_top = 64
+	acq.offset_bottom = 64 + 150
+	acq.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	root.add_child(acq)
+	var acq_v := VBoxContainer.new()
+	acq_v.add_theme_constant_override("separation", 4)
+	acq.add_child(acq_v)
+	var acq_head := HBoxContainer.new()
+	acq_head.add_theme_constant_override("separation", 8)
+	var at := Label.new()
+	at.text = "COUNTING"
+	at.theme_type_variation = "Kicker"
+	at.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	acq_head.add_child(at)
+	_acq_time_label = Label.new()
+	_acq_time_label.theme_type_variation = "Mono"
+	_acq_time_label.text = "t = 0.0 s"
+	acq_head.add_child(_acq_time_label)
+	_acq_run_btn = Button.new()
+	_acq_run_btn.text = "●  Run"
+	_acq_run_btn.theme_type_variation = "GhostButton"
+	_acq_run_btn.tooltip_text = "Start / pause counting photons in real time (Poisson statistics, like the real counter)."
+	_acq_run_btn.pressed.connect(acquisition_toggle)
+	acq_head.add_child(_acq_run_btn)
+	var acq_reset := Button.new()
+	acq_reset.text = "↺"
+	acq_reset.theme_type_variation = "GhostButton"
+	acq_reset.tooltip_text = "Reset the counters"
+	acq_reset.pressed.connect(acquisition_reset)
+	acq_head.add_child(acq_reset)
+	acq_v.add_child(acq_head)
+	var acq_scroll := ScrollContainer.new()
+	acq_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	acq_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	acq_v.add_child(acq_scroll)
+	acq_box = VBoxContainer.new()
+	acq_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	acq_box.add_theme_constant_override("separation", 2)
+	acq_scroll.add_child(acq_box)
+
 	# right: inspector
 	var right := PanelContainer.new()
 	right.theme_type_variation = "Hud"
 	right.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
 	right.offset_left = -360
 	right.offset_right = -16
-	right.offset_top = 64
+	right.offset_top = 64 + 150 + 10
 	right.offset_bottom = -340
 	root.add_child(right)
 	var right_v := VBoxContainer.new()
@@ -318,11 +395,19 @@ func _on_rebuilt_internal(snapshots: Array, result: Dictionary) -> void:
 	_refresh_state_panel(snapshots)
 	_refresh_beams(snapshots)
 	on_rebuilt(snapshots, result)
+	_refresh_acq()
 
 
 func _refresh_state_panel(snapshots: Array) -> void:
 	for c in state_box.get_children():
 		c.queue_free()
+	if not controller.source_on:
+		var banner := Label.new()
+		banner.text = "SHUTTER CLOSED — no photons in the beam. The states below describe a photon once it opens."
+		banner.theme_type_variation = "Muted"
+		banner.add_theme_color_override("font_color", Palette.WARNING)
+		banner.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		state_box.add_child(banner)
 	for s in snapshots:
 		var row := VBoxContainer.new()
 		row.add_theme_constant_override("separation", 0)
@@ -530,6 +615,82 @@ func add_result_control(c: Control) -> void:
 	results_box.add_child(c)
 
 
+# ---------------------------------------------------------------- acquisition
+
+func acquisition_toggle() -> void:
+	acq_running = not acq_running
+	_refresh_acq()
+
+
+func acquisition_reset() -> void:
+	acq_running = false
+	acq_time = 0.0
+	acq_counts.clear()
+	_refresh_acq()
+
+
+## Count for `dt` more seconds: every channel receives a Poisson number of clicks with mean
+## rate × dt. Called each frame while running; tests call it directly.
+func acquisition_advance(dt: float) -> void:
+	if dt <= 0.0:
+		return
+	acq_time += dt
+	for ch in acquisition_channels():
+		var n := _poisson(float(ch["rate"]) * dt)
+		acq_counts[ch["name"]] = int(acq_counts.get(ch["name"], 0)) + n
+	_refresh_acq()
+
+
+func _poisson(mean: float) -> int:
+	if mean <= 0.0:
+		return 0
+	if mean > 60.0:
+		return maxi(0, roundi(_rng.randfn(mean, sqrt(mean))))
+	var limit := exp(-mean)
+	var k := 0
+	var p := _rng.randf()
+	while p > limit:
+		k += 1
+		p *= _rng.randf()
+	return k
+
+
+func _refresh_acq() -> void:
+	if acq_box == null:
+		return
+	_acq_run_btn.text = "❚❚  Pause" if acq_running else "●  Run"
+	_acq_time_label.text = "t = %.1f s" % acq_time
+	for c in acq_box.get_children():
+		c.queue_free()
+	for ch in acquisition_channels():
+		var name := str(ch["name"])
+		var rate := float(ch["rate"])
+		var n := int(acq_counts.get(name, 0))
+		var h := HBoxContainer.new()
+		h.add_theme_constant_override("separation", 8)
+		var k := Label.new()
+		k.text = name
+		k.theme_type_variation = "Muted"
+		k.custom_minimum_size = Vector2(56, 0)
+		h.add_child(k)
+		var v := Label.new()
+		v.theme_type_variation = "Mono"
+		if acq_time > 0.0:
+			v.text = "%d   (%.0f ± %.0f /s)" % [n, n / acq_time, sqrt(float(n)) / acq_time]
+		else:
+			v.text = "—"
+		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		h.add_child(v)
+		var e := Label.new()
+		e.text = "expect %.0f /s" % rate
+		e.theme_type_variation = "Muted"
+		e.add_theme_font_size_override("font_size", 12)
+		h.add_child(e)
+		acq_box.add_child(h)
+	if counter_display and is_instance_valid(counter_display) and counter_display.has_method("set_counts"):
+		counter_display.call("set_counts", acq_counts)
+
+
 # ---------------------------------------------------------------- photon animation
 
 func toggle_photons() -> void:
@@ -543,6 +704,8 @@ func toggle_photons() -> void:
 
 
 func _process(delta: float) -> void:
+	if acq_running:
+		acquisition_advance(delta)
 	if not _photon_mode or controller.components.size() < 2 or not beam_paths.is_empty():
 		return
 	_photon_timer -= delta
@@ -578,7 +741,7 @@ func _process(delta: float) -> void:
 ## Sample one photon's fate from the final state: which component absorbs it (if any).
 func _spawn_photon() -> void:
 	var sys := controller.system
-	if sys == null:
+	if sys == null or not controller.source_on:
 		return
 	var pol: String = controller.ctx["pol"]
 	var outcome := sys.sample(pol, 1)

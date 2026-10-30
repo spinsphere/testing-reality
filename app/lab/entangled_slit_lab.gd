@@ -36,6 +36,7 @@ func build_entangled_slit(with_p2: bool, with_wall: bool) -> void:
 		p2 = on_idler(Optics.Polarizer.new("P2", 45.0), 0.62)
 		p2.display_name = "Idler polarizer (basis choice)"
 	d2 = on_idler(Optics.Detector.new("D2"), 1.0)
+	d2.extra_alive = PackedStringArray(["idler_path"])  # a wall on the idler arm stops its clicks
 	d2.description = "Stationary detector for the idler photon. Its clicks are compared with D1's in a coincidence counter (10 ns window)."
 	finish_layout()
 	setup_slit_lab(m, d, 810.0, 0.5)

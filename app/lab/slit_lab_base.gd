@@ -55,13 +55,46 @@ func _finish(sys: QuagmireSystem, ctx: Dictionary) -> Dictionary:
 	var prof: QuagmireProfile = sys.screen_profile(ctx["path"], geom, ys, alive_pred())
 	if prof == null:
 		return {}
-	prof = prof.box_convolve(float(scanner.get_param("slit")) * 1e-6)
+	var slit_w := float(scanner.get_param("slit")) * 1e-6
+	prof = prof.box_convolve(slit_w)
 	last_profile = prof
 	var out := {"profile": prof, "ys": ys, "geometry": geom}
+	out["singles_scale"] = _rate_scale_for(prof, slit_w, sys.probability(alive_pred()))
 	if not coincidence_pred.is_empty():
 		var cp: QuagmireProfile = sys.screen_profile(ctx["path"], geom, ys, coincidence_pred)
 		if cp != null:
-			out["coincidence"] = cp.box_convolve(float(scanner.get_param("slit")) * 1e-6)
+			cp = cp.box_convolve(slit_w)
+			out["coincidence"] = cp
+			out["coinc_scale"] = _rate_scale_for(cp, slit_w, sys.probability(coincidence_pred))
+	return out
+
+
+## Counts per second per unit of profile intensity: the source rate × the probability that the
+## photon is counted at all × the share of the pattern the detector slit covers (slit / ∫I dy).
+func _rate_scale_for(prof: QuagmireProfile, slit_w: float, p_counted: float) -> float:
+	var ys: PackedFloat64Array = prof.ys()
+	var inten: PackedFloat64Array = prof.intensity()
+	var integral := 0.0
+	for i in range(1, ys.size()):
+		integral += 0.5 * (inten[i] + inten[i - 1]) * (ys[i] - ys[i - 1])
+	if integral <= 0.0:
+		return 0.0
+	return controller.rate_scale() * p_counted * slit_w / integral
+
+
+## Acquisition channels: the scanning detector at its current position, the coincidences
+## (when the lab has an idler), and every fixed detector.
+func acquisition_channels() -> Array:
+	var out: Array = []
+	var r: Dictionary = controller.result
+	if r.has("profile"):
+		var pos := float(scanner.get_param("position")) * 1e-3
+		var prof: QuagmireProfile = r["profile"]
+		out.append({"name": scanner.label, "rate": _sample(prof.ys(), prof.intensity(), pos) * float(r.get("singles_scale", 0.0))})
+		if r.has("coincidence"):
+			var cp: QuagmireProfile = r["coincidence"]
+			out.append({"name": "D1·D2", "rate": _sample(cp.ys(), cp.intensity(), pos) * float(r.get("coinc_scale", 0.0))})
+	out.append_array(super())
 	return out
 
 
@@ -75,9 +108,9 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	var overlay := _load_overlay()
 	var target := str(overlay.get("target", "singles"))
 
-	# singles
+	# singles, in counts / s from the source rate (lab points are scaled to the predicted peak)
 	var s_overlay := overlay if target == "singles" else {}
-	var s_scale := _scale_for(prof, s_overlay)
+	var s_scale := float(result.get("singles_scale", 0.0))
 	var rate := _sample(ys, prof.intensity(), pos_m) * s_scale
 	scanner.last_rate = rate
 	scanner.refresh_visual()
@@ -111,9 +144,14 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 		cvis.add_theme_color_override("font_color", Palette.PINK)
 		top.add_child(cvis)
 	var rate_l := Label.new()
-	rate_l.text = ("D1 @ %.2f mm: %d /s" % [pos_m * 1000.0, roundi(rate)]) if not s_overlay.is_empty() else ("D1 @ %.2f mm: %.2f (relative)" % [pos_m * 1000.0, rate])
+	rate_l.text = "D1 @ %.2f mm: %d /s" % [pos_m * 1000.0, roundi(rate)]
 	rate_l.theme_type_variation = "Mono"
 	top.add_child(rate_l)
+	if not overlay.is_empty():
+		var note := Label.new()
+		note.text = "lab points scaled to the predicted peak"
+		note.theme_type_variation = "Muted"
+		top.add_child(note)
 	add_result_control(top)
 	for row in _summary_rows:
 		add_result_row(row[0], row[1])
@@ -126,15 +164,9 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	if result.has("coincidence"):
 		var c_overlay := overlay if target == "coinc" else {}
 		var cprof: QuagmireProfile = result["coincidence"]
-		var cplot := _make_plot(cprof, _scale_for(cprof, c_overlay), c_overlay, pos_m, "D1·D2 coincidences", Palette.PINK)
+		var cplot := _make_plot(cprof, float(result.get("coinc_scale", 0.0)), c_overlay, pos_m, "D1·D2 coincidences", Palette.PINK)
 		plots.add_child(cplot)
 	add_result_control(plots)
-
-
-func _scale_for(prof: QuagmireProfile, overlay: Dictionary) -> float:
-	if not overlay.is_empty() and _fit_scale and prof.max() > 0.0:
-		return float(overlay["peak"]) / prof.max()
-	return 1.0
 
 
 func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m: float, title: String, color: Color) -> PatternPlot:
@@ -154,14 +186,22 @@ func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m:
 	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	p.custom_minimum_size = Vector2(0, 170)
 	p.x_label = "distance on the screen (mm)"
-	p.y_label = "counts / s" if not overlay.is_empty() else "relative intensity"
+	p.y_label = "counts / s"
 	var series := [
 		{"name": "quantum prediction", "xs": xs_mm, "ys": model, "color": color, "width": 2.2},
 		{"name": "no-interference envelope", "xs": xs_mm, "ys": env, "color": Color(Palette.TEXT_DIM, 0.8), "dashed": true, "width": 1.5},
 	]
 	p.set_series(series)
 	if not overlay.is_empty():
-		p.set_points([{"xs": overlay["xs"], "ys": overlay["ys"], "color": Palette.PINK if color != Palette.PINK else Palette.WARNING, "radius": 2.5}])
+		# the lab's counts are in its own units: scale them so their peak meets the prediction's
+		var peak := 0.0
+		for v in model:
+			peak = maxf(peak, v)
+		var k := peak / float(overlay["peak"]) if float(overlay.get("peak", 0.0)) > 0.0 and peak > 0.0 else 1.0
+		var oys := PackedFloat64Array()
+		for v in overlay["ys"]:
+			oys.append(float(v) * k)
+		p.set_points([{"xs": overlay["xs"], "ys": oys, "color": Palette.PINK if color != Palette.PINK else Palette.WARNING, "radius": 2.5}])
 	var marker := PackedFloat64Array([pos_m * 1000.0, pos_m * 1000.0])
 	var marker_y := PackedFloat64Array([0.0, p.y_range.y])
 	series.append({"name": "detector", "xs": marker, "ys": marker_y, "color": Palette.WARNING, "width": 1.0, "dashed": true})

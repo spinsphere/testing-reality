@@ -19,7 +19,7 @@ func _init() -> void:
 
 
 func build() -> void:
-	laser = place(Optics.Laser.new(405.0, 45.0, "LASER"), -0.52)
+	laser = place(Optics.Laser.new(405.0, 45.0, "LASER", I0), -0.52)
 	place(Optics.Lens.new("L1", 500.0), -0.33)
 	p1 = place(Optics.Polarizer.new("P1", 0.0), -0.14)
 	p2 = place(Optics.Polarizer.new("P2", 45.0), 0.05)
@@ -55,7 +55,7 @@ func on_rebuilt(_snapshots: Array, _result: Dictionary) -> void:
 	clear_results()
 	var p := detector.last_probability
 	add_result_row("Transmission to D1", "%.1f %%" % (p * 100.0), Palette.ACCENT_SOFT)
-	add_result_row("Predicted count rate", "%d photons / s" % roundi(p * I0))
+	add_result_row("Predicted count rate", "%d photons / s" % roundi(p * controller.rate_scale()))
 	var n_active := 0
 	for pol in [p1, p2, p3]:
 		if bool(pol.get_param("enabled")):
