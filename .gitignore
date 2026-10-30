@@ -1,18 +1,36 @@
-# Godot
+# ---- Godot (https://github.com/github/gitignore/blob/main/Godot.gitignore)
+# Import cache, editor state and per-machine files. The *.import files next to each asset
+# ARE committed: they pin the importer settings for everybody.
 .godot/
-export/
+.import/
+/android/
+export.cfg
+*.translation
+# Mono / C# (not used, kept for completeness)
+.mono/
+data_*/
+mono_crash.*.json
+# export_presets.cfg is committed on purpose (tools/export.sh needs it; it holds no secrets).
+
+# ---- Build outputs (tools/export.sh). The GDExtension binaries in app/addons/quagmire/bin
+# are committed on purpose so a clone opens in Godot without a Rust toolchain.
 builds/
-# Blender
+
+# ---- Blender
 *.blend1
 *.blend2
 __pycache__/
-# Python
+
+# ---- Python / Node
 *.pyc
 .venv/
-# OS / editors
-.DS_Store
-*.swp
+node_modules/
 
-# Build outputs (tools/export.sh); the GDExtension binaries in app/addons/quagmire/bin are
-# committed on purpose so a clone opens in Godot without a Rust toolchain.
-builds/
+# ---- OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.tmp
