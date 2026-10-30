@@ -1,0 +1,572 @@
+{
+  "$comment": "Experiment 7: Detecting, but not recording. Transcribed from docs/content/08-experiment-7-detecting-not-recording.md following docs/design/content-authoring.md. The site's TOC lists a 'Lab Experiments' section but the page has no body for it and no lab photos (only the two schematics), so that section is omitted; there is no 'Literature and video' section either. The FAQ and Conclusion are given their own sections because they carry the point of the page.",
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "Detecting, but not recording",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This experiment pushes the delayed-choice quantum eraser further by testing common \"what if\" scenarios. While exploring forums and FAQs, we encountered many questions people ask about the experiment:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "What if we block one of the paths?",
+                "What if a fly looks at the beam instead of me?",
+                "What if the detector is unplugged?"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The underlying question is: [i]what really counts as a detection?[/i] If someone else observes D₂ but I don't, do we see the same results? If a fly or a wall \"detects\" the photon, what happens?"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/Exp5_Diagram.png",
+              "height": 300,
+              "caption": "The starting point: the eraser of Experiments 5 and 6. The BBO crystals (BB) emit an entangled pair. The signal photon goes through the double slit, whose slits carry perpendicular polarizers PA and PB, then through the eraser polarizer P1 at 45° to the scanning detector D1. The idler photon goes through P2 to the fixed detector D2. A coincidence counter (coin) compares the clicks of D1 and D2."
+            },
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "What if a fly looks?",
+              "text": "In the eraser, fringes appear in the coincidences when P2 is set to 45°, and disappear when P2 is set to 90°. Rotating a piece of plastic on the [i]idler[/i] arm changes what we see on the [i]signal[/i] arm. So what is special about D2? Would a wall do? Would a fly's eye do? And if the cable from D2 to the counter is pulled out, does the photon \"know\" that nobody is listening?"
+            }
+          ]
+        },
+        {
+          "title": "Two ways to break the idler arm",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The answer has two parts: first, to see interference, we must record coincidences between D₁ and D₂. Second, the idler measurement must be performed in a basis that allows the wavefunction terms to recombine (e.g., diagonal polarization). Blocking the idler or leaving D₂ unplugged satisfies neither condition."
+            },
+            {
+              "type": "text",
+              "text": "Furthermore, which-path information cannot be destroyed — it may change form (e.g., if a photon is absorbed by a wall), but the correlation with the signal path remains encoded in the environment."
+            },
+            {
+              "type": "text",
+              "text": "In this section, we test two scenarios:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]Wall on path 2:[/b] a physical barrier blocks the idler photon before D₂.",
+                "[b]D₂ unplugged:[/b] the idler photon reaches the detector, but no signal is recorded."
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "What \"detecting, but not recording\" means at the bench",
+              "text": "In the [b]wall[/b] scenario the idler photon is absorbed by a passive black beam block placed on the idler arm, after P2 and before D2. It is \"detected\" in the sense that it interacts irreversibly with matter, but nothing records the outcome and D2 never fires.\n\nIn the [b]unplugged[/b] scenario the idler photon does reach the single-photon detector D2, and D2 does whatever it physically does, but its output cable is disconnected from the coincidence electronics. No electrical signal is recorded and the coincidence logic can never trigger. D1 is still recorded as singles.\n\nIn both cases the signal arm (double slit, PA/PB, P1 at 45°, D1 on its translation actuator) is left exactly as in the eraser configuration of Experiment 5."
+            },
+            {
+              "type": "text",
+              "text": "We conclude with a FAQ addressing additional \"what if\" questions."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Data files: [b]data_wall.csv[/b] and [b]data_unplugged.csv[/b]. Each file contains 7 columns:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Polarizer angle P₁",
+                "Polarizer angle P₂",
+                "Actuator position (μm)",
+                "Sweep number",
+                "Counts at D₁ (signal path)",
+                "Counts at D₂ (idler path)",
+                "Coincidences between D₁ and D₂"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "At each actuator position, we recorded multiple samples to compute an average and standard deviation. We performed several sweeps to further reduce noise."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Is that real?",
+              "text": "The header line of each file adds what the page itself does not state: every sample is a 20-second acquisition and the coincidence window is 10 ns. In the unplugged file the \"Counts at D₂\" column is zero all the way down: the detector was working, but nothing from it reached the counting electronics, so nothing was written."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "The raw data in the lab",
+              "text": "Both data files are loaded into this chapter's lab as overlays, one pair for the wall run (singles and coincidences) and one pair for the unplugged run. Switch an overlay on, run your own scan over it and compare."
+            }
+          ]
+        },
+        {
+          "title": "With a wall on the upper path",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/expWall_Diagram.png",
+              "height": 300,
+              "caption": "Scenario A. The eraser layout with P1 at 45° on the signal and P2 at 90° on the idler. A black WALL sits immediately after P2: the idler beam stops there and nothing reaches D2. Both detectors are still wired to the coincidence counter (coin). The planes Ψ_0 … Ψ_7 follow the state numbering of Experiment 5."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/Wall_A.png",
+              "height": 300,
+              "caption": "Number of counts on D1 per second with the wall in place (P2 = 90°), against the position on the screen (μm). Grey dashed: theory. Blue: fit of the data. Black dots: our data. A single broad diffraction envelope, about 178 counts/s at −2000 μm, a peak near 200 counts/s, 168 counts/s at +2000 μm. No fringes."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/Wall_AB.png",
+              "height": 300,
+              "caption": "Number of coincidences (D1–D2) per second with the wall. Theory and fit lie flat on zero. Almost every point is exactly 0; a scattering of points sit at 0.0017/s and 0.0033/s, i.e. one or two accidental counts in the whole integration time at that position."
+            },
+            {
+              "type": "text",
+              "text": "[i]Results with a wall blocking the idler path. Left: singles at D₁. Right: coincidences (nearly zero). Note: The wall's position does not affect the results — it could be placed immediately after the BBO or 22 km away, as long as it intercepts the idler before D₂.[/i]"
+            }
+          ]
+        },
+        {
+          "title": "With D2 unplugged",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/expUnplug_Diagram.png",
+              "height": 300,
+              "caption": "Scenario B. Same layout, no wall: the idler passes P2 (90°) and reaches D2. But only D1 is wired to the coincidence counter; the cable from D2 has been pulled."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/Unplugged_A.png",
+              "height": 300,
+              "caption": "Number of counts on D1 per second with D2 unplugged (P2 = 90°). Again a single envelope: about 183 counts/s at −2000 μm, a peak near 209 counts/s around 0 μm, 176 counts/s at +2000 μm. No fringes."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp7/Unplugged_AB.png",
+              "height": 300,
+              "caption": "Number of coincidences (D1–D2) per second with D2 unplugged. Every point is exactly 0.00 across the whole scan."
+            },
+            {
+              "type": "text",
+              "text": "[b]Singles at D₁:[/b] In both scenarios, the D₁ singles show only diffraction — no interference fringes. This matches all previous experiments: the signal path alone never reveals interference because which-path information is encoded in the idler."
+            },
+            {
+              "type": "text",
+              "text": "[b]Coincidences:[/b]"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]Wall:[/b] Near-zero coincidences. The small residual count is experimental noise (stray light, dark counts).",
+                "[b]Unplugged:[/b] Exactly zero coincidences. No electrical signal means no coincidence logic trigger."
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The key result: [b]without coincidence counting, interference cannot be recovered.[/b]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Why no interference? Steps 1 to 3",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The mathematics follows directly from Experiment 5. We repeat the derivation step by step and stop at the one line that is different."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. Initial entangled state"
+            },
+            {
+              "type": "text",
+              "text": "The BBO produces the Bell state:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_state",
+              "caption": "Subscript 1 is the signal photon, subscript 2 the idler. The two photons always share the same polarization, but neither has one of its own."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 2. Signal photon at the double slit"
+            },
+            {
+              "type": "text",
+              "text": "The signal photon enters a spatial superposition:"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_slits",
+              "caption": "|A⟩₁ and |B⟩₁ are the two slits; |S⟩₂ is the idler's own path, the \"second path\" up to D2. The ⊗ just joins the entries of the \"and\" list from Experiment 3: polarizations [i]and[/i] signal path [i]and[/i] idler path."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 3. Polarizer filtering at the slits"
+            },
+            {
+              "type": "text",
+              "text": "Vertical polarizer at slit A transmits |↕⟩₁; horizontal polarizer at slit B transmits |↔⟩₁. After filtering:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_filtered"
+            },
+            {
+              "type": "text",
+              "text": "The |lost⟩ term represents blocked photons; we drop it in subsequent steps."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "Compare with Experiment 3. There the slit polarizers tagged the path with the photon's [i]own[/i] polarization. Here, because the pair is entangled, the tag is copied one step further: |A⟩₁ now only ever appears next to |↕⟩₂, and |B⟩₁ next to |↔⟩₂. The which-way information has moved into the [i]other[/i] photon."
+            }
+          ]
+        },
+        {
+          "title": "Steps 4 and 5. The idler is lost",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "Step 4. Propagation to D₁"
+            },
+            {
+              "type": "text",
+              "text": "Photons from slits A and B travel distances a and b:"
+            },
+            {
+              "type": "equation",
+              "id": "psi3_propagation",
+              "caption": "|y⟩₁ is the signal photon at position y on the D1 screen; |D⟩₂ is the idler heading for D2. The \"⋯\" stand for the other positions on the screen and the dropped |lost⟩ terms."
+            },
+            {
+              "type": "equation",
+              "id": "k_delta_def",
+              "caption": "As in Experiment 2: k is the wave number and Δ the path difference, which near the centre is d·y/L."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 5. Idler photon is lost"
+            },
+            {
+              "type": "text",
+              "text": "In both scenarios (wall or unplugged detector), the idler photon provides no usable information. However, the which-path information still exists:"
+            },
+            {
+              "type": "equation",
+              "id": "which_way_tags"
+            },
+            {
+              "type": "text",
+              "text": "The idler's polarization state is correlated with the signal's path, whether or not we measure it."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "An absorbed photon still carries the tag: the environment as a bigger \"and\" list",
+              "text": "It is tempting to think that a photon swallowed by a black wall is simply gone, tag and all. The \"and\" list says otherwise. Before the wall, each term of the state is a list: signal path [i]and[/i] signal polarization [i]and[/i] idler polarization [i]and[/i] idler position. When the wall absorbs the idler, the entry \"idler at D\" does not vanish; it is [i]replaced[/i] by an entry describing the wall. A wall that has absorbed a ↕ photon is in a slightly different state from a wall that has absorbed a ↔ photon (different atoms kicked, a different grain warmed). Those two wall states are distinguishable, i.e. perpendicular, exactly as |↕⟩₂ and |↔⟩₂ were.\n\nSo the list only gets longer. The term that came from slit A still ends in a different, perpendicular entry from the term that came from slit B. Nothing we did on the signal side changed, and the rule from Experiment 3 for perpendicular entries still applies. The same goes for a fly's eye, a camera sensor, or an air molecule: any object that ends up in a different state depending on the idler's polarization has become part of the tag."
+            },
+            {
+              "type": "equation",
+              "id": "wall_absorbs"
+            },
+            {
+              "type": "equation",
+              "id": "psi_wall",
+              "caption": "Not on the original site: the state after the wall, written out. It has exactly the shape of |ψ_3⟩ with the idler entry renamed. The wall is now the last entry of the list."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/tensor_widget.tscn",
+              "params": {
+                "left": [
+                  "A",
+                  "B"
+                ],
+                "right": [
+                  "↕",
+                  "↔"
+                ]
+              },
+              "height": 340
+            },
+            {
+              "type": "text",
+              "text": "In the widget, think of the left entry as the signal path and the right entry as whatever carries the tag: the idler's polarization, or the wall that absorbed it. Our state has amplitude only on |A⟩|↕⟩ and |B⟩|↔⟩; the two \"cross\" products are zero. That is what perfect which-way correlation looks like as a list."
+            }
+          ]
+        },
+        {
+          "title": "Step 6. Detection intensity at D1",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "To find the intensity at D₁, we must account for both idler states. The idler polarizations |↕⟩₂ and |↔⟩₂ are orthogonal — they cannot combine. Each term contributes its own intensity independently:"
+            },
+            {
+              "type": "equation",
+              "id": "orthogonal_sum",
+              "caption": "The rule from Experiment 3, with |E_A⟩ and |E_B⟩ standing for whatever perpendicular pair carries the tag: |↕⟩₂ and |↔⟩₂, or the two wall states, or the two states of an unplugged D2."
+            },
+            {
+              "type": "equation",
+              "id": "intensity_sum"
+            },
+            {
+              "type": "text",
+              "text": "The intensity is independent of position y:"
+            },
+            {
+              "type": "equation",
+              "id": "no_interference"
+            },
+            {
+              "type": "text",
+              "text": "The pattern at D₁ is the sum of two single-slit diffraction envelopes — no fringes."
+            },
+            {
+              "type": "equation",
+              "id": "envelope_def",
+              "caption": "The envelope from Experiment 2, with w the slit width and θ the angle from the centre. The measured D1 curves on the previous pages are ½·E(y) times the count rate."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "\"Not measured\" and \"measured but ignored\" are the same thing for D1",
+              "text": "What does D1 alone see? D1 does not know what became of the partner, so its curve is the total over every possible fate of the partner: add up the probability of \"photon at y and partner says ↕\" and the probability of \"photon at y and partner says ↔\". This adding-up is called [i]tracing over[/i] the partner, and it is exactly the sum in Step 6.\n\nNow notice what the sum does [i]not[/i] depend on. It does not matter whether the partner was measured in the ↕/↔ basis, in the diagonal basis, swallowed by a wall, or recorded by a detector whose cable lies on the floor. In the diagonal basis the two coincidence curves are fringes and anti-fringes, and adding them gives back the same flat ½. Whatever you do to the idler, the D1 total is the same. The fringes of Experiment 5 were never in the D1 total: they live in how the total is [i]sorted[/i] by the partner's outcome. No partner outcome, no sorting."
+            },
+            {
+              "type": "equation",
+              "id": "singles_trace"
+            },
+            {
+              "type": "equation",
+              "id": "sorting_sum",
+              "caption": "The eraser case of Experiment 5 for comparison: the two sorted curves add back to the unsorted one."
+            }
+          ]
+        },
+        {
+          "title": "Interpretation",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The which-path information is encoded in the idler photon's polarization. Blocking or ignoring the idler does not erase this information — it merely prevents us from accessing it. Since the information exists (in the absorbed photon, in the environment, etc.), interference cannot appear. To recover interference, we would need to:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Detect the idler photon",
+                "Measure it in a basis that erases which-path information (e.g., diagonal)",
+                "Post-select coincidences based on that measurement"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "None of these are possible when the idler is blocked or the detector is unplugged."
+            },
+            {
+              "type": "subheading",
+              "text": "What the coincidence channel would show"
+            },
+            {
+              "type": "text",
+              "text": "For comparison, here is the coincidence rate of Experiment 5 with both polarizers in and D2 recorded, θ₁ the angle of P1 and θ₂ the angle of P2 (both measured from ↕):"
+            },
+            {
+              "type": "equation",
+              "id": "coincidence_general",
+              "caption": "Not on the original site: the Experiment 5 formula, so the four cases below can be read off."
+            },
+            {
+              "type": "equation",
+              "id": "coincidence_cases",
+              "caption": "With P1 fixed at 45°."
+            },
+            {
+              "type": "table",
+              "header": [
+                "Idler arm",
+                "D1 singles",
+                "Coincidences",
+                "Which-way information"
+              ],
+              "rows": [
+                [
+                  "P2 = ±45°, D2 recorded (Experiment 5)",
+                  "envelope, no fringes",
+                  "fringes / anti-fringes",
+                  "erased by P2, then sorted away"
+                ],
+                [
+                  "P2 = 90°, D2 recorded",
+                  "envelope, no fringes",
+                  "flat, half the singles",
+                  "read out: each coincidence names a slit"
+                ],
+                [
+                  "Wall after P2",
+                  "envelope, no fringes",
+                  "zero (plus accidentals)",
+                  "in the wall, unreadable"
+                ],
+                [
+                  "D2 unplugged",
+                  "envelope, no fringes",
+                  "exactly zero",
+                  "in D2's click, never recorded"
+                ]
+              ]
+            },
+            {
+              "type": "subheading",
+              "text": "Try it yourself!"
+            },
+            {
+              "type": "text",
+              "text": "The simulator below is the entangled eraser. Rotate P2 between 45°, −45° and 90° and watch the two curves: the coincidence curve changes basis with P2, the singles curve never moves. The wall and the unplugged cable are the two cases where the coincidence curve is simply not there."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/eraser_widget.tscn",
+              "params": {
+                "p1_angle": 45,
+                "entangled": true,
+                "p2_angle": 90
+              },
+              "height": 400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "title": "FAQ",
+      "pages": [
+        {
+          "title": "Frequently asked questions (1/2)",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The questions we met most often on forums, with the answers this experiment supports."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q1: What if someone else looks at D₂ but I don't?",
+              "text": "A: The results at D₁ are unchanged — you see only diffraction. To observe interference, [i]you[/i] must record coincidences. If another person has the D₂ data and you have the D₁ data, you could later combine them to find interference in the coincidence subset. But looking at D₁ alone will never show fringes."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q2: What if a fly or a camera observes the idler?",
+              "text": "A: Any interaction that could, in principle, reveal which-path information counts as a \"measurement.\" A fly's eye, a camera sensor, or even air molecules scattering the photon — all constitute measurements. The key is whether the which-path information becomes encoded in the environment. If it does, interference is lost at D1 (unless you can somehow access and erase that information)."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q3: Does the wall's position matter?",
+              "text": "A: No. The wall can be 1 cm or 1 km from the BBO. As long as it blocks the idler before reaching D₂, the result is the same: no coincidences, no interference. This reinforces that the effect is not about timing — it's about whether coincidence data can be collected."
+            }
+          ]
+        },
+        {
+          "title": "Frequently asked questions (2/2)",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q4: What if I delay the idler path by years?",
+              "text": "A: Even with an extremely long delay (using fiber optic storage, for example), the physics is unchanged. When you eventually detect the idler and compute coincidences, you will find interference if you measured in the erasing basis (±45°), or no interference if you measured in the which-path basis (0°/90°). The \"delayed choice\" aspect works regardless of the delay length."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q5: Can I use this to send information faster than light?",
+              "text": "A: No. The D₁ singles [i]never[/i] show interference — they always show diffraction. Only the coincidence subset reveals fringes, and computing coincidences requires classical communication between D₁ and D₂ (which is limited to light speed). There is no way to use this experiment for faster-than-light signaling."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Q6: Does blocking the idler \"change\" what already happened at D₁?",
+              "text": "A: No. The D₁ detection is unaffected by what happens to the idler. The signal photon's behavior at D₁ is fixed the moment it's detected. What changes is our ability to [i]sort[/i] the D₁ data into interference and non-interference subsets — and that sorting requires the idler data, which we don't have if it's blocked."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Why timing does not matter",
+              "text": "Q3, Q4 and Q6 are one fact seen three times. The D1 record is a list of positions y, written down as the clicks arrive and never edited. The idler record, if there is one, is a second list. Fringes appear only when the two lists are laid side by side and the D1 list is split according to the idler list. Laying lists side by side can be done a second, a year or never after the clicks; it changes nothing on either list. That is also why no message can be sent: the D1 list by itself looks the same whatever was, or will be, done to the idler."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conclusion",
+      "title": "Conclusion",
+      "pages": [
+        {
+          "title": "Conclusion",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "These \"what if\" experiments confirm the core principle: [b]interference appears only in coincidences, and only when which-path information is erased.[/b]"
+            },
+            {
+              "type": "text",
+              "text": "Blocking the idler or unplugging the detector doesn't change the physics — it simply removes our ability to perform the coincidence measurement that reveals interference. The which-path information still exists; we just can't access or erase it."
+            },
+            {
+              "type": "subheading",
+              "text": "What counts as a detection, in this page's own terms"
+            },
+            {
+              "type": "list",
+              "items": [
+                "A detection is any interaction that encodes which-path information in the environment: a wall, a fly's eye, a camera sensor, air molecules. A conscious observer is neither necessary nor relevant.",
+                "Nothing \"collapses\" differently depending on who looks. The D1 singles are a diffraction envelope in every configuration of Experiments 5, 6 and 7.",
+                "Interference is a property of the coincidence-filtered subset, a classical sorting step that needs both data streams.",
+                "No retrocausality: the D1 record is fixed at detection. Choices on the idler arm, even years later, change only how that record can be sorted.",
+                "No faster-than-light signalling, because the sorting needs classical communication."
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "Into the laboratory",
+              "text": "The lab is the Experiment 6 bench with two additions: a black [b]WALL[/b] on the idler arm that can be put in or taken out, and a [b]D2 cable connected[/b] switch on the idler detector. P1 stays at 45°. Three presets are provided: [i]Eraser working[/i] (P2 at 45°, wall out, D2 plugged), [i]Wall on idler[/i] and [i]D2 unplugged[/i]. The two plots show the D1 singles and the D1–D2 coincidences; our wall and unplugged data are available as overlays.\n\n1. Load [b]Eraser working[/b] and scan. Confirm fringes in the coincidence plot and a plain envelope in the singles plot. This is your reference.\n2. Put the [b]wall in[/b] (P2 stays at 45°). Scan. The coincidences drop to zero everywhere. Look at the singles plot: has it changed at all?\n3. Take the wall out and switch [b]D2 cable connected[/b] off. Scan. The coincidence row is exactly zero. Switch on the unplugged singles overlay and compare it with your singles.\n4. Set P2 to 90°, wall in, and switch on the wall overlays. This is the configuration of the plots in this chapter.\n5. Explain, in one sentence each, why the singles never changed in steps 1 to 4, and why the coincidences are zero in step 2 regardless of P2's angle. (Hint: Step 6, and the check-in on \"measured but ignored\".)\n6. Prediction: plug D2 back in, take the wall out, set P2 to −45°. Before scanning, say where the coincidence maxima will be relative to step 1. Then add the step 1 and step 6 coincidence curves in your head: what do you get?"
+            },
+            {
+              "type": "lab",
+              "label": "◆  Enter the Experiment 7 lab"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

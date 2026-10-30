@@ -1,0 +1,154 @@
+{
+  "generated": "2026-10-30T11:35:57.790Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "bell_state": {
+      "file": "bell_state.svg",
+      "width": 547.23,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Phi^{+}} = \\frac{1}{\\sqrt{2}}\\Big(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\Big)",
+      "hash": "6346f76521da3660",
+      "png": "bell_state.png"
+    },
+    "psi1_slits": {
+      "file": "psi1_slits.svg",
+      "width": 971.25,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\Big(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\Big)\\otimes\\frac{1}{\\sqrt{2}}\\Big(\\ket{A}_1 + \\ket{B}_1\\Big)\\otimes\\ket{S}_2",
+      "hash": "d8b0e8f447d11a35",
+      "png": "psi1_slits.png"
+    },
+    "psi2_filtered": {
+      "file": "psi2_filtered.svg",
+      "width": 868.64,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\ket{\\psi_2} = \\frac{1}{2}\\Big(\\ket{\\V}_1\\ket{\\V}_2\\ket{A}_1 + \\ket{\\H}_1\\ket{\\H}_2\\ket{B}_1\\Big)\\otimes\\ket{S}_2 + \\lost",
+      "hash": "8500e49f25785368",
+      "png": "psi2_filtered.png"
+    },
+    "psi3_propagation": {
+      "file": "psi3_propagation.svg",
+      "width": 999.74,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\ket{\\psi_3} = \\cdots + \\frac{1}{2}\\Big(e^{ika}\\ket{\\V}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\H}_1\\ket{\\H}_2\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+      "hash": "f6aa86f88d54ccbe",
+      "png": "psi3_propagation.png"
+    },
+    "which_way_tags": {
+      "file": "which_way_tags.svg",
+      "width": 550.64,
+      "height": 87.41,
+      "baseline": 34.66,
+      "tex": "\\begin{aligned} \\ket{\\V}_2 &\\;\\Rightarrow\\; \\text{signal came through slit } A\\\\ \\ket{\\H}_2 &\\;\\Rightarrow\\; \\text{signal came through slit } B \\end{aligned}",
+      "hash": "7157e7811b466c76",
+      "png": "which_way_tags.png"
+    },
+    "wall_absorbs": {
+      "file": "wall_absorbs.svg",
+      "width": 859.62,
+      "height": 94.29,
+      "baseline": 38.1,
+      "tex": "\\begin{aligned} \\ket{\\V}_2\\ket{D}_2 &\\;\\longrightarrow\\; \\wallV\\\\ \\ket{\\H}_2\\ket{D}_2 &\\;\\longrightarrow\\; \\wallH \\end{aligned} \\qquad\\text{with}\\qquad \\braket{\\mathrm{wall}_{\\updownarrow}}{\\mathrm{wall}_{\\leftrightarrow}} = 0",
+      "hash": "b26a5f3458860f76",
+      "png": "wall_absorbs.png"
+    },
+    "psi_wall": {
+      "file": "psi_wall.svg",
+      "width": 1034.66,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\ket{\\psi_{\\mathrm{wall}}} = \\cdots + \\frac{1}{2}\\Big(e^{ika}\\ket{\\V}_1\\,\\wallV + e^{ikb}\\ket{\\H}_1\\,\\wallH\\Big)\\otimes\\ket{y}_1 + \\cdots",
+      "hash": "1ce034405676cff7",
+      "png": "psi_wall.png"
+    },
+    "orthogonal_sum": {
+      "file": "orthogonal_sum.svg",
+      "width": 995.68,
+      "height": 65.92,
+      "baseline": 20.32,
+      "tex": "\\Big|\\alpha\\ket{E_A} + \\beta\\ket{E_B}\\Big|^{2} = |\\alpha|^{2} + |\\beta|^{2} \\qquad\\text{whenever}\\qquad \\braket{E_A}{E_B} = 0",
+      "hash": "0900827c492c7048",
+      "png": "orthogonal_sum.png"
+    },
+    "intensity_sum": {
+      "file": "intensity_sum.svg",
+      "width": 645.42,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "I(y) \\propto \\Big|\\tfrac{1}{2}e^{ika}\\Big|^{2} + \\Big|\\tfrac{1}{2}e^{ikb}\\Big|^{2} = \\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}",
+      "hash": "bcc7377d6da35c3e",
+      "png": "intensity_sum.png"
+    },
+    "no_interference": {
+      "file": "no_interference.svg",
+      "width": 547.49,
+      "height": 55.54,
+      "baseline": 18.72,
+      "tex": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+      "hash": "ed925bca1af5de63",
+      "png": "no_interference.png"
+    },
+    "singles_trace": {
+      "file": "singles_trace.svg",
+      "width": 583.47,
+      "height": 130.02,
+      "baseline": 81.42,
+      "tex": "I_1(y) = \\underbrace{\\Big|\\tfrac{1}{2}e^{ika}\\Big|^{2}}_{\\text{partner is }\\V} + \\underbrace{\\Big|\\tfrac{1}{2}e^{ikb}\\Big|^{2}}_{\\text{partner is }\\H} = \\frac{1}{2}",
+      "hash": "dfc77a3450059386",
+      "png": "singles_trace.png"
+    },
+    "sorting_sum": {
+      "file": "sorting_sum.svg",
+      "width": 855.15,
+      "height": 98.62,
+      "baseline": 40.26,
+      "tex": "\\begin{aligned} C_{+45^{\\circ}}(y) + C_{-45^{\\circ}}(y) &= \\tfrac{1}{4}\\big(1 + \\cos k\\Delta\\big) + \\tfrac{1}{4}\\big(1 - \\cos k\\Delta\\big)\\\\ &= \\tfrac{1}{2} = I_1(y) \\end{aligned}",
+      "hash": "066ea75ebb398890",
+      "png": "sorting_sum.png"
+    },
+    "coincidence_general": {
+      "file": "coincidence_general.svg",
+      "width": 765.26,
+      "height": 65.92,
+      "baseline": 20.32,
+      "tex": "C(y) \\propto \\Big|\\cos\\theta_1\\cos\\theta_2\\,e^{ika} + \\sin\\theta_1\\sin\\theta_2\\,e^{ikb}\\Big|^{2}\\,E(y)",
+      "hash": "fdbed8e7db55eae4",
+      "png": "coincidence_general.png"
+    },
+    "coincidence_cases": {
+      "file": "coincidence_cases.svg",
+      "width": 817.87,
+      "height": 145.68,
+      "baseline": 63.79,
+      "tex": "\\begin{aligned} P_2 = \\pm 45^{\\circ}:\\quad & C(y) \\propto \\tfrac{1}{2}\\big(1 \\pm \\cos k\\Delta\\big)\\,E(y)\\\\ P_2 = 90^{\\circ}:\\quad & C(y) \\propto \\tfrac{1}{2}\\,E(y)\\\\ \\text{wall, or } D_2 \\text{ unplugged:}\\quad & C(y) = 0 \\end{aligned}",
+      "hash": "4799619dae5b0d6d",
+      "png": "coincidence_cases.png"
+    },
+    "envelope_def": {
+      "file": "envelope_def.svg",
+      "width": 582.45,
+      "height": 94.02,
+      "baseline": 34.37,
+      "tex": "E(y) = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\qquad \\alpha = \\frac{\\pi\\, w \\sin\\theta}{\\lambda}",
+      "hash": "c3838e00aafbb79c",
+      "png": "envelope_def.png"
+    },
+    "k_delta_def": {
+      "file": "k_delta_def.svg",
+      "width": 367.65,
+      "height": 73.84,
+      "baseline": 25.26,
+      "tex": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\Delta = a - b",
+      "hash": "fd022225b4d82403",
+      "png": "k_delta_def.png"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$comment": "Experiment 7 (Detecting, but not recording) equations E1-E6 transcribed from docs/content/08-experiment-7-detecting-not-recording.md, plus helper equations for the maths check-ins (which_way_tags, wall_absorbs, psi_wall, orthogonal_sum, singles_trace, sorting_sum) and the Experiment 5 coincidence formula used in the Interpretation page (coincidence_general, coincidence_cases, envelope_def, k_delta_def). Rendered by tools/mathgen into app/assets/math/exp7/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "wallV": "\\ket{\\mathrm{wall}_{\\updownarrow}}",
+    "wallH": "\\ket{\\mathrm{wall}_{\\leftrightarrow}}"
+  },
+  "equations": {
+    "bell_state": "\\ket{\\Phi^{+}} = \\frac{1}{\\sqrt{2}}\\Big(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\Big)",
+    "psi1_slits": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\Big(\\ket{\\V}_1\\ket{\\V}_2 + \\ket{\\H}_1\\ket{\\H}_2\\Big)\\otimes\\frac{1}{\\sqrt{2}}\\Big(\\ket{A}_1 + \\ket{B}_1\\Big)\\otimes\\ket{S}_2",
+    "psi2_filtered": "\\ket{\\psi_2} = \\frac{1}{2}\\Big(\\ket{\\V}_1\\ket{\\V}_2\\ket{A}_1 + \\ket{\\H}_1\\ket{\\H}_2\\ket{B}_1\\Big)\\otimes\\ket{S}_2 + \\lost",
+    "psi3_propagation": "\\ket{\\psi_3} = \\cdots + \\frac{1}{2}\\Big(e^{ika}\\ket{\\V}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\H}_1\\ket{\\H}_2\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+    "which_way_tags": "\\begin{aligned} \\ket{\\V}_2 &\\;\\Rightarrow\\; \\text{signal came through slit } A\\\\ \\ket{\\H}_2 &\\;\\Rightarrow\\; \\text{signal came through slit } B \\end{aligned}",
+    "wall_absorbs": "\\begin{aligned} \\ket{\\V}_2\\ket{D}_2 &\\;\\longrightarrow\\; \\wallV\\\\ \\ket{\\H}_2\\ket{D}_2 &\\;\\longrightarrow\\; \\wallH \\end{aligned} \\qquad\\text{with}\\qquad \\braket{\\mathrm{wall}_{\\updownarrow}}{\\mathrm{wall}_{\\leftrightarrow}} = 0",
+    "psi_wall": "\\ket{\\psi_{\\mathrm{wall}}} = \\cdots + \\frac{1}{2}\\Big(e^{ika}\\ket{\\V}_1\\,\\wallV + e^{ikb}\\ket{\\H}_1\\,\\wallH\\Big)\\otimes\\ket{y}_1 + \\cdots",
+    "orthogonal_sum": "\\Big|\\alpha\\ket{E_A} + \\beta\\ket{E_B}\\Big|^{2} = |\\alpha|^{2} + |\\beta|^{2} \\qquad\\text{whenever}\\qquad \\braket{E_A}{E_B} = 0",
+    "intensity_sum": "I(y) \\propto \\Big|\\tfrac{1}{2}e^{ika}\\Big|^{2} + \\Big|\\tfrac{1}{2}e^{ikb}\\Big|^{2} = \\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}",
+    "no_interference": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+    "singles_trace": "I_1(y) = \\underbrace{\\Big|\\tfrac{1}{2}e^{ika}\\Big|^{2}}_{\\text{partner is }\\V} + \\underbrace{\\Big|\\tfrac{1}{2}e^{ikb}\\Big|^{2}}_{\\text{partner is }\\H} = \\frac{1}{2}",
+    "sorting_sum": "\\begin{aligned} C_{+45^{\\circ}}(y) + C_{-45^{\\circ}}(y) &= \\tfrac{1}{4}\\big(1 + \\cos k\\Delta\\big) + \\tfrac{1}{4}\\big(1 - \\cos k\\Delta\\big)\\\\ &= \\tfrac{1}{2} = I_1(y) \\end{aligned}",
+    "coincidence_general": "C(y) \\propto \\Big|\\cos\\theta_1\\cos\\theta_2\\,e^{ika} + \\sin\\theta_1\\sin\\theta_2\\,e^{ikb}\\Big|^{2}\\,E(y)",
+    "coincidence_cases": "\\begin{aligned} P_2 = \\pm 45^{\\circ}:\\quad & C(y) \\propto \\tfrac{1}{2}\\big(1 \\pm \\cos k\\Delta\\big)\\,E(y)\\\\ P_2 = 90^{\\circ}:\\quad & C(y) \\propto \\tfrac{1}{2}\\,E(y)\\\\ \\text{wall, or } D_2 \\text{ unplugged:}\\quad & C(y) = 0 \\end{aligned}",
+    "envelope_def": "E(y) = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\qquad \\alpha = \\frac{\\pi\\, w \\sin\\theta}{\\lambda}",
+    "k_delta_def": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\Delta = a - b"
+  }
+}
