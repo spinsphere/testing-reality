@@ -194,9 +194,15 @@ func _drive_app() -> void:
 	await _drive_hub()
 	for ch in _app_state.CHAPTERS:
 		await _drive_chapter(ch)
+	# the first two labs open under the Low and High quality presets, the rest under Medium
+	var quality_cycle := [0, 2]
+	var li := 0
 	for ch in _app_state.CHAPTERS:
 		if str(ch.get("lab", "")) != "":
+			_app_state.settings["quality"] = quality_cycle[li] if li < quality_cycle.size() else 1
+			li += 1
 			await _drive_lab(ch)
+	_app_state.settings["quality"] = 1
 	_app_state.go_hub()
 	await _frames(_f)
 	_ok(_screen_kind() == "hub", "did not return to hub at the end")
@@ -365,6 +371,10 @@ func _drive_lab(ch: Dictionary) -> void:
 		return
 	var controller = lab.get("controller")
 	_ok(controller.components.size() >= 2, "lab %s has %d components" % [id, controller.components.size()])
+	var q: int = _app_state.quality()
+	var vp := _root
+	_ok(vp.msaa_3d == [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_4X][q], "lab %s: MSAA does not follow quality %d" % [id, q])
+	_ok(is_equal_approx(vp.scaling_3d_scale, 0.75 if q == 0 else 1.0), "lab %s: render scale does not follow quality %d" % [id, q])
 	_ok(controller.snapshots.size() == controller.components.size(), "lab %s: %d snapshots for %d components" % [id, controller.snapshots.size(), controller.components.size()])
 	_ok(controller.system != null, "lab %s: no quantum system after rebuild" % id)
 	var has_slits: bool = lab.get("mask") != null
@@ -704,12 +714,34 @@ func _drive_lab(ch: Dictionary) -> void:
 	_ok(cam._distance_goal < dist0, "lab %s: mouse wheel did not zoom the camera" % id)
 	cam.go_home(true)
 	await _frames(3)
-	# pick: project every component to the screen and click it
+	# pick: frame the table from above-front so the HUD panels hide as little as possible,
+	# then click every component that is on screen and not under a panel
+	cam._target_goal = Vector3(0.0, 0.1, 0.0)
+	cam._distance_goal = 1.1
+	cam._pitch_goal = 35.0
+	cam.target = cam._target_goal
+	cam.distance = cam._distance_goal
+	cam.pitch = cam._pitch_goal
+	cam._apply(true)
+	await process_frame
+	var panels: Array = []
+	for c in _descendants(lab.get("hud")):
+		if c is PanelContainer:
+			panels.append(c)
 	var picked := 0
+	var attempted := 0
 	for app in controller.components:
 		var pos3: Vector3 = (app as Node3D).global_position + Vector3(0, float(lab.get("BEAM_HEIGHT")), 0)
 		if cam.camera.is_position_behind(pos3):
 			continue
+		var vp_pos: Vector2 = cam.camera.unproject_position(pos3)
+		var covered := false
+		for pnl in panels:
+			if (pnl as Control).get_global_rect().has_point(vp_pos):
+				covered = true
+		if covered:
+			continue
+		attempted += 1
 		# parse_input_event takes window coordinates; the stretch transform maps them to the viewport
 		var sp: Vector2 = _root.get_final_transform() * (cam.camera.unproject_position(pos3) as Vector2)
 		var click := InputEventMouseButton.new()
@@ -726,7 +758,7 @@ func _drive_lab(ch: Dictionary) -> void:
 		await process_frame
 		if lab.get("selected") == app:
 			picked += 1
-	_ok(picked >= 1, "lab %s: clicking on the apparatus selected nothing (%d/%d)" % [id, picked, controller.components.size()])
+	_ok(attempted == 0 or picked >= 1, "lab %s: clicking on the apparatus selected nothing (%d/%d attempted)" % [id, picked, attempted])
 	lab.call("_try_pick", Vector2(5, 5))
 	await process_frame
 	print("lab %s: %d components, %d presets, %d params, %d overlays, picked %d/%d" % [id, controller.components.size(), n_presets, n_params, n_overlays, picked, controller.components.size()])

@@ -57,6 +57,15 @@ if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
 	# manages about a frame a second on the 3D labs, so it runs at 640x360 with the harness's
 	# --quick sweeps (the headless pass above does the full sweep). Screenshots use the full size.
 	step "run_all (xvfb, GL)" timeout 5400 xvfb-run -a -s "-screen 0 640x360x24" $GODOT --path . -s tests/run_all.gd -- --quick
+	# rendering budget (machine-independent counters): ≤ 1500 draw calls, ≤ 2 M triangles a frame
+	for route in lab:exp1 lab:exp4 lab:exp7; do
+		name="perf $route"
+		printf '%-28s' "$name"
+		( cd "$ROOT/app" && timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" $GODOT --path . -- "--go=$route" --perf ) > "$LOG/$name.log" 2>&1
+		line=$(grep '^PERF' "$LOG/$name.log" | tail -1)
+		calls=$(sed -n 's/.*draw_calls=\([0-9]*\).*/\1/p' <<<"$line"); prims=$(sed -n 's/.*primitives=\([0-9]*\).*/\1/p' <<<"$line")
+		if [ -n "$calls" ] && [ "$calls" -le 1500 ] && [ "$prims" -le 2000000 ]; then echo "ok  ($line)"; else echo "FAILED ($line)"; status=1; fi
+	done
 	for route in hub chapter:intro:0 chapter:exp1:2 lab:exp1 lab:exp2 lab:exp3 lab:exp4 lab:exp5 lab:exp6 lab:exp7; do
 		step "shot $route" timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" $GODOT --path . -- "--go=$route" "--shot=$LOG/shot-${route//:/-}.png"
 	done

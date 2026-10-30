@@ -33,17 +33,16 @@ func _ready() -> void:
 	v.add_child(_toggle("Show LaTeX source as equation tooltips", "show_latex"))
 	var quality := HBoxContainer.new()
 	var ql := Label.new()
-	ql.text = "3D quality (anti-aliasing)"
+	ql.text = "3D quality (applies when a lab opens)"
 	ql.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quality.add_child(ql)
 	var qo := OptionButton.new()
-	for o in ["off", "2×", "4×"]:
+	for o in ["Low — integrated graphics: no shadows or glow, 75 % render scale", "Medium — 2× MSAA, shadows, glow", "High — 4× MSAA"]:
 		qo.add_item(o)
-	qo.selected = int(AppState.settings.get("msaa", 1))
+	qo.selected = AppState.quality()
 	qo.item_selected.connect(func(i: int) -> void:
-		AppState.settings["msaa"] = i
-		AppState.save_progress()
-		get_viewport().msaa_3d = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_4X][i])
+		AppState.settings["quality"] = i
+		AppState.save_progress())
 	quality.add_child(qo)
 	v.add_child(quality)
 

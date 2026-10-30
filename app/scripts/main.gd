@@ -11,6 +11,7 @@ const CHAPTER_SCENE := preload("res://ui/chapter/chapter.tscn")
 var _screen: Node
 var _bg: ColorRect
 var _shot_path := ""
+var _perf := false
 
 
 func _ready() -> void:
@@ -32,6 +33,8 @@ func _parse_args() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			_shot_path = arg.trim_prefix("--shot=")
+		elif arg == "--perf":
+			_perf = true
 		elif arg.begins_with("--go="):
 			var parts := arg.trim_prefix("--go=").split(":")
 			match parts[0]:
@@ -43,6 +46,8 @@ func _parse_args() -> void:
 					AppState.current_route = {"screen": "lab", "id": parts[1]}
 	if _shot_path != "":
 		_take_screenshot.call_deferred()
+	elif _perf:
+		_report_perf.call_deferred()
 
 
 func _take_screenshot() -> void:
@@ -51,6 +56,30 @@ func _take_screenshot() -> void:
 	var img := get_viewport().get_texture().get_image()
 	var err := img.save_png(_shot_path)
 	print("screenshot %s -> %s" % [_shot_path, error_string(err)])
+	get_tree().quit()
+
+
+## `--perf`: after warm-up, average the renderer's per-frame counters over 60 frames and
+## print one PERF line (objects, primitives, draw calls are the same on every GPU; the
+## frame time is only meaningful on real hardware).
+func _report_perf() -> void:
+	for i in 20:
+		await get_tree().process_frame
+	var frames := 60
+	var t0 := Time.get_ticks_usec()
+	var objects := 0.0
+	var prims := 0.0
+	var calls := 0.0
+	for i in frames:
+		await get_tree().process_frame
+		objects += Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)
+		prims += Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)
+		calls += Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
+	var ms := (Time.get_ticks_usec() - t0) / 1000.0 / frames
+	print("PERF route=%s objects=%d primitives=%d draw_calls=%d vram_mb=%.1f nodes=%d frame_ms=%.1f" % [
+		str(AppState.current_route), roundi(objects / frames), roundi(prims / frames), roundi(calls / frames),
+		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
+		Performance.get_monitor(Performance.OBJECT_NODE_COUNT), ms])
 	get_tree().quit()
 
 

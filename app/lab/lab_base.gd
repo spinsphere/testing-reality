@@ -50,6 +50,7 @@ var _acq_time_label: Label
 var _acq_run_btn: Button
 ## Optional counting electronics on the table whose display mirrors the acquisition.
 var counter_display: Apparatus
+var _acq_rows: Dictionary = {}   # channel name -> {value: Label, expect: Label}
 ## Engine instance used only as the lab's random source (Poisson counts); seeded from the
 ## clock so every session counts differently.
 var dice: QuagmireSystem
@@ -93,7 +94,11 @@ func acquisition_channels() -> Array:
 # ---------------------------------------------------------------- world
 
 func _build_world() -> void:
-	get_viewport().msaa_3d = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_4X][clampi(int(AppState.settings.get("msaa", 1)), 0, 2)]
+	# quality preset (Settings): Low is meant for integrated graphics
+	var q := AppState.quality()
+	var vp := get_viewport()
+	vp.msaa_3d = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_4X][q]
+	vp.scaling_3d_scale = 0.75 if q == 0 else 1.0
 	var env := WorldEnvironment.new()
 	var e := Environment.new()
 	e.background_mode = Environment.BG_COLOR
@@ -102,10 +107,12 @@ func _build_world() -> void:
 	e.ambient_light_color = Color("#3a3a6a")
 	e.ambient_light_energy = 0.55
 	e.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	e.glow_enabled = true
+	e.glow_enabled = q >= 1
 	e.glow_intensity = 0.6
 	e.glow_bloom = 0.1
 	e.glow_hdr_threshold = 0.9
+	for i in 7:  # the beams only need a small halo: keep the two finest blur levels, drop the rest
+		e.set_glow_level(i, 1.0 if i < 2 else 0.0)
 	e.fog_enabled = false
 	env.environment = e
 	add_child(env)
@@ -114,7 +121,10 @@ func _build_world() -> void:
 	key.rotation_degrees = Vector3(-55, 35, 0)
 	key.light_energy = 1.6
 	key.light_color = Color("#fff4e6")
-	key.shadow_enabled = true
+	key.shadow_enabled = q >= 1
+	# one orthogonal cascade covering just the table: cheaper than 4 cascades over 100 m and sharper
+	key.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
+	key.directional_shadow_max_distance = 4.0
 	add_child(key)
 	var fill := DirectionalLight3D.new()
 	fill.rotation_degrees = Vector3(-30, -120, 0)
@@ -689,33 +699,40 @@ func _refresh_acq() -> void:
 		return
 	_acq_run_btn.text = "❚❚  Pause" if acq_running else "●  Run"
 	_acq_time_label.text = "t = %.1f s" % acq_time
-	for c in acq_box.get_children():
-		c.queue_free()
-	for ch in acquisition_channels():
+	var channels := acquisition_channels()
+	var names: Array = []
+	for ch in channels:
+		names.append(str(ch["name"]))
+	if names != _acq_rows.keys():
+		# the channel set changed (rare): rebuild the rows; otherwise only the texts change,
+		# which keeps a running acquisition from allocating controls every frame
+		for c in acq_box.get_children():
+			c.queue_free()
+		_acq_rows.clear()
+		for name in names:
+			var h := HBoxContainer.new()
+			h.add_theme_constant_override("separation", 8)
+			var k := Label.new()
+			k.text = name
+			k.theme_type_variation = "Muted"
+			k.custom_minimum_size = Vector2(56, 0)
+			h.add_child(k)
+			var v := Label.new()
+			v.theme_type_variation = "Mono"
+			v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			h.add_child(v)
+			var e := Label.new()
+			e.theme_type_variation = "Muted"
+			e.add_theme_font_size_override("font_size", 12)
+			h.add_child(e)
+			acq_box.add_child(h)
+			_acq_rows[name] = {"value": v, "expect": e}
+	for ch in channels:
 		var name := str(ch["name"])
-		var rate := float(ch["rate"])
 		var n := int(acq_counts.get(name, 0))
-		var h := HBoxContainer.new()
-		h.add_theme_constant_override("separation", 8)
-		var k := Label.new()
-		k.text = name
-		k.theme_type_variation = "Muted"
-		k.custom_minimum_size = Vector2(56, 0)
-		h.add_child(k)
-		var v := Label.new()
-		v.theme_type_variation = "Mono"
-		if acq_time > 0.0:
-			v.text = "%d   (%.0f ± %.0f /s)" % [n, n / acq_time, sqrt(float(n)) / acq_time]
-		else:
-			v.text = "—"
-		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		h.add_child(v)
-		var e := Label.new()
-		e.text = "expect %.0f /s" % rate
-		e.theme_type_variation = "Muted"
-		e.add_theme_font_size_override("font_size", 12)
-		h.add_child(e)
-		acq_box.add_child(h)
+		var row: Dictionary = _acq_rows[name]
+		(row["value"] as Label).text = ("%d   (%.0f ± %.0f /s)" % [n, n / acq_time, sqrt(float(n)) / acq_time]) if acq_time > 0.0 else "—"
+		(row["expect"] as Label).text = "expect %d /s" % roundi(float(ch["rate"]))
 	if counter_display and is_instance_valid(counter_display) and counter_display.has_method("set_counts"):
 		counter_display.call("set_counts", acq_counts)
 

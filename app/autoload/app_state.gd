@@ -36,6 +36,11 @@ func _ready() -> void:
 	load_progress()
 
 
+## 3D quality preset: 0 low, 1 medium (default), 2 high. The old "msaa" key maps onto it.
+func quality() -> int:
+	return clampi(int(settings.get("quality", settings.get("msaa", 1))), 0, 2)
+
+
 func chapter(id: String) -> Dictionary:
 	for c in CHAPTERS:
 		if c["id"] == id:

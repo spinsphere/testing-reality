@@ -89,6 +89,13 @@ zoom. Then run it:
 - **Stages**: click a line of the state panel to follow the beam only that far; the camera
   frames the element and everything downstream is dimmed.
 
+Settings offers three 3D quality presets. *Low* (no shadows or glow, 75 % render scale,
+no MSAA) is meant for integrated graphics; *Medium* is the default. The heaviest bench
+(Experiment 7) draws about 110 k triangles in roughly 750 draw calls, which any
+mid-range laptop GPU of the last decade handles at 60 fps; see
+`docs/design/performance.md`. What is on the table and why is documented in
+`docs/design/bench-accuracy.md`.
+
 ## How the physics works
 
 The Quagmire Engine models each experiment as a small register of labelled quantum

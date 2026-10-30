@@ -102,15 +102,26 @@ func _draw() -> void:
 		var c: Color = s.get("color", Palette.ACCENT_SOFT)
 		var w := float(s.get("width", 2.0))
 		var dashed := bool(s.get("dashed", false))
+		# Antialiased polylines cost three strips per segment, so a 481-point curve becomes
+		# thousands of canvas primitives. Keep at most ~1 vertex per 2 px and antialias only
+		# short series (markers, legends); the long curves are drawn plain at 2 px.
+		var step := maxi(1, int(ceil(float(xs.size()) / maxf(1.0, r.size.x / 2.0))))
 		var pts := PackedVector2Array()
-		for i in xs.size():
+		for i in range(0, xs.size(), step):
 			pts.append(_to_px(xs[i], ys[i]))
+		if step > 1 and (xs.size() - 1) % step != 0:
+			pts.append(_to_px(xs[xs.size() - 1], ys[ys.size() - 1]))
+		var aa := pts.size() <= 64
 		if pts.size() >= 2:
 			if dashed:
+				# one draw call for all dashes (a dash every other segment)
+				var dashes := PackedVector2Array()
 				for i in range(0, pts.size() - 1, 2):
-					draw_line(pts[i], pts[i + 1], c, w, true)
+					dashes.append(pts[i])
+					dashes.append(pts[i + 1])
+				draw_multiline(dashes, c, w, aa)
 			else:
-				draw_polyline(pts, c, w, true)
+				draw_polyline(pts, c, maxf(w, 2.0), aa)
 	# legend
 	if show_legend:
 		var y := r.position.y + 10
