@@ -180,3 +180,11 @@ reading a computed result. User request 2026-10-31.
       counts > 0 within tolerance; scan completes; pair animation runs without errors).
 - [x] Engine-boundary audit (user request): Poisson counts, joint outcome draw, rate normalisation, interpolation and λL/d, λL/w moved from GDScript into the Quagmire core + SDK with golden tests; rule documented in docs/design/architecture.md and quagmire-engine/README.md.
 - [x] Rebuild the Linux (and Windows) exports with `tools/export.sh` (09:13: Linux 126 MB, Windows 162 MB; exported Linux binary verified with a lab screenshot); commit + push.
+
+## Phase 9 — Bench accuracy and performance (user request 2026-10-31)
+
+- [x] Bench audit: nothing floats; out-of-beam = set aside on the table; PA/PB as films on the mask (new `polarizer_film` model); PBS dumps + stray beams; undepleted-pump dump; `L` per experiment from the measured fringe spacing; harness consistency checks. Documented in `docs/design/bench-accuracy.md`.
+- [ ] Quality presets (Low / Medium / High: MSAA, shadows, glow, 3D render scale) in Settings; labs apply them; Low targets integrated graphics.
+- [ ] Rendering cost: single-cascade 2048 shadow map limited to the table, cheaper glow; acquisition panel updates labels in place instead of rebuilding every frame.
+- [ ] `--perf` run mode: objects / primitives / draw calls / VRAM per lab, machine-independent budget checked by `tools/test.sh` (≤ 1500 draw calls, ≤ 2 M triangles per frame).
+- [ ] Document the targets and results in `docs/design/performance.md`; commit + push.
