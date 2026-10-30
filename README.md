@@ -71,6 +71,24 @@ tools/test.sh --quick    # skip the xvfb / GL pass
 
 Any `SCRIPT ERROR` / `ERROR` / `WARNING` line printed by Godot fails the run.
 
+## In the laboratory
+
+Every lab is the real bench: click any instrument to open its controls (polarizer angle and
+in/out of the beam, slit width and separation, cover a slit, detector position and slit, pump
+wave plate, Berek phase, idler wall, D2 cable), drag to orbit, shift-drag to pan, wheel to
+zoom. Then run it:
+
+- **Shutter and power** on the laser: close it and the beam, the rates and the counts stop.
+- **Counting** (top right): Run starts a real-time acquisition. Every channel (D1, D2, D1·D2
+  coincidences) accumulates Poisson counts at the predicted rate, shown with ± √N; the
+  coincidence-counter box on the entangled benches shows the same digits.
+- **Scan D1** (slit labs): the motorised stage steps the detector across the pattern, counting
+  at each position, and draws your points (green) over the prediction and the lab's data.
+- **Photons** (Space): single photons, or pump photons that split into pairs at the crystal,
+  fly down the beam and are absorbed or detected according to a joint draw from the state.
+- **Stages**: click a line of the state panel to follow the beam only that far; the camera
+  frames the element and everything downstream is dimmed.
+
 ## How the physics works
 
 The Quagmire Engine models each experiment as a small register of labelled quantum

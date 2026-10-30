@@ -126,8 +126,8 @@ func _deg(v: float) -> String:
 	return ("%d" % roundi(v)) if is_equal_approx(v, roundf(v)) else ("%.1f" % v)
 
 
-func _photon_arrived(_photon: Dictionary, index: int) -> void:
-	if controller.components[index].is_detector():
+func _photon_arrived(_photon: Dictionary, at: Apparatus) -> void:
+	if at.is_detector():
 		_counts["detected"] += 1
 	else:
 		_counts["lost"] += 1

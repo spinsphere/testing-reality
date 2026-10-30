@@ -29,7 +29,11 @@ var presets_box: HBoxContainer
 var hint_label: Label
 var _photon_mode := false
 var _photon_timer := 0.0
-var _photons: Array = []  # [{mesh, t, path_index, dies_at}]
+var _photons: Array = []  # [{mesh, path, seg, t, dies_after, kind, outcome, pair?}]
+var _anim: Dictionary = {"sent": 0, "detected": {}, "coinc": 0}
+var _anim_label: Label
+## Stage the user is following (focus_stage): everything downstream is dimmed.
+var _focus_app: Apparatus
 var _ray_length := 20.0
 ## Width of the bottom-right results panel (labs with two plots use a wider one).
 var results_width := 640.0
@@ -273,7 +277,7 @@ func _build_hud() -> void:
 	left_v.add_theme_constant_override("separation", 4)
 	left.add_child(left_v)
 	var st := Label.new()
-	st.text = "QUANTUM STATE ALONG THE BEAM"
+	st.text = "QUANTUM STATE ALONG THE BEAM   ·   click a stage to follow the beam that far"
 	st.theme_type_variation = "Kicker"
 	left_v.add_child(st)
 	var scroll := ScrollContainer.new()
@@ -322,6 +326,12 @@ func _build_hud() -> void:
 	acq_reset.pressed.connect(acquisition_reset)
 	acq_head.add_child(acq_reset)
 	acq_v.add_child(acq_head)
+	_anim_label = Label.new()
+	_anim_label.theme_type_variation = "Muted"
+	_anim_label.add_theme_font_size_override("font_size", 12)
+	_anim_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_anim_label.visible = false
+	acq_v.add_child(_anim_label)
 	var acq_scroll := ScrollContainer.new()
 	acq_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	acq_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -411,6 +421,14 @@ func _refresh_state_panel(snapshots: Array) -> void:
 	for s in snapshots:
 		var row := VBoxContainer.new()
 		row.add_theme_constant_override("separation", 0)
+		var app_ref: Apparatus = s["apparatus"]
+		row.mouse_filter = Control.MOUSE_FILTER_STOP
+		row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		row.gui_input.connect(func(ev: InputEvent) -> void:
+			if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+				focus_stage(app_ref))
+		if beyond_focus(app_ref):
+			row.modulate = Color(1, 1, 1, 0.4)
 		var head := HBoxContainer.new()
 		var stage := Label.new()
 		stage.text = "%s  after %s" % [s["stage"], s["label"]]
@@ -448,6 +466,8 @@ func _refresh_beams(_snapshots: Array) -> void:
 			var from := a.global_position + Vector3(0, BEAM_HEIGHT, 0)
 			var to := b.global_position + Vector3(0, BEAM_HEIGHT, 0)
 			var intensity := controller.alive_after_apparatus(a)
+			if beyond_focus(b):
+				intensity *= 0.08  # following the beam only up to the focused stage
 			segs.append({"from": from, "to": to, "intensity": intensity, "wavelength": path_nm})
 	beams.set_segments(segs)
 
@@ -691,6 +711,42 @@ func _refresh_acq() -> void:
 		counter_display.call("set_counts", acq_counts)
 
 
+# ---------------------------------------------------------------- stage stepping
+
+## Follow the beam only up to `app`: select and frame it, dim everything beyond it (beam and
+## state rows). Clicking the same stage again lifts the focus.
+func focus_stage(app: Apparatus) -> void:
+	if _focus_app == app:
+		_focus_app = null
+	else:
+		_focus_app = app
+		camera_rig.focus_on(_beam_point(app), 0.5)
+	select(app)
+	_refresh_beams(controller.snapshots)
+
+
+## True when `app` lies downstream of the focused stage (same path, or an arm fed by it).
+func beyond_focus(app: Apparatus) -> bool:
+	if _focus_app == null or app == _focus_app:
+		return false
+	var paths: Array = beam_paths if not beam_paths.is_empty() else [controller.components]
+	var focus_path := -1
+	var focus_index := -1
+	for j in paths.size():
+		var k: int = (paths[j] as Array).find(_focus_app)
+		if k >= 0:
+			focus_path = j
+			focus_index = k
+			break
+	if focus_path < 0:
+		return false
+	var same: int = (paths[focus_path] as Array).find(app)
+	if same >= 0:
+		return same > focus_index
+	# the focus is on the pump line: every arm element is downstream
+	return focus_path == 0
+
+
 # ---------------------------------------------------------------- photon animation
 
 func toggle_photons() -> void:
@@ -701,57 +757,82 @@ func toggle_photons() -> void:
 		for p in _photons:
 			(p["mesh"] as Node).queue_free()
 		_photons.clear()
+	else:
+		_anim = {"sent": 0, "detected": {}, "coinc": 0}
+		_photon_timer = 0.0
+	_refresh_anim_label()
 
 
 func _process(delta: float) -> void:
 	if acq_running:
 		acquisition_advance(delta)
-	if not _photon_mode or controller.components.size() < 2 or not beam_paths.is_empty():
+	if _photon_mode:
+		tick_photons(delta)
+
+
+## Advance the photon animation by `dt` seconds (called every frame; tests call it directly).
+func tick_photons(dt: float) -> void:
+	if controller.components.size() < 2:
 		return
-	_photon_timer -= delta
+	_photon_timer -= dt
 	if _photon_timer <= 0.0:
-		_photon_timer = 0.12
+		_photon_timer = 0.7 if not beam_paths.is_empty() else 0.12
 		_spawn_photon()
-	var comps := controller.components
 	var speed := 1.2  # m/s on screen
 	for p in _photons.duplicate():
-		p["t"] += delta * speed
-		var seg: int = p["seg"]
-		var a := comps[seg].global_position + Vector3(0, BEAM_HEIGHT, 0)
-		var b := comps[seg + 1].global_position + Vector3(0, BEAM_HEIGHT, 0)
-		var length := a.distance_to(b)
-		while p["t"] >= length:
-			p["t"] -= length
-			seg += 1
-			if seg >= comps.size() - 1 or seg + 1 > int(p["dies_after"]):
-				_photon_arrived(p, seg)
-				_photons.erase(p)
-				(p["mesh"] as Node).queue_free()
-				seg = -1
-				break
-			p["seg"] = seg
-			a = comps[seg].global_position + Vector3(0, BEAM_HEIGHT, 0)
-			b = comps[seg + 1].global_position + Vector3(0, BEAM_HEIGHT, 0)
-			length = a.distance_to(b)
-		if seg < 0:
-			continue
-		(p["mesh"] as Node3D).global_position = a.lerp(b, p["t"] / maxf(length, 1e-6))
+		_advance_photon(p, dt * speed)
 
 
-## Sample one photon's fate from the final state: which component absorbs it (if any).
-func _spawn_photon() -> void:
+func _beam_point(app: Apparatus) -> Vector3:
+	return app.global_position + Vector3(0, BEAM_HEIGHT, 0)
+
+
+## One joint draw from the final state, property -> label, using the system's RNG. All
+## properties are drawn together, so a photon lost at PA is also the one that went through A.
+func sample_outcome() -> Dictionary:
 	var sys := controller.system
-	if sys == null or not controller.source_on:
-		return
-	var pol: String = controller.ctx["pol"]
-	var outcome := sys.sample(pol, 1)
-	var dies_after := controller.components.size() - 1
-	if outcome.size() == 1 and outcome[0].begins_with("lost@"):
-		var at := outcome[0].trim_prefix("lost@")
-		for i in controller.components.size():
-			if controller.components[i].label == at:
-				dies_after = i
-				break
+	var out := {}
+	if sys == null:
+		return out
+	var names: PackedStringArray = []
+	for p in sys.get_properties():
+		names.append(p["name"])
+	var terms: Array = sys.amplitudes()
+	if terms.is_empty():
+		return out
+	var u := sys.uniform()
+	var acc := 0.0
+	var chosen: Dictionary = terms[terms.size() - 1]
+	for term in terms:
+		acc += float(term["prob"])
+		if u <= acc:
+			chosen = term
+			break
+	var labels: PackedStringArray = chosen["labels"]
+	for i in mini(names.size(), labels.size()):
+		out[names[i]] = labels[i]
+	return out
+
+
+## Index on `path` of the element that absorbs a photon with this outcome, else the last one.
+func _dies_at(path: Array, outcome: Dictionary) -> int:
+	for prop in outcome:
+		var l := str(outcome[prop])
+		var target := ""
+		if l.begins_with("lost@"):
+			target = l.trim_prefix("lost@")
+		elif prop == "idler_path" and l == "wall":
+			for app in path:
+				if app is Optics.Wall:
+					target = app.label
+		if target != "":
+			for i in path.size():
+				if (path[i] as Apparatus).label == target:
+					return i
+	return path.size() - 1
+
+
+func _make_photon(color: Color, at: Vector3) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	var sm := SphereMesh.new()
 	sm.radius = 0.006
@@ -759,16 +840,98 @@ func _spawn_photon() -> void:
 	mi.mesh = sm
 	var mat := StandardMaterial3D.new()
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.albedo_color = Palette.wavelength_to_color(float(controller.ctx.get("wavelength", 405.0))).lightened(0.5)
+	mat.albedo_color = color
 	mat.emission_enabled = true
-	mat.emission = mat.albedo_color
+	mat.emission = color
 	mat.emission_energy_multiplier = 3.0
 	mi.material_override = mat
 	add_child(mi)
-	_photons.append({"mesh": mi, "t": 0.0, "seg": 0, "dies_after": dies_after})
-	mi.global_position = controller.components[0].global_position + Vector3(0, BEAM_HEIGHT, 0)
+	mi.global_position = at
+	return mi
 
 
-## Called when an animated photon reaches component `index` (absorbed or detected).
-func _photon_arrived(_photon: Dictionary, _index: int) -> void:
+## Fire one photon (or one pump photon that will become a pair at the crystal).
+func _spawn_photon() -> void:
+	if controller.system == null or not controller.source_on:
+		return
+	var outcome := sample_outcome()
+	var color := Palette.wavelength_to_color(float(controller.ctx.get("wavelength", 405.0))).lightened(0.5)
+	var path: Array = controller.components if beam_paths.is_empty() else beam_paths[0]
+	var mi := _make_photon(color, _beam_point(path[0]))
+	_photons.append({"mesh": mi, "path": path, "seg": 0, "t": 0.0, "dies_after": _dies_at(path, outcome),
+		"kind": "single" if beam_paths.is_empty() else "pump", "outcome": outcome})
+	_anim["sent"] = int(_anim["sent"]) + 1
+	_refresh_anim_label()
+
+
+func _advance_photon(p: Dictionary, dist: float) -> void:
+	var path: Array = p["path"]
+	var seg: int = p["seg"]
+	p["t"] = float(p["t"]) + dist
+	var a := _beam_point(path[seg])
+	var b := _beam_point(path[seg + 1])
+	var length := a.distance_to(b)
+	while float(p["t"]) >= length:
+		p["t"] = float(p["t"]) - length
+		var arrived := seg + 1
+		if arrived >= path.size() - 1 or arrived >= int(p["dies_after"]):
+			_photons.erase(p)
+			(p["mesh"] as Node).queue_free()
+			_photon_finished(p, path[arrived])
+			return
+		seg = arrived
+		p["seg"] = seg
+		a = _beam_point(path[seg])
+		b = _beam_point(path[seg + 1])
+		length = a.distance_to(b)
+	(p["mesh"] as Node3D).global_position = a.lerp(b, float(p["t"]) / maxf(length, 1e-6))
+
+
+func _photon_finished(p: Dictionary, at: Apparatus) -> void:
+	var outcome: Dictionary = p["outcome"]
+	if p["kind"] == "pump" and at is Optics.SPDCSource:
+		# the pump photon becomes a pair: one photon down each arm, fates drawn together
+		var color := Color(1.0, 0.3, 0.35)
+		var kinds := ["signal", "idler"]
+		for k in 2:
+			if beam_paths.size() <= k + 1:
+				break
+			var path: Array = beam_paths[k + 1]
+			var mi := _make_photon(color, _beam_point(path[0]))
+			_photons.append({"mesh": mi, "path": path, "seg": 0, "t": 0.0, "dies_after": _dies_at(path, outcome),
+				"kind": kinds[k], "outcome": outcome, "pair": p})
+		return
+	if at.is_detector():
+		var det: Dictionary = _anim["detected"]
+		det[at.label] = int(det.get(at.label, 0)) + 1
+		if p.has("pair"):
+			var pair: Dictionary = p["pair"]
+			pair["hits"] = int(pair.get("hits", 0)) + 1
+			if int(pair["hits"]) == 2:
+				_anim["coinc"] = int(_anim["coinc"]) + 1
+	_photon_arrived(p, at)
+	_refresh_anim_label()
+
+
+## Called when an animated photon reaches `at` (absorbed there or detected).
+func _photon_arrived(_photon: Dictionary, _at: Apparatus) -> void:
 	pass
+
+
+func _refresh_anim_label() -> void:
+	if _anim_label == null:
+		return
+	_anim_label.visible = _photon_mode
+	if not _photon_mode:
+		return
+	var det: Dictionary = _anim["detected"]
+	var parts: PackedStringArray = []
+	for k in det:
+		parts.append("%s %d" % [k, int(det[k])])
+	var branched := not beam_paths.is_empty()
+	var txt := "photon mode: %d %s sent" % [int(_anim["sent"]), "pairs" if branched else "photons"]
+	if parts.size() > 0:
+		txt += "   ·   " + "   ".join(parts)
+	if branched:
+		txt += "   ·   both %d" % int(_anim["coinc"])
+	_anim_label.text = txt

@@ -19,6 +19,14 @@ var _summary_rows: Array = []  # [[key, value]] filled by subclasses before plot
 var last_profile: QuagmireProfile
 var last_scale := 1.0
 
+# motorised detector scan: count `scan_dwell` seconds at each of `scan_steps` positions
+var scan_running := false
+var scan_points: Array = []   # [{x_mm, n, nc}] counts of D1 and of D1·D2 at each position
+var scan_steps := 41
+var scan_dwell := 0.5
+var _scan_timer := 0.0
+var _scan_index := 0
+
 
 func setup_slit_lab(p_mask: Optics.SlitMask, p_scanner: Optics.ScanningDetector, p_wavelength_nm: float, p_distance_m: float) -> void:
 	mask = p_mask
@@ -36,6 +44,57 @@ func setup_slit_lab(p_mask: Optics.SlitMask, p_scanner: Optics.ScanningDetector,
 
 func set_overlays(options: Array) -> void:
 	overlay_options = options
+
+
+func scan_start() -> void:
+	scan_points.clear()
+	_scan_index = 0
+	_scan_timer = 0.0
+	scan_running = true
+	scanner.set_param("position", -float(scanner.get_param("range")))
+	controller.mark_dirty()
+
+
+func scan_stop() -> void:
+	scan_running = false
+	controller.mark_dirty()
+
+
+func scan_clear() -> void:
+	scan_running = false
+	scan_points.clear()
+	controller.mark_dirty()
+
+
+func _process(delta: float) -> void:
+	super(delta)
+	if scan_running:
+		scan_advance(delta)
+
+
+## Count for `dt` more seconds at the current position; once `scan_dwell` is reached, record
+## the point and step the detector. At most one point per call (the rates must be rebuilt
+## between positions).
+func scan_advance(dt: float) -> void:
+	_scan_timer += dt
+	if _scan_timer < scan_dwell:
+		return
+	_scan_timer = 0.0
+	var n := 0
+	var nc := 0
+	for ch in acquisition_channels():
+		if ch["name"] == scanner.label:
+			n = _poisson(float(ch["rate"]) * scan_dwell)
+		elif ch["name"] == "D1·D2":
+			nc = _poisson(float(ch["rate"]) * scan_dwell)
+	scan_points.append({"x_mm": float(scanner.get_param("position")), "n": n, "nc": nc})
+	_scan_index += 1
+	if _scan_index >= scan_steps:
+		scan_running = false
+		controller.mark_dirty()
+		return
+	var half := float(scanner.get_param("range"))
+	scanner.set_param("position", lerpf(-half, half, float(_scan_index) / float(scan_steps - 1)))
 
 
 ## Alive condition for the signal photon by default.
@@ -147,6 +206,22 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	rate_l.text = "D1 @ %.2f mm: %d /s" % [pos_m * 1000.0, roundi(rate)]
 	rate_l.theme_type_variation = "Mono"
 	top.add_child(rate_l)
+	var scan_btn := Button.new()
+	scan_btn.theme_type_variation = "GhostButton"
+	if scan_running:
+		scan_btn.text = "■  Stop scan  (%d / %d)" % [_scan_index, scan_steps]
+		scan_btn.pressed.connect(scan_stop)
+	else:
+		scan_btn.text = "▶  Scan D1  (%d points × %.1f s)" % [scan_steps, scan_dwell]
+		scan_btn.pressed.connect(scan_start)
+	scan_btn.tooltip_text = "Step the detector across the pattern and count at each position, like the real motorised scan. Green points: your counts."
+	top.add_child(scan_btn)
+	if not scan_points.is_empty() and not scan_running:
+		var clear_btn := Button.new()
+		clear_btn.theme_type_variation = "GhostButton"
+		clear_btn.text = "clear scan"
+		clear_btn.pressed.connect(scan_clear)
+		top.add_child(clear_btn)
 	if not overlay.is_empty():
 		var note := Label.new()
 		note.text = "lab points scaled to the predicted peak"
@@ -159,17 +234,17 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	var plots := HBoxContainer.new()
 	plots.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	plots.add_theme_constant_override("separation", 8)
-	plot = _make_plot(prof, s_scale, s_overlay, pos_m, "D1 singles" if result.has("coincidence") else "", Palette.ACCENT_SOFT)
+	plot = _make_plot(prof, s_scale, s_overlay, pos_m, "D1 singles" if result.has("coincidence") else "", Palette.ACCENT_SOFT, "n")
 	plots.add_child(plot)
 	if result.has("coincidence"):
 		var c_overlay := overlay if target == "coinc" else {}
 		var cprof: QuagmireProfile = result["coincidence"]
-		var cplot := _make_plot(cprof, float(result.get("coinc_scale", 0.0)), c_overlay, pos_m, "D1·D2 coincidences", Palette.PINK)
+		var cplot := _make_plot(cprof, float(result.get("coinc_scale", 0.0)), c_overlay, pos_m, "D1·D2 coincidences", Palette.PINK, "nc")
 		plots.add_child(cplot)
 	add_result_control(plots)
 
 
-func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m: float, title: String, color: Color) -> PatternPlot:
+func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m: float, title: String, color: Color, scan_key: String = "n") -> PatternPlot:
 	var ys: PackedFloat64Array = prof.ys()
 	var intensity: PackedFloat64Array = prof.intensity()
 	var incoherent: PackedFloat64Array = prof.incoherent()
@@ -192,6 +267,7 @@ func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m:
 		{"name": "no-interference envelope", "xs": xs_mm, "ys": env, "color": Color(Palette.TEXT_DIM, 0.8), "dashed": true, "width": 1.5},
 	]
 	p.set_series(series)
+	var pts: Array = []
 	if not overlay.is_empty():
 		# the lab's counts are in its own units: scale them so their peak meets the prediction's
 		var peak := 0.0
@@ -201,7 +277,17 @@ func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m:
 		var oys := PackedFloat64Array()
 		for v in overlay["ys"]:
 			oys.append(float(v) * k)
-		p.set_points([{"xs": overlay["xs"], "ys": oys, "color": Palette.PINK if color != Palette.PINK else Palette.WARNING, "radius": 2.5}])
+		pts.append({"xs": overlay["xs"], "ys": oys, "color": Palette.PINK if color != Palette.PINK else Palette.WARNING, "radius": 2.5})
+	if not scan_points.is_empty():
+		# the user's own scan: counts per dwell → counts / s
+		var sx := PackedFloat64Array()
+		var sy := PackedFloat64Array()
+		for pt in scan_points:
+			sx.append(float(pt["x_mm"]))
+			sy.append(float(pt[scan_key]) / scan_dwell)
+		pts.append({"xs": sx, "ys": sy, "color": Palette.SUCCESS, "radius": 3.0})
+	if not pts.is_empty():
+		p.set_points(pts)
 	var marker := PackedFloat64Array([pos_m * 1000.0, pos_m * 1000.0])
 	var marker_y := PackedFloat64Array([0.0, p.y_range.y])
 	series.append({"name": "detector", "xs": marker, "ys": marker_y, "color": Palette.WARNING, "width": 1.0, "dashed": true})

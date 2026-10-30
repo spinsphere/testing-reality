@@ -418,9 +418,11 @@ func _drive_lab(ch: Dictionary) -> void:
 				"enum": want_options += 1
 		_ok(sliders.size() == want_sliders and checks.size() == want_checks and options.size() == want_options,
 			"lab %s: inspector for %s shows %d/%d/%d controls, expected %d/%d/%d" % [id, app.label, sliders.size(), checks.size(), options.size(), want_sliders, want_checks, want_options])
+		var origs: Array = []
 		for s in sliders:
 			var sl: HSlider = s
 			var orig := sl.value
+			origs.append(orig)
 			for v in ([sl.max_value, orig] if _quick else [sl.min_value, sl.max_value, (sl.min_value + sl.max_value) * 0.5, orig]):
 				sl.value = v
 				await _frames(_f)
@@ -428,6 +430,11 @@ func _drive_lab(ch: Dictionary) -> void:
 		for b in ([] if _quick else small_buttons):
 			(b as Button).pressed.emit()
 			await _frames(_f)
+		# the quick angle buttons leave the sliders changed (e.g. laser polarization at 90°, which
+		# the beam splitter then blocks): put every slider back so later checks see the preset
+		for i in sliders.size():
+			(sliders[i] as HSlider).value = origs[i]
+		await _frames(_f)
 		for c in checks:
 			var cb: CheckBox = c
 			cb.button_pressed = not cb.button_pressed
@@ -540,11 +547,98 @@ func _drive_lab(ch: Dictionary) -> void:
 			ob.item_selected.emit(0)
 			await _frames(3)
 
-	# photons, keys, camera, picking
+	# detector scan (slit labs): every position counted, points drawn, detector back under control
+	if has_slits:
+		var steps: int = lab.get("scan_steps")
+		var dwell: float = lab.get("scan_dwell")
+		var scan_btn := _find_button(lab.get("results_box"), "▶  Scan D1")
+		if _ok(scan_btn != null, "lab %s has no Scan button" % id):
+			scan_btn.pressed.emit()
+		await _frames(_f)
+		_ok(bool(lab.get("scan_running")), "lab %s: scan did not start" % id)
+		var scanner: Node = lab.get("scanner")
+		_ok(is_equal_approx(float(scanner.get_param("position")), -float(scanner.get_param("range"))), "lab %s: scan did not move D1 to the start" % id)
+		_ok(_find_button(lab.get("results_box"), "■  Stop scan") != null, "lab %s: no Stop button while scanning" % id)
+		for i in steps + 2:
+			if not bool(lab.get("scan_running")):
+				break
+			lab.call("scan_advance", dwell)
+			await _frames(_f)
+		_ok(not bool(lab.get("scan_running")), "lab %s: scan still running after %d steps" % [id, steps])
+		var pts: Array = lab.get("scan_points")
+		_ok(pts.size() == steps, "lab %s: scan recorded %d points, expected %d" % [id, pts.size(), steps])
+		var total := 0
+		for pt in pts:
+			total += int(pt["n"])
+		_ok(total > 0, "lab %s: the scan counted nothing" % id)
+		var green := 0
+		for c in _descendants(lab.get("results_box")):
+			if _is_a(c, "PatternPlot"):
+				for pset in (c.get("points") as Array):
+					if (pset["xs"] as PackedFloat64Array).size() == steps:
+						green += 1
+		_ok(green >= 1, "lab %s: scan points not drawn on the plot" % id)
+		var clear_btn := _find_button(lab.get("results_box"), "clear scan")
+		if _ok(clear_btn != null, "lab %s: no clear-scan button after the scan" % id):
+			clear_btn.pressed.emit()
+			await _frames(_f)
+			_ok((lab.get("scan_points") as Array).is_empty(), "lab %s: clear scan left points" % id)
+
+	# stage stepping: follow the beam up to the second element, then lift the focus
+	var comps: Array = controller.components
+	lab.call("focus_stage", comps[1])
+	await _frames(_f)
+	_ok(lab.get("_focus_app") == comps[1] and lab.get("selected") == comps[1], "lab %s: focus_stage did not select the stage" % id)
+	_ok(lab.call("beyond_focus", comps[comps.size() - 1]) and not lab.call("beyond_focus", comps[0]), "lab %s: beyond_focus wrong" % id)
+	var dim_rows := 0
+	for c in (lab.get("state_box") as Node).get_children():
+		if (c as Control).modulate.a < 0.9:
+			dim_rows += 1
+	_ok(dim_rows >= 1, "lab %s: no dimmed stages while following the beam" % id)
+	# clicking the focused row again lifts the focus
+	var rows: Array = (lab.get("state_box") as Node).get_children()
+	var row1: Control = null
+	for c in rows:
+		if c is VBoxContainer and (c as Control).modulate.a > 0.9:
+			row1 = c
+			break
+	var ev := InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.pressed = true
+	lab.call("focus_stage", comps[1])
+	await _frames(_f)
+	_ok(lab.get("_focus_app") == null, "lab %s: second focus_stage did not lift the focus" % id)
+	if row1:
+		row1.gui_input.emit(ev)
+		await _frames(_f)
+		_ok(lab.get("_focus_app") != null, "lab %s: clicking a state row did not focus it" % id)
+		lab.call("focus_stage", lab.get("_focus_app"))
+		await _frames(_f)
+	lab.call("select", null)
+
+	# photons: deterministic ticks, every photon ends at a detector or an absorber
 	lab.call("toggle_photons")
-	await _frames(10 if _quick else 45)
+	_ok(bool(lab.get("_photon_mode")), "lab %s: photon mode did not start" % id)
+	var branched: bool = not (lab.get("beam_paths") as Array).is_empty()
+	for i in (60 if _quick else 240):
+		lab.call("tick_photons", 0.05)
+		if i % 20 == 19:
+			await process_frame
+	var anim: Dictionary = lab.get("_anim")
+	_ok(int(anim["sent"]) >= 3, "lab %s: only %d photons sent in photon mode" % [id, int(anim["sent"])])
+	if not _quick:
+		var det: Dictionary = anim["detected"]
+		var hits := 0
+		for k in det:
+			hits += int(det[k])
+		_ok(hits >= 1, "lab %s: no photon reached a detector in 12 s of animation" % id)
+		if branched:
+			_ok(det.size() >= 1, "lab %s: pair animation detected nothing" % id)
+	var anim_label: Label = lab.get("_anim_label")
+	_ok(anim_label.visible and anim_label.text.contains("sent"), "lab %s: photon-mode readout missing" % id)
 	lab.call("toggle_photons")
 	await _frames(_f)
+	_ok((lab.get("_photons") as Array).is_empty(), "lab %s: photons left after switching the mode off" % id)
 	await _action("lab_run")
 	await _frames(5 if _quick else 20)
 	await _action("lab_run")
