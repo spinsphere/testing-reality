@@ -132,3 +132,15 @@ Headless screenshots work via Xvfb + Mesa llvmpipe (see `app/scripts/main.gd` `-
 - Blender scripts: one file per instrument in `blender/models/`, run with `blender -b -P <file>`; never commit `.blend` files, only scripts and exported `.glb`.
 - Keep the repo tidy: scratch work in the session scratchpad, not in the repo.
 - Autonomous resume: a cron wake-up in the Claude session re-reads this plan after a token reset.
+
+## Phase 7 — QA hardening (started 2026-10-31)
+
+User report: opening `app/project.godot` in Godot 4.7.2 shows parse errors; the chapter menus
+raise "Identifier QuagmireSystem not declared". Root cause under investigation: the GDExtension
+binaries (`app/addons/quagmire/bin/`) were git-ignored so a clone has no extension.
+
+- [ ] Ship the GDExtension binaries (Linux .so + Windows .dll) in the repo; keep `tools/build-sdk.sh` as the rebuild path
+- [ ] `app/tests/run_all.gd`: loads every script, instantiates every scene, drives hub → settings → every chapter page → every lab (presets, every apparatus parameter, overlays, photons, keys); exits non-zero on any engine error line
+- [ ] `tools/test.sh`: cargo tests + Godot import + smoke tests + run_all under xvfb and headless, failing on `SCRIPT ERROR` / `ERROR:` output
+- [ ] Fix every error/warning surfaced; re-run until clean; verify a fresh `git clone` of the repo opens without errors
+- [ ] Commit + push; update README "Testing" section

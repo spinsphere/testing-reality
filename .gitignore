@@ -13,6 +13,6 @@ __pycache__/
 .DS_Store
 *.swp
 
-# Built GDExtension binaries (tools/build-sdk.sh, tools/export.sh)
-app/addons/quagmire/bin/
+# Build outputs (tools/export.sh); the GDExtension binaries in app/addons/quagmire/bin are
+# committed on purpose so a clone opens in Godot without a Rust toolchain.
 builds/
