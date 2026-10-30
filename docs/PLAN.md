@@ -29,9 +29,9 @@ page-by-page source material.
 | 0 | Ingest source PDFs, research, plan | `docs/content/*.md`, this plan, architecture doc | done |
 | 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | done |
 | 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | done |
-| 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | mostly done (widgets in progress) |
+| 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | done |
 | 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | in progress (agent) |
-| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | done (widgets integration pending) |
+| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | done |
 | 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
 
 Phases 1, 3 and 4 are independent and run in parallel where agents allow. Phase 5 chapters are
@@ -74,7 +74,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Navigation: `Main` → `Hub` (experiment cards like the site's grid) → `Chapter` (TOC sidebar + page stack) → `Lab` (3D)
 - [x] Story page system: data-driven pages (`.tres`/JSON) with blocks: text, equation (SVG), figure, interactive widget, "enter lab" button
 - [x] Math pipeline: `tools/mathgen` (MathJax → SVG into `app/assets/math/`), equation manifest per chapter
-- [ ] Math primers (reusable widgets): 2D vector playground, Pythagoras/unit-length, projection = cosine, phasor/complex number, adding phasors (interference), "and" (tensor) lists, probability bars
+- [x] Math primers (reusable widgets): 2D vector playground, Pythagoras/unit-length, projection = cosine, phasor/complex number, adding phasors (interference), "and" (tensor) lists, probability bars
 - [x] Lab framework: orbit/pan/zoom camera, click-to-select apparatus, inspector panel (sliders/dials/presets), live state ket display, pattern plot widget, photon-by-photon mode, lab-data overlay hooks
 - [ ] Commit
 
@@ -86,7 +86,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 
 ### Phase 5 — Chapters
 - [x] 00 Home / hub
-- [x] 01 Introduction (quantum apple, kets as arrows, superposition, R45, measurement; interactive) — pages done; widgets pending
+- [x] 01 Introduction (quantum apple, kets as arrows, superposition, R45, measurement; interactive)
 - [x] 02 Experiment 1 — Polarizers (lab + 16 pages)
 - [x] 03 Experiment 2 — Single/double slit (lab + 16 pages)
 - [x] 04 Experiment 3 — Polarized double slit (lab + 16 pages)
