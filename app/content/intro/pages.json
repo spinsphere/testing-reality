@@ -1,0 +1,19 @@
+{
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "The quantum formalism: learn the basics for everyone",
+          "blocks": [
+            {"type": "text", "text": "Here, we explain how quantum mechanics works: the mathematical objects it uses, the predictions it makes, and how those predictions are tested experimentally."},
+            {"type": "text", "text": "Rather than beginning with rigorous formalism, we start in the middle — by offering simple statements that capture the core ideas. The downside of simplicity is that it can be inaccurate, but as you move through the chapters, we'll gradually refine and deepen the presentation."},
+            {"type": "callout", "kind": "math", "title": "What you need to know", "text": "Almost nothing. For now, you only need [b]arrows in a plane[/b] (vectors in 2 dimensions). Every time a new piece of maths appears, a short check-in like this one introduces it first."},
+            {"type": "equation", "id": "psi0", "caption": "A quantum apple: our first quantum state. Don't worry about the notation yet."}
+          ]
+        }
+      ]
+    }
+  ]
+}
