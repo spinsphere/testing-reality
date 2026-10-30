@@ -47,10 +47,13 @@ var _acq_time_label: Label
 var _acq_run_btn: Button
 ## Optional counting electronics on the table whose display mirrors the acquisition.
 var counter_display: Apparatus
-var _rng := RandomNumberGenerator.new()
+## Engine instance used only as the lab's random source (Poisson counts); seeded from the
+## clock so every session counts differently.
+var dice: QuagmireSystem
 
 
 func _ready() -> void:
+	dice = QuagmireSystem.with_seed(int(Time.get_ticks_usec()))
 	_build_world()
 	_build_hud()
 	controller = LabController.new()
@@ -656,23 +659,9 @@ func acquisition_advance(dt: float) -> void:
 		return
 	acq_time += dt
 	for ch in acquisition_channels():
-		var n := _poisson(float(ch["rate"]) * dt)
+		var n := int(dice.counts(float(ch["rate"]), dt))
 		acq_counts[ch["name"]] = int(acq_counts.get(ch["name"], 0)) + n
 	_refresh_acq()
-
-
-func _poisson(mean: float) -> int:
-	if mean <= 0.0:
-		return 0
-	if mean > 60.0:
-		return maxi(0, roundi(_rng.randfn(mean, sqrt(mean))))
-	var limit := exp(-mean)
-	var k := 0
-	var p := _rng.randf()
-	while p > limit:
-		k += 1
-		p *= _rng.randf()
-	return k
 
 
 func _refresh_acq() -> void:
@@ -787,31 +776,12 @@ func _beam_point(app: Apparatus) -> Vector3:
 	return app.global_position + Vector3(0, BEAM_HEIGHT, 0)
 
 
-## One joint draw from the final state, property -> label, using the system's RNG. All
-## properties are drawn together, so a photon lost at PA is also the one that went through A.
+## One joint draw from the final state, property -> label (the engine draws every property
+## together, so a photon lost at PA is also the one that went through A).
 func sample_outcome() -> Dictionary:
-	var sys := controller.system
-	var out := {}
-	if sys == null:
-		return out
-	var names: PackedStringArray = []
-	for p in sys.get_properties():
-		names.append(p["name"])
-	var terms: Array = sys.amplitudes()
-	if terms.is_empty():
-		return out
-	var u := sys.uniform()
-	var acc := 0.0
-	var chosen: Dictionary = terms[terms.size() - 1]
-	for term in terms:
-		acc += float(term["prob"])
-		if u <= acc:
-			chosen = term
-			break
-	var labels: PackedStringArray = chosen["labels"]
-	for i in mini(names.size(), labels.size()):
-		out[names[i]] = labels[i]
-	return out
+	if controller.system == null:
+		return {}
+	return controller.system.sample_outcome()
 
 
 ## Index on `path` of the element that absorbs a photon with this outcome, else the last one.

@@ -696,6 +696,63 @@ impl System {
         Ok(())
     }
 
+    /// One joint Born-rule draw of **every** property from the current state, without
+    /// collapsing it: `(property, label)` pairs in property order. Because the whole tuple
+    /// is drawn at once, correlations are exact — the photon that is "lost at PA" is the one
+    /// that went through slit A, both photons of a Bell pair come out with the same label, etc.
+    /// This is what an animation of single photons (or pairs) should use.
+    pub fn sample_outcome(&mut self) -> Result<Vec<(String, String)>> {
+        let total: f64 = self.state.values().map(|a| a.norm_sqr()).sum();
+        if total <= 0.0 {
+            return Err(QuagmireError::ZeroNorm);
+        }
+        let r = self.uniform() * total;
+        let mut acc = 0.0;
+        let mut chosen = *self.state.keys().next_back().expect("non-empty state");
+        for (k, a) in &self.state {
+            acc += a.norm_sqr();
+            if r < acc {
+                chosen = *k;
+                break;
+            }
+        }
+        let labels = self.labels_of(chosen);
+        Ok(self
+            .props
+            .iter()
+            .map(|p| p.name.clone())
+            .zip(labels)
+            .collect())
+    }
+
+    /// Poisson-distributed count with the given mean, from the system's RNG: the number of
+    /// clicks a detector gives in a time window when `mean = rate × dt`. Knuth's method
+    /// below a mean of 50, the normal approximation above.
+    pub fn poisson(&mut self, mean: f64) -> u64 {
+        if !(mean > 0.0) {
+            return 0;
+        }
+        if mean < 50.0 {
+            let limit = (-mean).exp();
+            let mut k = 0u64;
+            let mut p = self.uniform();
+            while p > limit {
+                k += 1;
+                p *= self.uniform();
+            }
+            return k;
+        }
+        let u1 = self.uniform().max(1e-300);
+        let u2 = self.uniform();
+        let z = (-2.0 * u1.ln()).sqrt() * (2.0 * std::f64::consts::PI * u2).cos();
+        (mean + z * mean.sqrt()).round().max(0.0) as u64
+    }
+
+    /// Clicks of a detector counting at `rate` per second for `dt` seconds.
+    pub fn counts(&mut self, rate: f64, dt: f64) -> u64 {
+        self.poisson(rate * dt)
+    }
+
     /// Sample `n` outcomes of `prop` without collapsing the state.
     pub fn sample(&mut self, prop: &str, n: usize) -> Result<Vec<String>> {
         let marg = self.marginals(prop)?;
@@ -747,6 +804,38 @@ mod tests {
         assert_abs_diff_eq!(m[1].1, 0.5, epsilon = 1e-12);
         assert_abs_diff_eq!(m[2].1, 0.5, epsilon = 1e-12);
         assert_abs_diff_eq!(s.probability(&Pred::is("path", "S")).unwrap(), 0.0);
+    }
+
+    #[test]
+    fn joint_outcomes_are_correlated_and_poisson_has_the_right_moments() {
+        // |Φ+⟩ = (|00⟩ + |11⟩)/√2: every joint draw must agree on both labels
+        let mut s = System::with_seed(3);
+        s.add_property("a", &["0", "1"]).unwrap();
+        s.add_property("b", &["0", "1"]).unwrap();
+        let h = C::new(crate::INV_SQRT2, 0.0);
+        s.set_state(&[(&["0", "0"], h), (&["1", "1"], h)]).unwrap();
+        let mut ones = 0;
+        for _ in 0..400 {
+            let o = s.sample_outcome().unwrap();
+            assert_eq!(o[0].0, "a");
+            assert_eq!(o[1].0, "b");
+            assert_eq!(o[0].1, o[1].1);
+            if o[0].1 == "1" {
+                ones += 1;
+            }
+        }
+        assert!((150..=250).contains(&ones), "ones = {ones}");
+        // Poisson: mean and variance ≈ λ (small-λ branch and normal branch)
+        for lambda in [4.0, 200.0] {
+            let n = 4000;
+            let draws: Vec<f64> = (0..n).map(|_| s.poisson(lambda) as f64).collect();
+            let mean = draws.iter().sum::<f64>() / n as f64;
+            let var = draws.iter().map(|d| (d - mean).powi(2)).sum::<f64>() / n as f64;
+            assert!((mean - lambda).abs() < 0.08 * lambda + 0.2, "mean {mean} for λ={lambda}");
+            assert!((var - lambda).abs() < 0.2 * lambda + 0.5, "var {var} for λ={lambda}");
+        }
+        assert_eq!(s.poisson(0.0), 0);
+        assert_eq!(s.counts(0.0, 10.0), 0);
     }
 
     #[test]

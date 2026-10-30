@@ -106,6 +106,8 @@ func _lab_reference(n_active: int) -> String:
 
 
 func _explain() -> String:
+	# each factor is the engine's survival through that polarizer: alive after / alive before,
+	# which is Malus's cos² of the angle difference
 	var parts: PackedStringArray = []
 	var prev := float(laser.get_param("polarization"))
 	var total := 1.0
@@ -113,7 +115,9 @@ func _explain() -> String:
 		if not bool(pol.get_param("enabled")):
 			continue
 		var a := float(pol.get_param("angle"))
-		var f := pow(cos(deg_to_rad(a - prev)), 2.0)
+		var i := controller.components.find(pol)
+		var before := controller.alive_after(i - 1)
+		var f := controller.alive_after(i) / before if before > 0.0 else 0.0
 		parts.append("cos²(%s° − %s°) = %.3f" % [_deg(a), _deg(prev), f])
 		total *= f
 		prev = a

@@ -461,6 +461,31 @@ impl QuagmireSystem {
         self.sys.uniform()
     }
 
+    /// One joint draw of every property (Born rule over the whole state) without collapsing:
+    /// `{property: label}`. Correlations are exact, so use it to decide the fate of one photon
+    /// or of both photons of a pair in an animation.
+    #[func]
+    fn sample_outcome(&mut self) -> VarDictionary {
+        let mut d = VarDictionary::new();
+        let pairs = check!(self.sys.sample_outcome());
+        for (p, l) in pairs {
+            d.set(&GString::from(&p).to_variant(), &GString::from(&l).to_variant());
+        }
+        d
+    }
+
+    /// Poisson-distributed count with the given mean (detector clicks in a window).
+    #[func]
+    fn poisson(&mut self, mean: f64) -> i64 {
+        self.sys.poisson(mean) as i64
+    }
+
+    /// Clicks of a detector counting at `rate` per second for `dt` seconds.
+    #[func]
+    fn counts(&mut self, rate: f64, dt: f64) -> i64 {
+        self.sys.counts(rate, dt) as i64
+    }
+
     // ---------------------------------------------------------------- display
 
     /// Unicode ket string, e.g. `1/√2 |↔⟩|A⟩ + 1/√2 |↕⟩|B⟩`.
@@ -600,6 +625,18 @@ impl QuagmireScreen {
         self.geometry().envelope(sin_theta)
     }
 
+    /// Fringe spacing `λL/d` on the screen (metres); 0 with fewer than two slits.
+    #[func]
+    fn fringe_spacing(&self) -> f64 {
+        self.geometry().fringe_spacing()
+    }
+
+    /// First zero of the single-slit envelope on the screen, `λL/w` (metres).
+    #[func]
+    fn envelope_zero(&self) -> f64 {
+        self.geometry().envelope_zero()
+    }
+
     /// Uniform positions from `-half` to `+half`.
     #[func]
     fn linspace(half: f64, n: i64) -> PackedFloat64Array {
@@ -663,6 +700,31 @@ impl QuagmireProfile {
     #[func]
     fn visibility(&self) -> f64 {
         self.profile.visibility()
+    }
+
+    /// `∫ I dy` over the sampled range.
+    #[func]
+    fn integral(&self) -> f64 {
+        self.profile.integral()
+    }
+
+    /// Intensity at `y` (metres), linearly interpolated.
+    #[func]
+    fn intensity_at(&self, y: f64) -> f64 {
+        self.profile.intensity_at(y)
+    }
+
+    /// Counts/s per unit intensity for a detector slit of `slit_width` when `flux` countable
+    /// photons/s reach the screen: `flux × slit_width / ∫I dy` (call on the convolved profile).
+    #[func]
+    fn rate_scale(&self, slit_width: f64, flux: f64) -> f64 {
+        self.profile.rate_scale(slit_width, flux)
+    }
+
+    /// Click rate with the detector (slit `slit_width`) at `y`, for `flux` countable photons/s.
+    #[func]
+    fn rate_at(&self, y: f64, slit_width: f64, flux: f64) -> f64 {
+        self.profile.rate_at(y, slit_width, flux)
     }
 
     /// Convolve with a detector slit of `width` metres.

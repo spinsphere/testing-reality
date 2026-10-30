@@ -481,3 +481,27 @@ fn photon_sampling_follows_profile() {
         "dark {near_dark} bright {near_bright}"
     );
 }
+
+#[test]
+fn profile_rates_and_geometry_helpers() {
+    // Experiment 2 geometry: 808 nm, w = 200 µm, d = 400 µm, L = 0.5 m
+    let g = ScreenGeometry::double_slit(808e-9, 200e-6, 400e-6, 0.5, "A", "B");
+    assert_abs_diff_eq!(g.fringe_spacing(), 1.01e-3, epsilon = 1e-12);
+    assert_abs_diff_eq!(g.envelope_zero(), 2.02e-3, epsilon = 1e-12);
+    let mut s = System::new();
+    s.add_property("path", &["S", "A", "B"]).unwrap();
+    s.slits("path", "S", &["A", "B"], 1.0, 0.0, None).unwrap();
+    let ys = linspace(3e-3, 601);
+    let prof = s.screen_profile("path", &g, &ys, None).unwrap().box_convolve(200e-6);
+    // interpolation hits the grid exactly and is clamped outside it
+    assert_abs_diff_eq!(prof.intensity_at(ys[300]), prof.intensity[300], epsilon = 1e-12);
+    assert_abs_diff_eq!(prof.intensity_at(1.0), prof.intensity[600], epsilon = 1e-12);
+    // the detector rates summed over the scan (slit-sized steps) give back the flux
+    let flux = 3000.0;
+    let slit = 200e-6;
+    let dy = ys[1] - ys[0];
+    let total: f64 = ys.iter().map(|&y| prof.rate_at(y, slit, flux) * dy / slit).sum();
+    assert_abs_diff_eq!(total, flux, epsilon = 0.02 * flux);
+    assert_abs_diff_eq!(prof.rate_at(0.0, slit, flux), prof.intensity_at(0.0) * prof.rate_scale(slit, flux), epsilon = 1e-9);
+    assert_eq!(prof.rate_scale(0.0, flux), 0.0);
+}

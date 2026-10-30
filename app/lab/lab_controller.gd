@@ -73,6 +73,8 @@ func rebuild() -> void:
 	result = {}
 	if finish_hook.is_valid():
 		result = finish_hook.call(system, ctx)
+	# the kets are deterministic; the draws (photon fates) should not replay after each rebuild
+	system.reseed(int(Time.get_ticks_usec()))
 	rebuilt.emit(snapshots, result)
 
 

@@ -62,5 +62,5 @@ if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
 	done
 fi
 
-echo "== $( [ $status -eq 0 ] && echo ALL OK || echo FAILURES ) — logs in $LOG"
+if [ $status -eq 0 ]; then echo "== ALL OK — logs in $LOG"; else echo "== FAILURES — logs in $LOG"; fi
 exit $status

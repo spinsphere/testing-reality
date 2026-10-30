@@ -63,6 +63,26 @@ impl ScreenGeometry {
         2.0 * std::f64::consts::PI / self.wavelength
     }
 
+    /// Fringe spacing `λ L / d` between the first two slits (0 with fewer than two slits).
+    pub fn fringe_spacing(&self) -> f64 {
+        if self.slits.len() < 2 {
+            return 0.0;
+        }
+        let d = (self.slits[0].1 - self.slits[1].1).abs();
+        if d <= 0.0 {
+            return 0.0;
+        }
+        self.wavelength * self.distance / d
+    }
+
+    /// First zero of the single-slit envelope on the screen, `λ L / w`.
+    pub fn envelope_zero(&self) -> f64 {
+        if self.slit_width <= 0.0 {
+            return 0.0;
+        }
+        self.wavelength * self.distance / self.slit_width
+    }
+
     /// Single-slit envelope `(sin α / α)²`, `α = π w sin θ / λ`.
     pub fn envelope(&self, sin_theta: f64) -> f64 {
         let alpha = std::f64::consts::PI * self.slit_width * sin_theta / self.wavelength;
@@ -106,6 +126,50 @@ pub struct Profile {
 impl Profile {
     pub fn max(&self) -> f64 {
         self.intensity.iter().cloned().fold(0.0, f64::max)
+    }
+
+    /// Trapezoid integral `∫ I dy` of the coherent intensity over the sampled range.
+    pub fn integral(&self) -> f64 {
+        let mut sum = 0.0;
+        for i in 1..self.ys.len() {
+            sum += 0.5 * (self.intensity[i] + self.intensity[i - 1]) * (self.ys[i] - self.ys[i - 1]);
+        }
+        sum
+    }
+
+    /// Coherent intensity at `y`, linearly interpolated (clamped to the sampled range).
+    pub fn intensity_at(&self, y: f64) -> f64 {
+        let n = self.ys.len();
+        if n == 0 {
+            return 0.0;
+        }
+        if n == 1 || y <= self.ys[0] {
+            return self.intensity[0];
+        }
+        if y >= self.ys[n - 1] {
+            return self.intensity[n - 1];
+        }
+        let t = (y - self.ys[0]) / (self.ys[n - 1] - self.ys[0]) * (n - 1) as f64;
+        let i = (t.floor() as usize).min(n - 2);
+        let f = t - i as f64;
+        self.intensity[i] * (1.0 - f) + self.intensity[i + 1] * f
+    }
+
+    /// Counts per second per unit of intensity for a detector with a slit of `slit_width`
+    /// when `flux` photons per second (those that can be counted at all) reach the screen
+    /// plane: `flux × slit_width / ∫ I dy`. Use it on the box-convolved profile, so that
+    /// `rate_scale × intensity_at(y)` is the click rate with the detector at `y`.
+    pub fn rate_scale(&self, slit_width: f64, flux: f64) -> f64 {
+        let integral = self.integral();
+        if integral <= 0.0 || slit_width <= 0.0 {
+            return 0.0;
+        }
+        flux * slit_width / integral
+    }
+
+    /// Click rate of a detector with a slit of `slit_width` centred at `y` (see `rate_scale`).
+    pub fn rate_at(&self, y: f64, slit_width: f64, flux: f64) -> f64 {
+        self.intensity_at(y) * self.rate_scale(slit_width, flux)
     }
 
     /// Fringe visibility `(max − min)/(max + min)` of the fringe factor

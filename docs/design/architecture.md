@@ -130,3 +130,41 @@ IOR 1.5, AR-coated optic tint, ABS plastic, PCB), parametric builders (post, pos
 hole grid as baked normal map), export to glTF with `export_apply=True`. One script per
 instrument under `blender/models/`, each writing `app/assets/models/<name>.glb`. Run
 `tools/build-models.sh` to rebuild everything headlessly.
+
+
+## Engine boundary — what lives in Quagmire and what lives in the app
+
+Rule: **anything that computes a physical quantity lives in the Quagmire Engine** (Rust
+core, exposed through the GDExtension SDK). The app composes engine calls, renders, and
+narrates. The engine must stay useful for other games, so it never knows about tables,
+Godot nodes or the site's chapters.
+
+| Concern | Where | API |
+|---|---|---|
+| State, operators, polarizers/wave plates/retarders/PBS, slits, SPDC, sinks | engine | `QuagmireSystem.*` |
+| Probabilities, marginals, conditionals, measurement, collapse | engine | `probability`, `marginals`, `measure`, `force`, `sample` |
+| **Joint draw of one photon's (or one pair's) fate** | engine | `sample_outcome()` → `{property: label}` |
+| **Detector statistics** (Poisson clicks in a window) | engine | `poisson(mean)`, `counts(rate, dt)` |
+| Screen pattern `I(y)`, envelope, visibility, detector-slit convolution | engine | `screen_profile`, `QuagmireProfile.*` |
+| **Count rate at a detector position** (`flux × slit / ∫I dy`), interpolation | engine | `QuagmireProfile.rate_scale`, `rate_at`, `intensity_at`, `integral` |
+| **Textbook geometry** `λL/d`, `λL/w` | engine | `QuagmireScreen.fringe_spacing`, `envelope_zero` |
+| Ket pretty-printing (Unicode / LaTeX) | engine | `ket_text`, `ket_latex`, `ket_text_mapped` |
+| Which apparatus an outcome label belongs to, beam geometry, camera, HUD, plots | app | `Apparatus`, `LabController`, `LabBase` |
+| Acquisition bookkeeping (elapsed time, per-channel totals, display) | app | `LabBase.acquisition_*` (counts come from `dice.counts`) |
+| Lab-data CSV overlays and their scaling to the predicted peak | app | `LabData`, `SlitLabBase` |
+| Shutter / power / pair-rate *parameters* and `rate_scale()` bookkeeping | app | `Optics.Laser`, `Optics.SPDCSource`, `LabController.rate_scale()` |
+
+Each `Optics.*` apparatus is a thin adapter: its `apply()` is one or two engine calls (for
+example `Optics.Polarizer.apply` → `sys.polarizer(...)`, `Optics.Wall.apply` →
+`sys.relabel` + `sys.mark_sink`). Closed-form "textbook" expressions that appear in the
+results panels (`½cos²(α−β)`, `|sin 2θ|`, `1 + sin 2γ cos kΔ`) are displayed **next to** the
+engine's number as the formula the student has just learnt; they are labels, never the
+source of a displayed measurement. Experiment 1's Malus factors are read from the engine's
+stage-by-stage survival (`LabController.alive_after`).
+
+Audit, 2026-10-31 (Phase 8): the first version of the acquisition and the pair animation
+put Poisson sampling, a joint Born-rule draw over `amplitudes()`, the `∫I dy` rate
+normalisation, profile interpolation and `λL/d` into GDScript. All five moved into the
+engine (`core/src/system.rs`, `core/src/screen.rs`) with golden tests, and the GDScript now
+calls the SDK. Future rule of thumb: if a line of GDScript contains `cos`, `sin`, `exp`,
+`sqrt` or a sum over amplitudes and it is not drawing, it belongs in the engine.

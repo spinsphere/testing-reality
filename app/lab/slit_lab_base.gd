@@ -84,9 +84,9 @@ func scan_advance(dt: float) -> void:
 	var nc := 0
 	for ch in acquisition_channels():
 		if ch["name"] == scanner.label:
-			n = _poisson(float(ch["rate"]) * scan_dwell)
+			n = int(dice.counts(float(ch["rate"]), scan_dwell))
 		elif ch["name"] == "D1·D2":
-			nc = _poisson(float(ch["rate"]) * scan_dwell)
+			nc = int(dice.counts(float(ch["rate"]), scan_dwell))
 	scan_points.append({"x_mm": float(scanner.get_param("position")), "n": n, "nc": nc})
 	_scan_index += 1
 	if _scan_index >= scan_steps:
@@ -118,27 +118,15 @@ func _finish(sys: QuagmireSystem, ctx: Dictionary) -> Dictionary:
 	prof = prof.box_convolve(slit_w)
 	last_profile = prof
 	var out := {"profile": prof, "ys": ys, "geometry": geom}
-	out["singles_scale"] = _rate_scale_for(prof, slit_w, sys.probability(alive_pred()))
+	# counts/s per unit intensity: flux of countable photons × slit / ∫I dy (engine)
+	out["singles_scale"] = prof.rate_scale(slit_w, controller.rate_scale() * sys.probability(alive_pred()))
 	if not coincidence_pred.is_empty():
 		var cp: QuagmireProfile = sys.screen_profile(ctx["path"], geom, ys, coincidence_pred)
 		if cp != null:
 			cp = cp.box_convolve(slit_w)
 			out["coincidence"] = cp
-			out["coinc_scale"] = _rate_scale_for(cp, slit_w, sys.probability(coincidence_pred))
+			out["coinc_scale"] = cp.rate_scale(slit_w, controller.rate_scale() * sys.probability(coincidence_pred))
 	return out
-
-
-## Counts per second per unit of profile intensity: the source rate × the probability that the
-## photon is counted at all × the share of the pattern the detector slit covers (slit / ∫I dy).
-func _rate_scale_for(prof: QuagmireProfile, slit_w: float, p_counted: float) -> float:
-	var ys: PackedFloat64Array = prof.ys()
-	var inten: PackedFloat64Array = prof.intensity()
-	var integral := 0.0
-	for i in range(1, ys.size()):
-		integral += 0.5 * (inten[i] + inten[i - 1]) * (ys[i] - ys[i - 1])
-	if integral <= 0.0:
-		return 0.0
-	return controller.rate_scale() * p_counted * slit_w / integral
 
 
 ## Acquisition channels: the scanning detector at its current position, the coincidences
@@ -149,10 +137,10 @@ func acquisition_channels() -> Array:
 	if r.has("profile"):
 		var pos := float(scanner.get_param("position")) * 1e-3
 		var prof: QuagmireProfile = r["profile"]
-		out.append({"name": scanner.label, "rate": _sample(prof.ys(), prof.intensity(), pos) * float(r.get("singles_scale", 0.0))})
+		out.append({"name": scanner.label, "rate": prof.intensity_at(pos) * float(r.get("singles_scale", 0.0))})
 		if r.has("coincidence"):
 			var cp: QuagmireProfile = r["coincidence"]
-			out.append({"name": "D1·D2", "rate": _sample(cp.ys(), cp.intensity(), pos) * float(r.get("coinc_scale", 0.0))})
+			out.append({"name": "D1·D2", "rate": cp.intensity_at(pos) * float(r.get("coinc_scale", 0.0))})
 	out.append_array(super())
 	return out
 
@@ -170,7 +158,7 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	# singles, in counts / s from the source rate (lab points are scaled to the predicted peak)
 	var s_overlay := overlay if target == "singles" else {}
 	var s_scale := float(result.get("singles_scale", 0.0))
-	var rate := _sample(ys, prof.intensity(), pos_m) * s_scale
+	var rate := prof.intensity_at(pos_m) * s_scale
 	scanner.last_rate = rate
 	scanner.refresh_visual()
 	var light := Palette.wavelength_to_color(wavelength_nm) if Palette.is_visible(wavelength_nm) else Color(0.9, 0.2, 0.25)
@@ -305,16 +293,3 @@ func _load_overlay() -> Dictionary:
 	if not scan.is_empty():
 		scan["target"] = o.get("target", "singles")
 	return scan
-
-
-static func _sample(ys: PackedFloat64Array, vals: PackedFloat64Array, x: float) -> float:
-	var n := ys.size()
-	if n == 0:
-		return 0.0
-	if x <= ys[0]:
-		return vals[0]
-	if x >= ys[n - 1]:
-		return vals[n - 1]
-	var t := (x - ys[0]) / (ys[n - 1] - ys[0]) * (n - 1)
-	var i := int(t)
-	return lerpf(vals[i], vals[mini(i + 1, n - 1)], t - i)

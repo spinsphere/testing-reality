@@ -34,10 +34,9 @@ func build() -> void:
 
 
 func on_rebuilt(snapshots: Array, result: Dictionary) -> void:
-	var d_um := float(mask.get_param("separation"))
-	var spacing_mm := wavelength_nm * 1e-9 * distance_m / (d_um * 1e-6) * 1000.0
-	var w_um := float(mask.get_param("width"))
-	var env_zero_mm := wavelength_nm * 1e-9 * distance_m / (w_um * 1e-6) * 1000.0
+	var geom: QuagmireScreen = result.get("geometry")
+	var spacing_mm := geom.fringe_spacing() * 1000.0 if geom else 0.0
+	var env_zero_mm := geom.envelope_zero() * 1000.0 if geom else 0.0
 	_summary_rows = [
 		["Fringe spacing λL/d", "%.2f mm" % spacing_mm],
 		["First envelope zero λL/w", "±%.2f mm" % env_zero_mm],

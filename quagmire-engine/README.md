@@ -69,3 +69,18 @@ patterns (½ and ¼), the delayed-choice law `1 + sin 2γ cos kΔ`, and the wall
 ## Status
 
 Phase 1 (core) complete. Next: the Godot SDK, then a C ABI crate for other engines.
+
+
+## Added for interactive benches (v0.2)
+
+| Core | SDK | Purpose |
+|---|---|---|
+| `System::sample_outcome()` | `QuagmireSystem.sample_outcome() -> Dictionary` | one joint Born-rule draw of every property (fates of a photon or an entangled pair), no collapse |
+| `System::poisson(mean)`, `counts(rate, dt)` | `poisson(mean) -> int`, `counts(rate, dt) -> int` | detector click statistics from the engine's seeded RNG |
+| `Profile::integral()`, `intensity_at(y)` | `QuagmireProfile.integral()`, `intensity_at(y)` | pattern bookkeeping without copying arrays out |
+| `Profile::rate_scale(slit, flux)`, `rate_at(y, slit, flux)` | same names | click rate of a slit detector at `y` for a given countable flux |
+| `ScreenGeometry::fringe_spacing()`, `envelope_zero()` | `QuagmireScreen.fringe_spacing()`, `envelope_zero()` | `λL/d`, `λL/w` |
+
+Design rule for host applications (see the app repository's `docs/design/architecture.md`,
+"Engine boundary"): everything that computes a physical quantity belongs here; the host
+composes these calls, renders and narrates.

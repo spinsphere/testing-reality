@@ -142,8 +142,8 @@ binaries (`app/addons/quagmire/bin/`) were git-ignored so a clone has no extensi
 - [x] Ship the GDExtension binaries (Linux .so + Windows .dll) in the repo; keep `tools/build-sdk.sh` as the rebuild path (95114d1)
 - [x] `app/tests/run_all.gd`: loads every script, instantiates every scene, drives hub → settings → every chapter page → every lab (presets, every apparatus parameter, overlays, photons, keys); exits non-zero on any engine error line
 - [x] `tools/test.sh`: cargo tests + Godot import + smoke tests + run_all under xvfb and headless, failing on `SCRIPT ERROR` / `ERROR:` output
-- [ ] Fix every error/warning surfaced; re-run until clean; verify a fresh `git clone` of the repo opens without errors
-- [ ] Commit + push; update README "Testing" section
+- [x] Fix every error/warning surfaced; re-run until clean; verify a fresh `git clone` of the repo opens without errors
+- [x] Commit + push; update README "Testing" section
 
 ### Status 2026-10-31 02:45 (cut off by usage limit — resume here)
 Full `tools/test.sh` run (logs in builds/test-logs): headless run_all OK (1049 checks); GL run_all
@@ -152,8 +152,10 @@ was clean through exp4 then hit the 900 s timeout (llvmpipe is slow). Remaining 
 - [x] `app/tests/smoke_widgets.gd` leaks at exit — real cause: `static var` in apple_evolution.gd and widget_kit.gd kept the scripts (and theme/fonts/textures) alive; replaced with an instance var / `WidgetKit.hv()`. `tests/leak_probe.gd` attributes exit leaks per widget.
 - [x] `tools/test.sh`: add `V-Sync` to IGNORE; raise the GL run_all timeout to 3600 and run Xvfb at 1280x720 for that step (keep 1600x900 for screenshots).
 - [x] The 141 `app/assets/models/*.png` were NOT Blender leftovers: Godot's glTF importer extracts embedded textures by default (`gltf/embedded_image_handling=1`) and the editor then rewrote their `.import` files (detect-3D) — the churn seen in GitHub Desktop. Fixed by `gltf/embedded_image_handling=2` (Basis Universal inside the imported scene) in all 17 `.glb.import`; the PNGs are gone for good.
-- [ ] Re-run `tools/test.sh` until ALL OK; then `git clone` into a scratch dir and run `xvfb-run godot -e --path <clone>/app --quit-after 400` and `git status` there to prove the editor changes no tracked files.
-- [ ] Commit each step and push; README "Testing" section is already written (uncommitted edit in README.md — commit it).
+- [x] Re-run `tools/test.sh` until ALL OK; then `git clone` into a scratch dir and run `xvfb-run godot -e --path <clone>/app --quit-after 400` and `git status` there to prove the editor changes no tracked files.
+- [x] Commit each step and push; README "Testing" section is already written (uncommitted edit in README.md — commit it).
+
+Phase 7 closed 2026-10-31 09:10: `tools/test.sh` ALL OK (cargo 28 tests, import, smoke, run_all headless 1307 checks, run_all xvfb/GL, 10 screenshots); `tools/check-clone.sh` CLONE OK (fresh clone imports, opens in the headless and GL editor, runs the harness, changes no tracked file).
 
 ## Phase 8 — Run the experiment (after Phase 7 closes)
 
@@ -176,4 +178,5 @@ reading a computed result. User request 2026-10-31.
       dims the beam beyond it, so a run can be read beginning → middle → end.
 - [x] Harness coverage for all of the above (shutter closed → zero rates; 2 s acquisition →
       counts > 0 within tolerance; scan completes; pair animation runs without errors).
+- [x] Engine-boundary audit (user request): Poisson counts, joint outcome draw, rate normalisation, interpolation and λL/d, λL/w moved from GDScript into the Quagmire core + SDK with golden tests; rule documented in docs/design/architecture.md and quagmire-engine/README.md.
 - [ ] Rebuild the Linux (and Windows) exports with `tools/export.sh`; commit + push.
