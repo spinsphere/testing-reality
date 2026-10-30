@@ -21,10 +21,18 @@ func _ready() -> void:
 	center.add_child(column)
 
 	column.add_child(_spacer(40))
+	var head := HBoxContainer.new()
 	var kicker := Label.new()
 	kicker.text = "TESTING REALITY"
 	kicker.theme_type_variation = "Kicker"
-	column.add_child(kicker)
+	kicker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(kicker)
+	var settings := Button.new()
+	settings.text = "⚙  Settings & keys"
+	settings.theme_type_variation = "GhostButton"
+	settings.pressed.connect(func() -> void: add_child(SettingsOverlay.new()))
+	head.add_child(settings)
+	column.add_child(head)
 
 	var title := Label.new()
 	title.text = "Quantum Experiments"

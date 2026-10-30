@@ -62,6 +62,8 @@ func focus_on(point: Vector3, p_distance: float = -1.0) -> void:
 
 func _process(delta: float) -> void:
 	var k := clampf(smoothing * delta, 0.0, 1.0)
+	if bool(AppState.settings.get("reduce_motion", false)):
+		k = 1.0
 	target = target.lerp(_target_goal, k)
 	distance = lerpf(distance, _distance_goal, k)
 	yaw = lerpf(yaw, _yaw_goal, k)

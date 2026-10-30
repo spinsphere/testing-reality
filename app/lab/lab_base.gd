@@ -62,6 +62,7 @@ func on_rebuilt(_snapshots: Array, _result: Dictionary) -> void:
 # ---------------------------------------------------------------- world
 
 func _build_world() -> void:
+	get_viewport().msaa_3d = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_4X][clampi(int(AppState.settings.get("msaa", 1)), 0, 2)]
 	var env := WorldEnvironment.new()
 	var e := Environment.new()
 	e.background_mode = Environment.BG_COLOR
@@ -532,6 +533,8 @@ func add_result_control(c: Control) -> void:
 # ---------------------------------------------------------------- photon animation
 
 func toggle_photons() -> void:
+	if bool(AppState.settings.get("reduce_motion", false)):
+		return
 	_photon_mode = not _photon_mode
 	if not _photon_mode:
 		for p in _photons:
