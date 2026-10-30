@@ -1,0 +1,250 @@
+{
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "From polarization to path",
+          "blocks": [
+            {"type": "text", "text": "In Experiment 1, we explored how polarizers transform the polarization state of photons — and saw that quantum mechanics predicts results that defy classical intuition. Now we turn to another quantum degree of freedom: the photon's [i]path[/i]."},
+            {"type": "text", "text": "The double-slit experiment is perhaps the most iconic demonstration in quantum mechanics. Here is the puzzle: send photons through two slits, one at a time, and record where each one lands on a detector screen."},
+            {"type": "callout", "kind": "paradox", "title": "Each photon arrives alone — yet fringes appear", "text": "Each photon arrives as a single localized dot — clearly particle-like. But after thousands of photons, the collection of recorded dots forms an interference pattern — the kind of pattern we associate with waves. Where does the interference come from, if each photon travels alone?"},
+            {"type": "callout", "kind": "math", "title": "Paths as states", "text": "In the Introduction a state was an arrow, and two perpendicular arrows (like |↔⟩ and |↕⟩) were two outcomes you can tell apart. The same trick works for [b]where a photon goes[/b]. \"Through slit A\" and \"through slit B\" are two things a detector placed at the slits could tell apart, so we give them two perpendicular arrows, |A⟩ and |B⟩. A photon that is equally likely to be found in either slit is the arrow half-way between them: (|A⟩ + |B⟩)/√2. Drag the arrow below and watch the two components change; the 1/√2 is just what keeps the arrow at unit length."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["A", "B"], "angle": 45, "mode": "superposition", "show_probabilities": true}},
+            {"type": "text", "text": "The answer lies in superposition. Just as a photon's polarization can be a superposition of |↕⟩ and |↔⟩, a photon's path can be a superposition of |A⟩ and |B⟩ — passing through both slits simultaneously. The interference pattern emerges from how these path amplitudes combine, exactly as the Introduction described for any quantum superposition."}
+          ]
+        },
+        {
+          "title": "Try it yourself!",
+          "blocks": [
+            {"type": "text", "text": "Explore how the interference pattern depends on the geometry. The simulation lets you adjust:"},
+            {"type": "list", "items": ["Number of slits ([b]N[/b])", "Slit width ([b]w[/b])", "Slit separation ([b]d[/b])", "Wavelength ([b]λ[/b])"]},
+            {"type": "text", "text": "Drag the pink dots on the control panel and observe how each parameter affects the pattern. Pay attention to what happens when you cover one slit — the fringes disappear, leaving only the wide envelope."},
+            {"type": "widget", "scene": "slit_pattern.tscn", "params": {"wavelength_nm": 808, "slit_width_um": 200, "separation_um": 400, "slits": 2, "distance_m": 0.5}, "height": 420},
+            {"type": "callout", "kind": "note", "title": "The starting values are our lab's values", "text": "λ = 808 nm, slits 200 µm wide with a 200 µm bar between them (so 400 µm from centre to centre), and the detector half a metre away. Three things to try: make the slits narrower and watch the whole pattern spread out; move the slits apart and watch the fringes crowd together; halve the wavelength and watch everything shrink."}
+          ]
+        },
+        {
+          "title": "Is that real?",
+          "blocks": [
+            {"type": "text", "text": "To prove to you that the animation is not lying, we built the setup in a lab."},
+            {"type": "figure", "src": "res://assets/figures/exp2/exp2_single.png", "caption": "Single slit", "height": 260},
+            {"type": "figure", "src": "res://assets/figures/exp2/exp2_A.png", "caption": "Double slit", "height": 260},
+            {"type": "text", "text": "This is the data we got from our lab setup. The left plot has two curves, for either slit covered. In the following section, we will explain what we did in the lab, what the data shows, what the explanation is for all of this and the maths behind the theoretical curves."},
+            {"type": "callout", "kind": "note", "title": "Look at the vertical axes", "text": "One slit alone peaks at about 2 200 counts per second. Both slits together peak at about 8 700 — roughly [b]four[/b] times, not two. Keep that number in mind; the theory section explains why doubling the amplitude quadruples the intensity."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "What the setup looks like",
+          "blocks": [
+            {"type": "text", "text": "Curious of what an optical setup looks like? Here are some pictures of the double slit and the single slit setup (same setup, we just change the slit)."},
+            {"type": "figure", "src": "res://assets/figures/exp2/setup_exp2.png", "caption": "The whole table seen from above, with the beam path drawn in: LASER → half-wave plate → beam splitter → lens → double slit → detection stage.", "height": 340},
+            {"type": "figure", "src": "res://assets/figures/exp2/laser_exp2.png", "caption": "The source end: the 808 nm laser, the polarizing beam-splitter cube with its beam dump, and the half-wave plate in a rotation mount.", "height": 300},
+            {"type": "figure", "src": "res://assets/figures/exp2/slit_exp2.png", "caption": "The double-slit mask, made in-house, with a magnified view of the two slits.", "height": 300},
+            {"type": "figure", "src": "res://assets/figures/exp2/detector_exp2.png", "caption": "The detection stage: a fibre collimator and a stack of filters on a motorized linear actuator, feeding the single-photon counting module (red box) through an orange fibre.", "height": 300}
+          ]
+        },
+        {
+          "title": "Technical set-up and equipment",
+          "blocks": [
+            {"type": "text", "text": "The diagram below represents the double-slit setup shown in the previous pictures. While all key components are included, the scaling is not to size."},
+            {"type": "figure", "src": "res://assets/figures/exp2/exp2_MontageT.png", "caption": "LASER → BS (with beam dump BD) → λ/2 → L1 = 50 cm → slit → D1.", "height": 300},
+            {"type": "text", "text": "We use a laser with a wavelength of 808 nm as the light source. The beam first passes through a half-wave plate and a beam splitter, which together ensure that its polarization is diagonal — an important detail for certain interference effects."},
+            {"type": "callout", "kind": "note", "title": "You cannot see this beam", "text": "808 nm is in the near infrared, just beyond what the eye can see. In the real lab we find the beam with an infrared viewer card. In the 3D lab of this chapter the beam is drawn [b]deep red[/b] so that you can follow it — remember that the colour is a convention, not what you would see."},
+            {"type": "text", "text": "The beam is then focused by a lens onto the double slit (or single slit), after which it continues toward the detector."},
+            {"type": "text", "text": "Our detector is a single-photon counting module mounted on a motorized linear translation stage, allowing it to scan across the interference pattern and build up a full spatial intensity profile over time. In front of the detector, we place a set of optical filters, including long-pass filters, to prevent saturation and reduce background noise. These detectors are extremely sensitive and can handle a maximum of about 250 000 photons per second — meaning even ambient light must be carefully controlled."},
+            {"type": "text", "text": "For the single-slit measurements, we used the same double-slit mask with one of the slits covered, allowing us to isolate the contribution of each slit individually. A dedicated single slit could also be used, but covering one slit allows for direct comparison under otherwise identical conditions. Our approach allows us to observe the contribution of each individual slit and clearly visualize the spacing between them in the resulting graph."},
+            {"type": "subheading", "text": "Equipment list"},
+            {"type": "table", "header": ["Name", "Description"], "rows": [
+              ["LASER", "Laser diode (808 nm)"],
+              ["Half-wave plate", "Zero-Order Half-Wave plate [WPH05M-808]"],
+              ["Beam splitter", "30 mm Mounted Polarizing Beamsplitting Cube"],
+              ["Lens", "Plano-convex lenses, L1 has f = 50 cm [LA1908-B]"],
+              ["Double slit", "Dimension (200-200-200 µm), made in-house"],
+              ["Single slit", "Adjustable slit (placed near 200 µm)"],
+              ["Detectors", "Single photon detection module"]
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data and the single-slit plot",
+          "blocks": [
+            {"type": "subheading", "text": "Raw data"},
+            {"type": "text", "text": "You can download all our data here — in the app, the same three files ship with the lab and can be overlaid on the pattern your own scan builds:"},
+            {"type": "table", "header": ["File", "What it contains"], "rows": [
+              ["Single_slit_-_left_slit.csv", "Left slit only — 51 points, 100 µm steps"],
+              ["Single_slit_-_right_slit.csv", "Right slit only — 51 points, 100 µm steps"],
+              ["double_slit_-_calib_123_(1).csv", "Both slits open — 121 points, 50 µm steps"]
+            ]},
+            {"type": "text", "text": "The files have 3 columns. The first one is the distance travelled by the actuator in µm. The second column is the number of counts seen by the detector, in a range of 2 seconds. The last column is the same number of counts, but per second."},
+            {"type": "subheading", "text": "Graphics"},
+            {"type": "figure", "src": "res://assets/figures/exp2/exp2_single.png", "caption": "Number of counts on D1 per second [single slit]: red = left slit, blue = right slit, black dots = our data.", "height": 360},
+            {"type": "text", "text": "In the first plot, two curves are displayed — each corresponding to the intensity with one of the slits covered. Each is a wide bell about 1.8 mm across at half height, sitting on a background of roughly 200 counts per second. No fringes: with a single slit open there is nothing for the photon's path to interfere with."}
+          ]
+        },
+        {
+          "title": "Double slit: three main peaks",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/exp2/exp2_A.png", "caption": "Number of counts on D1 per second [double slit]: black dots = our data, blue = fit of the data, grey dashed = theoretical curve.", "height": 360},
+            {"type": "text", "text": "In the second plot, we can clearly distinguish three main peaks, indicating the presence of interference. The number and size of the peaks are determined by the geometry of the double slit — depending on the slit width and spacing, you might observe three, four, five, or more peaks. To anticipate the number and structure of the peaks, you can refer to the interactive animation provided at the beginning of the experiment."},
+            {"type": "text", "text": "Typically, the central peak is the most intense, and the adjacent peaks should have roughly equal intensity. If they do not, it may indicate that the slits are not perfectly aligned perpendicular to the incoming beam. The horizontal distance between the two individual curves is approximately 175 µm, which corresponds closely to the actual slit separation of about 200 µm."},
+            {"type": "text", "text": "As a final check, we compare the experimental data with theoretical predictions using the equations from the theory section. The theoretical curve, shown as a gray dashed line, matches the general pattern, although we observe slight deviations in intensity and width. These discrepancies can be attributed to minor misalignments in lens placement or imperfections in the linear actuator's motion."},
+            {"type": "callout", "kind": "note", "title": "Reading the plot like a physicist", "text": "The minima between the peaks do not reach zero: background light and detector dark counts fill them in. The fringes are about 1 mm apart, and the pattern dies away near ±2 mm — exactly where the single-slit bell of the previous plot dies away. The three peaks are the double-slit fringes [i]sitting inside[/i] the single-slit envelope. The theory section builds this picture in two steps: first the envelope, then the fringes."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Conceptual overview: diffraction",
+          "blocks": [
+            {"type": "text", "text": "A first surprising effect to be explained is that when coming through a narrow slit, the beam of photons does not get narrow. Quite the opposite: it widens up. This phenomenon is called diffraction."},
+            {"type": "text", "text": "The easiest way to understand, at a high level, why a particle diffracts when it passes through a slit is by invoking Heisenberg's uncertainty principle. Here's what the principle says:"},
+            {"type": "list", "items": ["A particle's position and momentum cannot both be precisely defined at the same time.", "The more precisely position is constrained, the more uncertain momentum becomes, and vice versa."]},
+            {"type": "subheading", "text": "Why does this matter for a slit?"},
+            {"type": "text", "text": "When a photon passes through a slit of a certain width, we know its position along the vertical axis (the slit fixes it within that range). This means that the uncertainty in its vertical momentum must increase, following Heisenberg's uncertainty principle."},
+            {"type": "text", "text": "That uncertainty in momentum translates into a spread of possible directions the photon can take once it has passed the slit. Instead of traveling in a perfectly straight line, its sideways momentum has a significant spread. So instead of having one exact momentum value pointing straight ahead, the photon now has many possible sideways momentum values, each value tied to a certain probability. The result is that many possible shifted directions are realized, with different probabilities, forming what we observe as a diffraction pattern."},
+            {"type": "text", "text": "To put it simply:"},
+            {"type": "list", "items": ["Narrow slit → small uncertainty in position → large uncertainty in momentum → [b]wide[/b] diffraction pattern.", "Wide slit → large uncertainty in position → small uncertainty in momentum → [b]narrow[/b] diffraction pattern."]},
+            {"type": "callout", "kind": "math", "title": "The envelope, before the formula", "text": "You do not need to compute anything yet. The curve below is the shape every single slit paints on the screen: one big central hump and small side lobes. Its width is set by one ratio, [b]λ/w[/b] — wavelength over slit width. Squeeze the slit (smaller w) and the hump gets wider; use a shorter wavelength and it gets narrower. This is Heisenberg's trade-off drawn as a curve. The formula, which we call D, is written next; it will reappear in every later experiment, so get used to its shape."},
+            {"type": "figure", "src": "res://assets/figures/exp2/Diffraction_1.png", "caption": "Single-slit diffraction pattern: normalized intensity as a function of position on the screen, showing the characteristic central maximum and smaller side lobes.", "height": 300},
+            {"type": "text", "text": "The mathematical form of this diffraction pattern is:"},
+            {"type": "equation", "id": "diffraction_d", "caption": "This formula will reappear throughout subsequent experiments."}
+          ]
+        },
+        {
+          "title": "Other uncertainties: complementarity",
+          "blocks": [
+            {"type": "text", "text": "Heisenberg's uncertainty principle is very general, it doesn't just apply to position and momentum, but also to other pairs of quantum properties. More broadly, this is called quantum complementarity."},
+            {"type": "text", "text": "Take polarization, for example. A photon can be in the state |↕⟩, for instance. If we then measure it along the vertical-horizontal axes, we will get a definite outcome: it will appear vertical."},
+            {"type": "text", "text": "But what if we measure it along the diagonal (|↗↙⟩ and |↘↖⟩) axes? In that case the outcome is no longer certain. We can in fact write the |↕⟩ state as a superposition of the diagonal states:"},
+            {"type": "equation", "id": "vertical_in_diagonal"},
+            {"type": "callout", "kind": "note", "title": "Same arrow, other axes", "text": "This is the basis change from Experiment 1: the arrow |↕⟩ has not moved, we only read its components along the diagonal axes. Each component is 1/√2 long, and (1/√2)² = ½. Drag the arrow to the vertical and switch to the diagonal basis to see it."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["↔", "↕"], "angle": 90, "mode": "basis_change", "show_probabilities": true}},
+            {"type": "text", "text": "What the above equation means is that if we test the |↕⟩ state with a diagonal polarizer, it has a 50 percent chance of coming out one way, and a 50 percent chance of coming out the other way. The core idea here is that no photon can be perfectly defined in both descriptions, meaning vertical [i]and[/i] diagonal at the same time."}
+          ]
+        },
+        {
+          "title": "Phase and interference",
+          "blocks": [
+            {"type": "text", "text": "We have seen that when a system is in superposition, its state is expressed as a sum of many other states, each of which is multiplied by an amplitude. These amplitudes correspond to a complex number, and so it can be decomposed into a modulus and a phase."},
+            {"type": "callout", "kind": "math", "title": "A phase is an arrow that turns as the photon travels", "text": "So far every amplitude was a plain number like 1/√2. From now on an amplitude is a [b]small arrow[/b]: it has a length (the modulus) and a direction (the phase). A photon that has travelled a distance [i]s[/i] carries an arrow that has turned by an angle [i]k·s[/i], where [b]k = 2π/λ[/b] is the [i]wave number[/i]: one full turn for every wavelength of distance. Writing that turning arrow as e^{iks} is just compact notation — the arrow's horizontal part is cos(ks) and its vertical part is sin(ks). Slide the distance below and watch the arrow turn; one wavelength (808 nm here) is one full revolution. The arrow's direction by itself has no effect on a probability (its length is always 1); what matters is how [i]two[/i] such arrows line up, which is the next check-in."},
+            {"type": "widget", "scene": "phasor_widget.tscn", "params": {"mode": "single", "wavelength_nm": 808}},
+            {"type": "equation", "id": "wave_number", "caption": "The wave number: how many radians the arrow turns per unit of distance."},
+            {"type": "equation", "id": "rotating_arrow", "caption": "The turning arrow written as a complex number (Euler's formula). You will never need to expand it; we only ever compare two of them."},
+            {"type": "text", "text": "We can think of a phase as a point rotating on a circle. Mathematically, it's represented by a complex exponential:"},
+            {"type": "equation", "id": "phase"},
+            {"type": "text", "text": "In the above equation, i is the imaginary number, k = 2π/λ is the wave number, and s is the distance the photon has traveled."},
+            {"type": "text", "text": "Using Dirac notation, we can describe the photon's journey mathematically. At the source, the state is |ψ₀⟩ = |S⟩. After passing through the double slit, the photon is in a superposition of both paths:"},
+            {"type": "equation", "id": "psi1_paths"},
+            {"type": "text", "text": "Here, the factor 1/√2 ensures normalization. As each path accumulates phase based on distance traveled, interference emerges. The full derivation appears in the Mathematical Derivation section below."}
+          ]
+        },
+        {
+          "title": "Key formulas",
+          "blocks": [
+            {"type": "text", "text": "The equation that describes the diffraction pattern of a photon passing through a single slit is:"},
+            {"type": "equation", "id": "diffraction_d"},
+            {"type": "text", "text": "Here, w represents the width of the slit, θ is the angle between a point on the screen and the center of the slit, and λ is the wavelength of the photons. Below, we can see an example of a diffraction pattern."},
+            {"type": "figure", "src": "res://assets/figures/exp2/Diffraction_1.png", "caption": "Single-slit diffraction pattern: normalized intensity as a function of position on the screen, showing the characteristic central maximum and smaller side lobes.", "height": 300},
+            {"type": "callout", "kind": "note", "title": "Where the zeros are", "text": "The curve is zero whenever α is a whole multiple of π, i.e. whenever w·sin θ = λ, 2λ, 3λ … For our lab (w = 200 µm, λ = 808 nm, screen at about 50 cm) the first zero sits near ±2 mm on the screen — which is where the measured double-slit pattern fades into the background."}
+          ]
+        },
+        {
+          "title": "Mathematical derivation: through the mask",
+          "blocks": [
+            {"type": "text", "text": "In this experiment, the polarization of the photon does not matter, we only track its position. The photon starts at the source in the state:"},
+            {"type": "equation", "id": "psi0_source"},
+            {"type": "figure", "src": "res://assets/figures/exp2/imageDavid_2a.png", "caption": "Schematic of the double-slit geometry: source S (plane 1), slits A and B in the mask (plane 2), detection point X on detector D₀ (plane 3). Both source-to-slit distances are l; the slit-to-screen distances are a and b.", "height": 240},
+            {"type": "text", "text": "As the photon propagates toward the slits, its wavefunction overlaps with both slits, as well as the opaque parts of the mask (the area between/around the slits, which blocks or absorbs photons). Some photons hit the mask and are absorbed (lost), while others pass through slit A or slit B. Let A_pass represent the amplitude of a photon that successfully passes through a slit, and A_lost the amplitude of a photon that is absorbed."},
+            {"type": "equation", "id": "psi1_mask"},
+            {"type": "text", "text": "Since we cannot easily predict the number of lost photons and because they do not contribute to the interference pattern, we drop the |lost⟩ term. The state becomes:"},
+            {"type": "equation", "id": "psi1_clean"},
+            {"type": "callout", "kind": "note", "title": "Why the common factor does not matter", "text": "Both paths have the same length l from the source, so both arrows have turned by the same angle kl. A turn shared by every term of a state changes nothing we can measure — it is like rotating the whole drawing. That is why e^{ikl} can be pulled out in front, and why we will stop writing it soon."},
+            {"type": "text", "text": "The photon then propagates to the detection screen. Consider a specific point on the screen, |y⟩. If |y⟩ is at the center, the distances from A and B are equal. If |y⟩ is above or below the center, the path lengths differ. Let \"a\" be the distance from slit A to |y⟩, and \"b\" the distance from slit B to |y⟩. At that position, the amplitudes from both slits combine."}
+          ]
+        },
+        {
+          "title": "Path difference geometry",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/exp2/DoubleSlit_(1).png", "caption": "Path geometry for the double-slit experiment: equal lengths ℓ from the laser to each slit, then a and b from the slits to the screen point y (faint a′, b′ to another point y′).", "height": 320},
+            {"type": "callout", "kind": "math", "title": "Small-angle geometry: how much longer is the lower path?", "text": "Look at the figure. The two slits are a distance [i]d[/i] apart, the screen is a distance [i]L[/i] away, and the point y is a height [i]y[/i] above the centre line. Because L is huge compared with d (half a metre versus half a millimetre), the two rays to y are almost parallel. The lower ray is longer by a tiny segment, and the triangle that segment makes with the slit spacing d is a scaled-down copy of the big triangle (y, L). Similar triangles give [b]b − a ≈ d·y/L[/b]. Written with the angle θ from the axis, y/L is sin θ (or tan θ — for such small angles they are the same), so b − a ≈ d sin θ. The approximation is excellent whenever y is much smaller than L; that is called the far-field regime."},
+            {"type": "text", "text": "For a screen at distance L from slits separated by d, the path difference in the small-angle regime (y ≪ L) is:"},
+            {"type": "equation", "id": "path_difference"},
+            {"type": "text", "text": "where θ is the angle from the optical axis. We use this approximation throughout."},
+            {"type": "text", "text": "As the photon propagates from each slit to position y, each path acquires a phase proportional to the distance traveled:"},
+            {"type": "equation", "id": "propagation"},
+            {"type": "callout", "kind": "note", "title": "Reading the arrows", "text": "The ket |A⟩ (\"through the upper slit\") turns into the ket |y⟩ (\"arrived at height y\") carrying an arrow turned by k·a. The ket |B⟩ turns into the same |y⟩, but its arrow has turned by k·b. At the centre a = b and the two arrows point the same way; move y up and the lower path grows longer, so its arrow lags further and further behind."}
+          ]
+        },
+        {
+          "title": "Adding the two paths",
+          "blocks": [
+            {"type": "text", "text": "The full state now includes contributions at every screen position. Focusing on a single position y:"},
+            {"type": "equation", "id": "psi2", "caption": "The \"⋯\" indicates similar terms for other positions y′ on the screen."},
+            {"type": "callout", "kind": "math", "title": "Adding two arrows with different phases", "text": "The coefficient in front of |y⟩ is a sum of two unit arrows: one turned by k·a, one by k·b. Adding arrows is tip-to-tail, as in the Introduction. If the two arrows point the same way (path difference 0, λ, 2λ …) the sum is an arrow of length 2. If they point opposite ways (path difference λ/2, 3λ/2 …) they cancel and the sum has length 0. In between, the length is in between. Slide the path difference b − a below and watch the sum arrow grow and shrink."},
+            {"type": "widget", "scene": "phasor_widget.tscn", "params": {"mode": "sum", "wavelength_nm": 808}},
+            {"type": "callout", "kind": "math", "title": "Squaring the sum gives 1 + cos", "text": "Probability is the [b]squared length[/b] of the sum arrow. Two unit arrows with an angle φ = k(b − a) between them add to an arrow of squared length 2 + 2 cos φ — you can check it on the widget: angle 0 gives 4, angle 180° gives 0, angle 90° gives 2. So the detection probability at y rises and falls as 1 + cos φ, between 0 and 2. That one cosine [i]is[/i] the fringe pattern."},
+            {"type": "equation", "id": "sum_of_two_phases", "caption": "The squared length of two added unit arrows, in terms of the angle k(b − a) between them."},
+            {"type": "text", "text": "To compute the probability of detecting a photon at |y⟩, we square the coefficient in front of |y⟩. We define I₀ as the [i]peak intensity[/i] at the center of the screen (θ = 0), before any angular dependence is applied. With this definition, the interference term becomes:"},
+            {"type": "equation", "id": "interference_term"},
+            {"type": "text", "text": "This term oscillates between 0 (destructive interference, when b − a = (n + ½)λ) and 2I₀ (constructive interference, when b − a = nλ)."}
+          ]
+        },
+        {
+          "title": "The full pattern",
+          "blocks": [
+            {"type": "text", "text": "Finally, the interference term must be combined with the [i]single-slit diffraction envelope[/i]. Each slit has finite width w, which causes the light to spread according to:"},
+            {"type": "equation", "id": "envelope"},
+            {"type": "text", "text": "The complete intensity pattern combines both effects — interference fringes modulated by the diffraction envelope:"},
+            {"type": "equation", "id": "full_pattern"},
+            {"type": "text", "text": "Here:"},
+            {"type": "list", "items": [
+              "I₀ is the intensity from a [i]single slit[/i] at θ = 0. With both slits open and constructive interference, the maximum intensity is 4I₀, because intensity scales as amplitude squared (doubling amplitude quadruples intensity).",
+              "d is the slit separation (center to center)",
+              "w is the width of each slit",
+              "The term (1 + cos(⋯)) creates the interference fringes (ranges from 0 to 2)",
+              "The term (sin α/α)² is the diffraction envelope"
+            ]},
+            {"type": "text", "text": "Note: We replaced the path difference (b − a) with its geometric equivalent d sin θ, valid in the far-field regime."},
+            {"type": "callout", "kind": "note", "title": "Back to the data", "text": "Single slit: about 2 200 counts per second at the centre, so I₀ ≈ 2 200. Double slit: about 8 700 at the centre — 4I₀, as the formula says. Fringe spacing λL/d ≈ 1 mm and envelope zero at λL/w ≈ 2 mm: with d = 2w the second fringe on each side falls exactly on the envelope zero and is missing, which is why we see three main peaks and not five. In the lab, change w or d and count the peaks again."},
+            {"type": "widget", "scene": "slit_pattern.tscn", "params": {"wavelength_nm": 808, "slit_width_um": 200, "separation_um": 400, "slits": 2, "distance_m": 0.5}, "height": 420}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "literature",
+      "title": "Literature and video",
+      "pages": [
+        {
+          "title": "Videos, and into the lab",
+          "blocks": [
+            {"type": "text", "text": "If you want to see the double-slit experiment with your own eyes, here are some YouTube videos we found to be accurate and insightful!"},
+            {"type": "video", "title": "Why reality changes when you look — The Royal Institution (Jim Al-Khalili)", "url": "https://www.youtube.com/watch?v=A9tKncAdlHQ"},
+            {"type": "video", "title": "Young's interference experiment with single photons — Hamamatsu Photonics (1982)", "url": "https://www.youtube.com/watch?v=I9Ab8BLW3kA"},
+            {"type": "figure", "src": "res://assets/figures/exp2/Exp2Addition.png", "caption": "Comparison of the single-slit diffraction envelope (red, (sin x/x)²) with the full double-slit pattern (blue, the same envelope times cos²).", "height": 300},
+            {"type": "callout", "kind": "lab", "title": "Your turn: scan the pattern yourself", "text": "The lab is the bench from the photos: 808 nm laser, half-wave plate and polarizing beam splitter, lens, the slit mask, and a single-photon detector on a motorized stage.\n\n[b]1.[/b] Switch on the laser. You cannot see 808 nm; the lab draws it deep red so you can follow it.\n[b]2.[/b] Turn the half-wave plate and watch the beam splitter share the light between the beam dump and the slit. Leave it where the beam heading for the slit is diagonal — it makes no difference in this experiment, but it will in Experiment 3.\n[b]3.[/b] Set the mask to [b]left only[/b] and start the detector scan. Watch the plot build one wide bell, point by point. Overlay [i]Single_slit_-_left_slit.csv[/i] and compare.\n[b]4.[/b] Switch to [b]right only[/b] and scan again. The second bell should sit about 175 µm from the first. No fringes in either: one path, nothing to interfere with.\n[b]5.[/b] Set the mask to [b]double[/b] and scan. Three main peaks appear. Overlay the double-slit CSV. Check the centre: about four times the single-slit peak, not two.\n[b]6.[/b] Now play with the sliders. Narrow the slit width: the envelope widens. Increase the separation: the fringes crowd together and more peaks fit inside the envelope. Set the wavelength to 405 nm: everything shrinks by half.\n[b]7.[/b] Cover one slit again at any setting. The fringes vanish and only the envelope stays."},
+            {"type": "lab", "label": "◆  Enter the double-slit lab"}
+          ]
+        }
+      ]
+    }
+  ]
+}

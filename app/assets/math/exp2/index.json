@@ -1,0 +1,154 @@
+{
+  "generated": "2026-10-30T11:25:36.288Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "diffraction_d": {
+      "file": "diffraction_d.svg",
+      "width": 576.08,
+      "height": 94.02,
+      "baseline": 34.37,
+      "tex": "D = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\quad \\text{with } \\alpha = \\frac{\\pi w \\sin\\theta}{\\lambda}",
+      "hash": "49a6b37f028b5c17",
+      "png": "diffraction_d.png"
+    },
+    "vertical_in_diagonal": {
+      "file": "vertical_in_diagonal.svg",
+      "width": 347.81,
+      "height": 89.78,
+      "baseline": 36.93,
+      "tex": "\\ket{\\V} = \\frac{\\ket{\\diag} - \\ket{\\antidiag}}{\\sqrt{2}}\\,,",
+      "hash": "a065ad7199425f17",
+      "png": "vertical_in_diagonal.png"
+    },
+    "wave_number": {
+      "file": "wave_number.svg",
+      "width": 121.79,
+      "height": 73.84,
+      "baseline": 25.26,
+      "tex": "k = \\frac{2\\pi}{\\lambda}",
+      "hash": "aacf6330001d8273",
+      "png": "wave_number.png"
+    },
+    "rotating_arrow": {
+      "file": "rotating_arrow.svg",
+      "width": 392.02,
+      "height": 41.76,
+      "baseline": 9.06,
+      "tex": "e^{iks} = \\cos(ks) + i\\,\\sin(ks)",
+      "hash": "39f1b7250e3593be",
+      "png": "rotating_arrow.png"
+    },
+    "phase": {
+      "file": "phase.svg",
+      "width": 191.01,
+      "height": 39.74,
+      "baseline": 7.02,
+      "tex": "\\text{phase} = e^{iks}",
+      "hash": "d99bad7a6757b164",
+      "png": "phase.png"
+    },
+    "psi1_paths": {
+      "file": "psi1_paths.svg",
+      "width": 352.02,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\left(\\ket{A} + \\ket{B}\\right)",
+      "hash": "d830a83ea315b3ee",
+      "png": "psi1_paths.png"
+    },
+    "psi0_source": {
+      "file": "psi0_source.svg",
+      "width": 175.39,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} = \\ket{S}\\,.",
+      "hash": "378932e5afc59e5d",
+      "png": "psi0_source.png"
+    },
+    "psi1_mask": {
+      "file": "psi1_mask.svg",
+      "width": 758.91,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = A_{\\text{pass}}\\,\\frac{1}{\\sqrt{2}}\\left(e^{ikl}\\ket{A} + e^{ikl}\\ket{B}\\right) + A_{\\text{lost}}\\,\\lost",
+      "hash": "310fe475478588e2",
+      "png": "psi1_mask.png"
+    },
+    "psi1_clean": {
+      "file": "psi1_clean.svg",
+      "width": 413.76,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{A} + \\ket{B}\\right)",
+      "hash": "c6f875e31497b637",
+      "png": "psi1_clean.png"
+    },
+    "path_difference": {
+      "file": "path_difference.svg",
+      "width": 362.54,
+      "height": 74.43,
+      "baseline": 24.83,
+      "tex": "b - a \\approx \\frac{d \\cdot y}{L} = d\\sin\\theta\\,,",
+      "hash": "1c8cdc484e8ea1b9",
+      "png": "path_difference.png"
+    },
+    "propagation": {
+      "file": "propagation.svg",
+      "width": 524.58,
+      "height": 41.76,
+      "baseline": 9.06,
+      "tex": "\\ket{A} \\rightarrow e^{ika}\\ket{y}, \\qquad \\ket{B} \\rightarrow e^{ikb}\\ket{y}\\,.",
+      "hash": "cccd536c6b243d49",
+      "png": "propagation.png"
+    },
+    "psi2": {
+      "file": "psi2.svg",
+      "width": 693.63,
+      "height": 181.87,
+      "baseline": 81.89,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\cdots + \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(e^{ika}\\ket{y} + e^{ikb}\\ket{y}\\right) + \\cdots \\\\ &= \\cdots + \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(e^{ika} + e^{ikb}\\right)\\ket{y} + \\cdots \\end{aligned}",
+      "hash": "d49893e797637f08",
+      "png": "psi2.png"
+    },
+    "sum_of_two_phases": {
+      "file": "sum_of_two_phases.svg",
+      "width": 917.6,
+      "height": 54.5,
+      "baseline": 14.61,
+      "tex": "\\left|e^{ika} + e^{ikb}\\right|^{2} = 2 + 2\\cos\\big(k(b-a)\\big) = 2\\left(1 + \\cos\\big(k(b-a)\\big)\\right)",
+      "hash": "4911065a0ea84fea",
+      "png": "sum_of_two_phases.png"
+    },
+    "interference_term": {
+      "file": "interference_term.svg",
+      "width": 539.33,
+      "height": 43.41,
+      "baseline": 12.66,
+      "tex": "I_{\\text{interference}} = I_0\\left(1 + \\cos\\big(k(b-a)\\big)\\right)",
+      "hash": "bf89e7a82ce72670",
+      "png": "interference_term.png"
+    },
+    "envelope": {
+      "file": "envelope.svg",
+      "width": 643.41,
+      "height": 94.02,
+      "baseline": 34.37,
+      "tex": "D(\\theta) = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\quad \\text{where } \\alpha = \\frac{\\pi w \\sin\\theta}{\\lambda}",
+      "hash": "4dbc208fbc49cfe6",
+      "png": "envelope.png"
+    },
+    "full_pattern": {
+      "file": "full_pattern.svg",
+      "width": 696.56,
+      "height": 94.02,
+      "baseline": 34.37,
+      "tex": "I(\\theta) = 2I_0\\left(1 + \\cos\\left(\\frac{2\\pi d \\sin\\theta}{\\lambda}\\right)\\right)\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}",
+      "hash": "69e479124f24d16f",
+      "png": "full_pattern.png"
+    }
+  }
+}

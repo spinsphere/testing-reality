@@ -1,0 +1,37 @@
+{
+  "$comment": "Experiment 2 (single and double slit) equations E1-E12, transcribed from docs/content/03-experiment-2-double-slit.md, plus three helper equations used by the maths check-ins (wave_number, rotating_arrow, sum_of_two_phases). Rendered by tools/mathgen into app/assets/math/exp2/.",
+  "macros": {},
+  "equations": {
+    "diffraction_d": "D = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\quad \\text{with } \\alpha = \\frac{\\pi w \\sin\\theta}{\\lambda}",
+
+    "vertical_in_diagonal": "\\ket{\\V} = \\frac{\\ket{\\diag} - \\ket{\\antidiag}}{\\sqrt{2}}\\,,",
+
+    "wave_number": "k = \\frac{2\\pi}{\\lambda}",
+
+    "rotating_arrow": "e^{iks} = \\cos(ks) + i\\,\\sin(ks)",
+
+    "phase": "\\text{phase} = e^{iks}",
+
+    "psi1_paths": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\left(\\ket{A} + \\ket{B}\\right)",
+
+    "psi0_source": "\\ket{\\psi_0} = \\ket{S}\\,.",
+
+    "psi1_mask": "\\ket{\\psi_1} = A_{\\text{pass}}\\,\\frac{1}{\\sqrt{2}}\\left(e^{ikl}\\ket{A} + e^{ikl}\\ket{B}\\right) + A_{\\text{lost}}\\,\\lost",
+
+    "psi1_clean": "\\ket{\\psi_1} = \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{A} + \\ket{B}\\right)",
+
+    "path_difference": "b - a \\approx \\frac{d \\cdot y}{L} = d\\sin\\theta\\,,",
+
+    "propagation": "\\ket{A} \\rightarrow e^{ika}\\ket{y}, \\qquad \\ket{B} \\rightarrow e^{ikb}\\ket{y}\\,.",
+
+    "psi2": "\\begin{aligned} \\ket{\\psi_2} &= \\cdots + \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(e^{ika}\\ket{y} + e^{ikb}\\ket{y}\\right) + \\cdots \\\\ &= \\cdots + \\frac{1}{\\sqrt{2}}\\,e^{ikl}\\left(e^{ika} + e^{ikb}\\right)\\ket{y} + \\cdots \\end{aligned}",
+
+    "sum_of_two_phases": "\\left|e^{ika} + e^{ikb}\\right|^{2} = 2 + 2\\cos\\big(k(b-a)\\big) = 2\\left(1 + \\cos\\big(k(b-a)\\big)\\right)",
+
+    "interference_term": "I_{\\text{interference}} = I_0\\left(1 + \\cos\\big(k(b-a)\\big)\\right)",
+
+    "envelope": "D(\\theta) = \\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}, \\quad \\text{where } \\alpha = \\frac{\\pi w \\sin\\theta}{\\lambda}",
+
+    "full_pattern": "I(\\theta) = 2I_0\\left(1 + \\cos\\left(\\frac{2\\pi d \\sin\\theta}{\\lambda}\\right)\\right)\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}"
+  }
+}
