@@ -179,4 +179,4 @@ reading a computed result. User request 2026-10-31.
 - [x] Harness coverage for all of the above (shutter closed → zero rates; 2 s acquisition →
       counts > 0 within tolerance; scan completes; pair animation runs without errors).
 - [x] Engine-boundary audit (user request): Poisson counts, joint outcome draw, rate normalisation, interpolation and λL/d, λL/w moved from GDScript into the Quagmire core + SDK with golden tests; rule documented in docs/design/architecture.md and quagmire-engine/README.md.
-- [ ] Rebuild the Linux (and Windows) exports with `tools/export.sh`; commit + push.
+- [x] Rebuild the Linux (and Windows) exports with `tools/export.sh` (09:13: Linux 126 MB, Windows 162 MB; exported Linux binary verified with a lab screenshot); commit + push.

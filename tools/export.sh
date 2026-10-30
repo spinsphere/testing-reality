@@ -14,7 +14,10 @@ echo "== Quagmire SDK (windows, mingw)"
 if rustup target list --installed | grep -q x86_64-pc-windows-gnu; then
   (cd "$ROOT/quagmire-engine" && cargo build -p quagmire-godot --release --target x86_64-pc-windows-gnu)
   mkdir -p "$ROOT/app/addons/quagmire/bin/windows"
-  cp "$ROOT/quagmire-engine/target/x86_64-pc-windows-gnu/release/quagmire_godot.dll" "$ROOT/app/addons/quagmire/bin/windows/"
+  WDEST="$ROOT/app/addons/quagmire/bin/windows/quagmire_godot.dll"
+  cp "$ROOT/quagmire-engine/target/x86_64-pc-windows-gnu/release/quagmire_godot.dll" "$WDEST.tmp"
+  command -v x86_64-w64-mingw32-strip >/dev/null && x86_64-w64-mingw32-strip --strip-unneeded "$WDEST.tmp"
+  mv -f "$WDEST.tmp" "$WDEST"
 else
   echo "   skipped: rustup target x86_64-pc-windows-gnu not installed"
 fi
