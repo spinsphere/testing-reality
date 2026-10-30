@@ -15,6 +15,9 @@ var beams: BeamRenderer
 var table_root: Node3D
 var apparatus_root: Node3D
 var selected: Apparatus
+## Explicit beam paths for multi-arm layouts: an Array of Arrays of Apparatus. When empty,
+## the controller's linear chain is used.
+var beam_paths: Array = []
 
 # HUD
 var hud: CanvasLayer
@@ -28,6 +31,8 @@ var _photon_mode := false
 var _photon_timer := 0.0
 var _photons: Array = []  # [{mesh, t, path_index, dies_at}]
 var _ray_length := 20.0
+## Width of the bottom-right results panel (labs with two plots use a wider one).
+var results_width := 640.0
 
 
 func _ready() -> void:
@@ -145,6 +150,20 @@ func place(app: Apparatus, x: float, z: float = 0.0, yaw_deg: float = 0.0) -> Ap
 	# alternate label heights so neighbouring labels do not overlap
 	if controller.components.size() % 2 == 0 and app._label3d:
 		app._label3d.position.y += 0.035
+	return app
+
+
+## Rotate `app` so its optical axis points from its position towards `target` (x, z).
+func aim(app: Apparatus, target: Vector2) -> void:
+	var d := target - Vector2(app.position.x, app.position.z)
+	app.rotation_degrees.y = rad_to_deg(atan2(-d.y, d.x))
+
+
+## Place `app` on the straight line from `a` to `b` (table x,z) at fraction `t`, facing along it.
+func place_on(app: Apparatus, a: Vector2, b: Vector2, t: float) -> Apparatus:
+	var p := a.lerp(b, t)
+	place(app, p.x, p.y)
+	aim(app, b)
 	return app
 
 
@@ -268,7 +287,7 @@ func _build_hud() -> void:
 	var res := PanelContainer.new()
 	res.theme_type_variation = "Hud"
 	res.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	res.offset_left = -640
+	res.offset_left = -results_width
 	res.offset_right = -16
 	res.offset_top = -300
 	res.offset_bottom = -16
@@ -329,17 +348,21 @@ func _refresh_state_panel(snapshots: Array) -> void:
 		state_box.add_child(row)
 
 
-func _refresh_beams(snapshots: Array) -> void:
+func _refresh_beams(_snapshots: Array) -> void:
 	var segs: Array = []
 	var nm := float(controller.ctx.get("wavelength", 405.0))
-	var comps := controller.components
-	for i in comps.size() - 1:
-		var a := comps[i]
-		var b := comps[i + 1]
-		var from := a.global_position + Vector3(0, BEAM_HEIGHT, 0)
-		var to := b.global_position + Vector3(0, BEAM_HEIGHT, 0)
-		var intensity := controller.alive_after(i)
-		segs.append({"from": from, "to": to, "intensity": intensity, "wavelength": nm})
+	var paths: Array = beam_paths if not beam_paths.is_empty() else [controller.components]
+	for path in paths:
+		var path_nm := nm
+		for i in path.size() - 1:
+			var a: Apparatus = path[i]
+			var b: Apparatus = path[i + 1]
+			if a.has_meta("wavelength_after"):
+				path_nm = float(a.get_meta("wavelength_after"))
+			var from := a.global_position + Vector3(0, BEAM_HEIGHT, 0)
+			var to := b.global_position + Vector3(0, BEAM_HEIGHT, 0)
+			var intensity := controller.alive_after_apparatus(a)
+			segs.append({"from": from, "to": to, "intensity": intensity, "wavelength": path_nm})
 	beams.set_segments(segs)
 
 
@@ -494,6 +517,10 @@ func add_result_row(key: String, value: String, color: Color = Palette.TEXT) -> 
 	v.text = value
 	v.theme_type_variation = "Mono"
 	v.add_theme_color_override("font_color", color)
+	v.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_stretch_ratio = 2.0
+	v.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	h.add_child(v)
 	results_box.add_child(h)
 
@@ -513,7 +540,7 @@ func toggle_photons() -> void:
 
 
 func _process(delta: float) -> void:
-	if not _photon_mode or controller.components.size() < 2:
+	if not _photon_mode or controller.components.size() < 2 or not beam_paths.is_empty():
 		return
 	_photon_timer -= delta
 	if _photon_timer <= 0.0:

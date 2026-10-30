@@ -12,6 +12,7 @@ var ctx: Dictionary = {"pol": "pol", "path": "path", "live": PackedStringArray([
 ## Last build.
 var system: QuagmireSystem
 var snapshots: Array = []   # [{label, stage: "Ψ0", ket, alive, apparatus}]
+var alive_by_apparatus: Dictionary = {}
 var result: Dictionary = {}  # free-form, filled by hooks (e.g. {"detector_probability": 0.125})
 ## Optional hook called after the chain: `Callable(sys, ctx) -> Dictionary` to compute profiles etc.
 var finish_hook: Callable
@@ -36,17 +37,21 @@ func rebuild() -> void:
 	_dirty = false
 	system = QuagmireSystem.with_seed(_seed)
 	snapshots.clear()
+	alive_by_apparatus.clear()
 	var label_map := {}
 	for l in ctx["live"]:
 		label_map["%s/%s" % [ctx["pol"], l]] = l
 	var stage := 0
 	var alive := 1.0
 	for app in components:
-		app.apply(system, ctx)
+		var c := ctx.duplicate()
+		c.merge(app.ctx_overrides, true)
+		app.apply(system, c)
 		if app is Optics.Laser:
 			alive = 1.0
-		elif system.get_properties().size() > 0:
-			alive = system.probability({"alive": PackedStringArray([ctx["pol"]])})
+		elif _has_property(c["pol"]):
+			alive = system.probability({"alive": PackedStringArray([c["pol"]])})
+		alive_by_apparatus[app] = alive
 		snapshots.append({
 			"label": app.label,
 			"stage": "Ψ%d" % stage,
@@ -71,6 +76,18 @@ func _pretty_ket(sys: QuagmireSystem, label_map: Dictionary) -> String:
 			if l.begins_with("lost@"):
 				map["%s/%s" % [p["name"], l]] = "lost " + l.trim_prefix("lost@")
 	return sys.ket_text_mapped(map)
+
+
+func _has_property(name: String) -> bool:
+	for p in system.get_properties():
+		if p["name"] == name:
+			return true
+	return false
+
+
+## Probability that the photon is still alive after `app` (1 if unknown).
+func alive_after_apparatus(app: Apparatus) -> float:
+	return float(alive_by_apparatus.get(app, 1.0))
 
 
 ## Probability that a photon survives up to and including `index`.

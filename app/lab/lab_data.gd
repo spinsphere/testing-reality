@@ -6,7 +6,7 @@ class_name LabData
 ## "peak": float, "n": int} or an empty dictionary on failure.
 ## `pos_col`/`count_col` are 0-based column indices; `window_s` divides raw counts
 ## (use 1.0 when the column is already per second); `centre_um` is subtracted from positions.
-static func load_scan(path: String, pos_col: int, count_col: int, window_s: float, centre_um: float) -> Dictionary:
+static func load_scan(path: String, pos_col: int, count_col: int, window_s: float, centre_um: float, count_cols: Array = []) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		push_warning("LabData: missing %s" % path)
 		return {}
@@ -25,10 +25,19 @@ static func load_scan(path: String, pos_col: int, count_col: int, window_s: floa
 		var cells := line.split(",")
 		if cells.size() <= maxi(pos_col, count_col):
 			continue
-		if not cells[pos_col].is_valid_float() or not cells[count_col].is_valid_float():
+		if not cells[pos_col].is_valid_float():
+			continue
+		var cols: Array = count_cols if not count_cols.is_empty() else [count_col]
+		var total := 0.0
+		var used := 0
+		for c in cols:
+			if int(c) < cells.size() and cells[int(c)].strip_edges().is_valid_float():
+				total += float(cells[int(c)])
+				used += 1
+		if used == 0:
 			continue
 		var x := (float(cells[pos_col]) - centre_um) / 1000.0
-		var y := float(cells[count_col]) / window_s
+		var y := total / used / window_s
 		xs.append(x)
 		ys.append(y)
 		peak = maxf(peak, y)
@@ -59,3 +68,22 @@ static func average_by_position(scan: Dictionary) -> Dictionary:
 		ys.append(y)
 		peak = maxf(peak, y)
 	return {"xs": xs, "ys": ys, "peak": peak, "n": xs.size()}
+
+
+## Experiment 4 grid: rows of {a, b, singles_a, singles_b, coinc} (counts per second).
+static func load_grid(path: String) -> Array:
+	var out: Array = []
+	if not FileAccess.file_exists(path):
+		return out
+	var f := FileAccess.open(path, FileAccess.READ)
+	var line_no := 0
+	while not f.eof_reached():
+		var line := f.get_line().strip_edges()
+		line_no += 1
+		if line == "" or line_no <= 2:
+			continue
+		var c := line.split(",")
+		if c.size() < 5 or not c[0].is_valid_float():
+			continue
+		out.append({"a": float(c[0]), "b": float(c[1]), "singles_a": float(c[2]), "singles_b": float(c[3]), "coinc": float(c[4])})
+	return out

@@ -19,6 +19,9 @@ signal selected_changed(is_selected: bool)
 @export var beam_height := 0.10
 ## Optional explanation shown in the inspector.
 @export_multiline var description := ""
+## Context overrides merged into the shared ctx when this element is applied, e.g.
+## {"pol": "pol2"} for elements on the idler arm after an SPDC source.
+var ctx_overrides: Dictionary = {}
 
 ## Parameter specs: name -> {label, type: "float"|"int"|"bool"|"enum", min, max, step, unit,
 ## options (for enum), value, help}

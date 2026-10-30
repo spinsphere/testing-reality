@@ -9,7 +9,8 @@ var screen_plane: ScreenPlane
 var plot: PatternPlot
 var distance_m := 0.5          # slit → detector distance (lens focal length in far-field mode)
 var wavelength_nm := 405.0
-var post_select: Dictionary = {}   # coincidence / alive condition for the main curve
+var post_select: Dictionary = {}   # alive condition for the singles curve (default: signal alive)
+var coincidence_pred: Dictionary = {}  # when set, a second (coincidence) profile is computed
 var overlay_options: Array = []    # [{name, file, pos_col, count_col, window, centre_um, average}]
 var overlay_index := 0
 var _overlay_button: OptionButton
@@ -28,9 +29,9 @@ func setup_slit_lab(p_mask: Optics.SlitMask, p_scanner: Optics.ScanningDetector,
 	controller.ctx["wavelength"] = wavelength_nm
 	controller.finish_hook = Callable(self, "_finish")
 	screen_plane = ScreenPlane.new()
-	screen_plane.position = Vector3(scanner.position.x - 0.012, BEAM_HEIGHT, 0.0)
-	screen_plane.rotation_degrees = Vector3(0, 90, 0)
 	add_child(screen_plane)
+	screen_plane.transform = scanner.transform.translated_local(Vector3(-0.012, BEAM_HEIGHT, 0.0))
+	screen_plane.rotate_object_local(Vector3.UP, deg_to_rad(90.0))
 
 
 func set_overlays(options: Array) -> void:
@@ -56,7 +57,12 @@ func _finish(sys: QuagmireSystem, ctx: Dictionary) -> Dictionary:
 		return {}
 	prof = prof.box_convolve(float(scanner.get_param("slit")) * 1e-6)
 	last_profile = prof
-	return {"profile": prof, "ys": ys, "geometry": geom}
+	var out := {"profile": prof, "ys": ys, "geometry": geom}
+	if not coincidence_pred.is_empty():
+		var cp: QuagmireProfile = sys.screen_profile(ctx["path"], geom, ys, coincidence_pred)
+		if cp != null:
+			out["coincidence"] = cp.box_convolve(float(scanner.get_param("slit")) * 1e-6)
+	return out
 
 
 func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
@@ -65,32 +71,23 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 		return
 	var prof: QuagmireProfile = result["profile"]
 	var ys: PackedFloat64Array = prof.ys()
-	var intensity: PackedFloat64Array = prof.intensity()
-	var incoherent: PackedFloat64Array = prof.incoherent()
-	# overlay + scale
-	var overlay := _load_overlay()
-	last_scale = 1.0
-	if not overlay.is_empty() and _fit_scale and prof.max() > 0.0:
-		last_scale = float(overlay["peak"]) / prof.max()
-	var xs_mm := PackedFloat64Array()
-	var model := PackedFloat64Array()
-	var env := PackedFloat64Array()
-	for i in ys.size():
-		xs_mm.append(ys[i] * 1000.0)
-		model.append(intensity[i] * last_scale)
-		env.append(incoherent[i] * last_scale)
-	# detector readout at its current position
 	var pos_m := float(scanner.get_param("position")) * 1e-3
-	var rate := _sample(ys, intensity, pos_m) * last_scale
+	var overlay := _load_overlay()
+	var target := str(overlay.get("target", "singles"))
+
+	# singles
+	var s_overlay := overlay if target == "singles" else {}
+	var s_scale := _scale_for(prof, s_overlay)
+	var rate := _sample(ys, prof.intensity(), pos_m) * s_scale
 	scanner.last_rate = rate
 	scanner.refresh_visual()
-	screen_plane.set_profile(ys, intensity, Palette.wavelength_to_color(wavelength_nm) if Palette.is_visible(wavelength_nm) else Color(0.9, 0.2, 0.25), float(scanner.get_param("range")) * 1e-3)
+	var light := Palette.wavelength_to_color(wavelength_nm) if Palette.is_visible(wavelength_nm) else Color(0.9, 0.2, 0.25)
+	screen_plane.set_profile(ys, prof.intensity(), light, float(scanner.get_param("range")) * 1e-3)
 
-	# top row: overlay chooser + rows
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 10)
 	var lbl := Label.new()
-	lbl.text = "Lab data overlay"
+	lbl.text = "Lab data"
 	lbl.theme_type_variation = "Muted"
 	top.add_child(lbl)
 	_overlay_button = OptionButton.new()
@@ -106,45 +103,84 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(sp)
 	var vis := Label.new()
-	vis.text = "visibility %.2f" % prof.visibility()
+	vis.text = "singles visibility %.2f" % prof.visibility()
 	vis.theme_type_variation = "Mono"
 	vis.add_theme_color_override("font_color", Palette.ACCENT_SOFT)
 	top.add_child(vis)
+	if result.has("coincidence"):
+		var cvis := Label.new()
+		cvis.text = "coincidence visibility %.2f" % (result["coincidence"] as QuagmireProfile).visibility()
+		cvis.theme_type_variation = "Mono"
+		cvis.add_theme_color_override("font_color", Palette.PINK)
+		top.add_child(cvis)
 	var rate_l := Label.new()
-	rate_l.text = "D1 @ %.2f mm: %d /s" % [pos_m * 1000.0, roundi(rate)]
+	rate_l.text = ("D1 @ %.2f mm: %d /s" % [pos_m * 1000.0, roundi(rate)]) if not s_overlay.is_empty() else ("D1 @ %.2f mm: %.2f (relative)" % [pos_m * 1000.0, rate])
 	rate_l.theme_type_variation = "Mono"
 	top.add_child(rate_l)
 	add_result_control(top)
 	for row in _summary_rows:
 		add_result_row(row[0], row[1])
 
-	plot = PatternPlot.new()
-	plot.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	plot.custom_minimum_size = Vector2(0, 170)
-	plot.x_label = "distance on the screen (mm)"
-	plot.y_label = "counts / s" if not overlay.is_empty() else "relative intensity"
+	var plots := HBoxContainer.new()
+	plots.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	plots.add_theme_constant_override("separation", 8)
+	plot = _make_plot(prof, s_scale, s_overlay, pos_m, "D1 singles" if result.has("coincidence") else "", Palette.ACCENT_SOFT)
+	plots.add_child(plot)
+	if result.has("coincidence"):
+		var c_overlay := overlay if target == "coinc" else {}
+		var cprof: QuagmireProfile = result["coincidence"]
+		var cplot := _make_plot(cprof, _scale_for(cprof, c_overlay), c_overlay, pos_m, "D1·D2 coincidences", Palette.PINK)
+		plots.add_child(cplot)
+	add_result_control(plots)
+
+
+func _scale_for(prof: QuagmireProfile, overlay: Dictionary) -> float:
+	if not overlay.is_empty() and _fit_scale and prof.max() > 0.0:
+		return float(overlay["peak"]) / prof.max()
+	return 1.0
+
+
+func _make_plot(prof: QuagmireProfile, scale: float, overlay: Dictionary, pos_m: float, title: String, color: Color) -> PatternPlot:
+	var ys: PackedFloat64Array = prof.ys()
+	var intensity: PackedFloat64Array = prof.intensity()
+	var incoherent: PackedFloat64Array = prof.incoherent()
+	var xs_mm := PackedFloat64Array()
+	var model := PackedFloat64Array()
+	var env := PackedFloat64Array()
+	for i in ys.size():
+		xs_mm.append(ys[i] * 1000.0)
+		model.append(intensity[i] * scale)
+		env.append(incoherent[i] * scale)
+	var p := PatternPlot.new()
+	p.title = title
+	p.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	p.custom_minimum_size = Vector2(0, 170)
+	p.x_label = "distance on the screen (mm)"
+	p.y_label = "counts / s" if not overlay.is_empty() else "relative intensity"
 	var series := [
-		{"name": "quantum prediction", "xs": xs_mm, "ys": model, "color": Palette.ACCENT_SOFT, "width": 2.2},
+		{"name": "quantum prediction", "xs": xs_mm, "ys": model, "color": color, "width": 2.2},
 		{"name": "no-interference envelope", "xs": xs_mm, "ys": env, "color": Color(Palette.TEXT_DIM, 0.8), "dashed": true, "width": 1.5},
 	]
-	plot.set_series(series)
+	p.set_series(series)
 	if not overlay.is_empty():
-		plot.set_points([{"xs": overlay["xs"], "ys": overlay["ys"], "color": Palette.PINK, "radius": 2.5}])
-	# detector marker
+		p.set_points([{"xs": overlay["xs"], "ys": overlay["ys"], "color": Palette.PINK if color != Palette.PINK else Palette.WARNING, "radius": 2.5}])
 	var marker := PackedFloat64Array([pos_m * 1000.0, pos_m * 1000.0])
-	var marker_y := PackedFloat64Array([0.0, plot.y_range.y])
+	var marker_y := PackedFloat64Array([0.0, p.y_range.y])
 	series.append({"name": "detector", "xs": marker, "ys": marker_y, "color": Palette.WARNING, "width": 1.0, "dashed": true})
-	plot.set_series(series)
-	add_result_control(plot)
+	p.set_series(series)
+	return p
 
 
 func _load_overlay() -> Dictionary:
 	if overlay_index <= 0 or overlay_index > overlay_options.size():
 		return {}
 	var o: Dictionary = overlay_options[overlay_index - 1]
-	var scan := LabData.load_scan(o["file"], int(o.get("pos_col", 0)), int(o.get("count_col", 1)), float(o.get("window", 1.0)), float(o.get("centre_um", 0.0)))
+	var scan := LabData.load_scan(o["file"], int(o.get("pos_col", 0)), int(o.get("count_col", 1)), float(o.get("window", 1.0)), float(o.get("centre_um", 0.0)), o.get("count_cols", []))
 	if bool(o.get("average", false)):
 		scan = LabData.average_by_position(scan)
+	if not scan.is_empty():
+		scan["target"] = o.get("target", "singles")
 	return scan
 
 

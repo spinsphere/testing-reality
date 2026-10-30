@@ -209,3 +209,84 @@ class ScanningDetector extends Apparatus:
 	func refresh_visual() -> void:
 		super()
 		model_root.position.z = float(get_param("position")) / 1000.0 * 40.0  # exaggerated ×40 so motion is visible
+
+
+class SPDCSource extends Apparatus:
+	## Two thin type-I BBO crystals at 90°: converts a pump photon into a polarization-
+	## entangled pair (signal "pol1", idler "pol2"). |↔⟩_pump → |↕⟩|↕⟩, |↕⟩_pump → e^{iφ}|↔⟩|↔⟩.
+	func _init(p_label: String = "BBO") -> void:
+		label = p_label
+		display_name = "BBO crystal pair (SPDC source)"
+		model = "bbo_crystal"
+		description = "Two thin beta-barium-borate crystals glued with their axes at 90°. Very rarely, a 405 nm pump photon splits into two 810 nm photons whose polarizations are entangled: both vertical or both horizontal, with the amplitudes set by the pump polarization."
+		add_param("phase", {"label": "Relative phase φ", "type": "float", "min": -180.0, "max": 180.0, "step": 5.0, "unit": "°", "value": 0.0, "help": "The phase between the |↕↕⟩ and |↔↔⟩ parts. The Berek compensator before the crystal is used to set it to zero (|Φ⁺⟩)."})
+
+	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
+		sys.spdc(ctx["pol"], ctx["live"], "pol1", "pol2", ctx["live"], float(get_param("phase")))
+		sys.add_property("idler_path", PackedStringArray(["D2"]))
+		set_meta("wavelength_after", 810.0)
+
+	func summary() -> String:
+		return "%s · φ = %d°" % [label, int(get_param("phase"))]
+
+
+class Berek extends Apparatus:
+	## Variable retarder: fine-tunes the phase between ↔ and ↕ of the pump.
+	func _init(p_label: String = "Berek") -> void:
+		label = p_label
+		display_name = "Berek compensator"
+		model = "berek_compensator"
+		description = "A tiltable crystal plate acting as a variable wave plate. Tilting it changes the phase delay between the horizontal and vertical components of the pump, which fixes the sign and phase of the entangled state."
+		add_param("retardance", {"label": "Retardance δ", "type": "float", "min": 0.0, "max": 360.0, "step": 5.0, "unit": "°", "value": 0.0})
+		add_param("axis", {"label": "Axis angle", "type": "float", "min": -90.0, "max": 90.0, "step": 1.0, "unit": "°", "value": 0.0})
+
+	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
+		sys.retarder(ctx["pol"], ctx["live"], float(get_param("axis")), float(get_param("retardance")))
+
+	func summary() -> String:
+		return "%s · δ = %d°" % [label, int(get_param("retardance"))]
+
+
+class Mirror extends Apparatus:
+	func _init(p_label: String = "M1", p_yaw: float = 45.0) -> void:
+		label = p_label
+		display_name = "Mirror in kinematic mount"
+		model = "mirror_kinematic"
+		rotation_degrees.y = p_yaw
+		description = "A dielectric mirror on a two-axis kinematic mount; it only folds the beam to fit the table."
+
+	func summary() -> String:
+		return label
+
+
+class BeamDump extends Apparatus:
+	func _init(p_label: String = "BD") -> void:
+		label = p_label
+		display_name = "Beam dump"
+		model = "beam_dump"
+		description = "Absorbs the unwanted reflected beam from the polarizing beam splitter."
+
+	func summary() -> String:
+		return label
+
+
+class Wall extends Apparatus:
+	## A removable black wall on the idler arm (Experiment 7).
+	func _init(p_label: String = "WALL") -> void:
+		label = p_label
+		display_name = "Black wall (beam block)"
+		model = "beam_dump"
+		description = "An opaque screen that absorbs the idler photon before it can reach D2. It can be anywhere on the idler path — 1 cm or 22 km from the crystal."
+		add_param("enabled", {"label": "Wall in the beam", "type": "bool", "value": false})
+
+	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
+		if bool(get_param("enabled")):
+			sys.relabel("idler_path", "D2", "wall", {})
+			sys.mark_sink("idler_path", "wall")
+
+	func summary() -> String:
+		return "%s · %s" % [label, "in" if bool(get_param("enabled")) else "out"]
+
+	func refresh_visual() -> void:
+		super()
+		model_root.visible = bool(get_param("enabled"))
