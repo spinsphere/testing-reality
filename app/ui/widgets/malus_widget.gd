@@ -72,9 +72,9 @@ func build() -> void:
 
 func _transmission(pol_deg: float) -> Array:
 	var s := QuagmireSystem.new()
-	s.add_property("pol", WidgetKit.HV)
-	s.set_linear_polarization("pol", WidgetKit.HV, _input)
-	s.polarizer("pol", WidgetKit.HV, pol_deg, "lost@P1", {})
+	s.add_property("pol", WidgetKit.hv())
+	s.set_linear_polarization("pol", WidgetKit.hv(), _input)
+	s.polarizer("pol", WidgetKit.hv(), pol_deg, "lost@P1", {})
 	var p := s.probability({"alive": PackedStringArray(["pol"])})
 	# signed amplitude along the polarizer axis = (alive component) · axis
 	var a := deg_to_rad(pol_deg)

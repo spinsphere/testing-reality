@@ -102,21 +102,21 @@ func build() -> void:
 func _system() -> QuagmireSystem:
 	var e := QuagmireSystem.new()
 	if _entangled:
-		e.add_property("pump", WidgetKit.HV)
-		e.set_linear_polarization("pump", WidgetKit.HV, 45.0)
-		e.spdc("pump", WidgetKit.HV, "pol1", "pol2", WidgetKit.HV, 0.0)
+		e.add_property("pump", WidgetKit.hv())
+		e.set_linear_polarization("pump", WidgetKit.hv(), 45.0)
+		e.spdc("pump", WidgetKit.hv(), "pol1", "pol2", WidgetKit.hv(), 0.0)
 	else:
-		e.add_property("pol1", WidgetKit.HV)
-		e.set_linear_polarization("pol1", WidgetKit.HV, 45.0)
+		e.add_property("pol1", WidgetKit.hv())
+		e.set_linear_polarization("pol1", WidgetKit.hv(), 45.0)
 	e.add_property("path", PackedStringArray(["S"]))
 	e.slits("path", "S", PackedStringArray(["A", "B"]), 1.0, 0.0, "")
 	if _markers:
-		e.polarizer("pol1", WidgetKit.HV, 90.0, "lost@MA", {"is": {"path": "A"}})
-		e.polarizer("pol1", WidgetKit.HV, 0.0, "lost@MB", {"is": {"path": "B"}})
+		e.polarizer("pol1", WidgetKit.hv(), 90.0, "lost@MA", {"is": {"path": "A"}})
+		e.polarizer("pol1", WidgetKit.hv(), 0.0, "lost@MB", {"is": {"path": "B"}})
 	if _p1_in:
-		e.polarizer("pol1", WidgetKit.HV, _p1, "lost@P1", {})
+		e.polarizer("pol1", WidgetKit.hv(), _p1, "lost@P1", {})
 	if _entangled and _p2_in:
-		e.polarizer("pol2", WidgetKit.HV, _p2, "lost@P2", {})
+		e.polarizer("pol2", WidgetKit.hv(), _p2, "lost@P2", {})
 	return e
 
 
