@@ -187,4 +187,4 @@ reading a computed result. User request 2026-10-31.
 - [x] Quality presets (Low / Medium / High: MSAA, shadows, glow, 3D render scale) in Settings; labs apply them; Low targets integrated graphics.
 - [x] Rendering cost: single-cascade 2048 shadow map limited to the table, cheaper glow; acquisition panel updates labels in place instead of rebuilding every frame.
 - [x] `--perf` run mode: objects / primitives / draw calls / VRAM per lab, machine-independent budget checked by `tools/test.sh` (≤ 1500 draw calls, ≤ 2 M triangles per frame).
-- [ ] Document the targets and results in `docs/design/performance.md`; commit + push.
+- [x] Document the targets and results in `docs/design/performance.md`; commit + push.
