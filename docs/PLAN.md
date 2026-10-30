@@ -154,3 +154,26 @@ was clean through exp4 then hit the 900 s timeout (llvmpipe is slow). Remaining 
 - [x] The 141 `app/assets/models/*.png` were NOT Blender leftovers: Godot's glTF importer extracts embedded textures by default (`gltf/embedded_image_handling=1`) and the editor then rewrote their `.import` files (detect-3D) — the churn seen in GitHub Desktop. Fixed by `gltf/embedded_image_handling=2` (Basis Universal inside the imported scene) in all 17 `.glb.import`; the PNGs are gone for good.
 - [ ] Re-run `tools/test.sh` until ALL OK; then `git clone` into a scratch dir and run `xvfb-run godot -e --path <clone>/app --quit-after 400` and `git status` there to prove the editor changes no tracked files.
 - [ ] Commit each step and push; README "Testing" section is already written (uncommitted edit in README.md — commit it).
+
+## Phase 8 — Run the experiment (after Phase 7 closes)
+
+Goal: the labs should feel like operating the real bench from start to finish, not only
+reading a computed result. User request 2026-10-31.
+
+- [ ] Laser shutter and power: `enabled` (shutter) and `power` (photons/s, default the lab's I₀)
+      params on `Optics.Laser`; beam renderer and all rates follow them; state panel says "laser off".
+- [ ] Acquisition mode (Run / Pause / Reset in the HUD): counts accumulate per detector in real
+      time (Poisson draws from the engine's probabilities × power × dt), coincidences via the
+      coincidence predicate; elapsed time, rates with √N error bars; live digits on the
+      coincidence-counter model (Label3D) and in the results panel.
+- [ ] Detector scan: "Scan" sweeps the scanning detector over its range with a dwell time,
+      plotting measured points progressively over the prediction and the lab's CSV data; the
+      detector carriage moves on the model.
+- [ ] Photon-pair animation for branched layouts (Experiments 4–7) along `beam_paths`, outcomes
+      sampled from the engine (detected / lost / coincidence), so the eraser and delayed-choice
+      stories can be watched one pair at a time.
+- [ ] Stage stepping: clicking a stage in the state panel focuses the camera on that element and
+      dims the beam beyond it, so a run can be read beginning → middle → end.
+- [ ] Harness coverage for all of the above (shutter closed → zero rates; 2 s acquisition →
+      counts > 0 within tolerance; scan completes; pair animation runs without errors).
+- [ ] Rebuild the Linux (and Windows) exports with `tools/export.sh`; commit + push.

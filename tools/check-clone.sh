@@ -8,7 +8,8 @@
 # renderer for a few hundred frames → run the smoke test → `git status` must be empty.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-GODOT="${GODOT:-$(command -v godot || echo "$HOME/.local/bin/godot")}"
+# shellcheck source=lib/godot.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib/godot.sh"
 SRC="${1:-$(git -C "$ROOT" remote get-url origin)}"
 WORK="$(mktemp -d /tmp/tr-clone-XXXXXX)"
 LOG="$WORK/logs"; mkdir -p "$LOG"
@@ -30,14 +31,14 @@ run() {  # run <name> <command...>
 	if [ -z "$bad" ] && { [ $code -eq 0 ] || [ $code -eq 124 ]; }; then echo "ok"; else echo "FAILED (exit $code)"; echo "$bad" | sed 's/^/    /'; status=1; fi
 }
 
-run "import"            timeout 600 "$GODOT" --headless --path . --import
-run "editor (headless)" timeout 600 "$GODOT" --headless -e --path . --quit
+run "import"            timeout 600 $GODOT --headless --path . --import
+run "editor (headless)" timeout 600 $GODOT --headless -e --path . --quit
 if command -v xvfb-run > /dev/null; then
 	# the editor with a real renderer: file-system scan, previews, detect-3D texture reimports
-	run "editor (xvfb, GL)" timeout 900 xvfb-run -a -s "-screen 0 1600x900x24" "$GODOT" -e --path . --quit-after 600
+	run "editor (xvfb, GL)" timeout 900 xvfb-run -a -s "-screen 0 1600x900x24" $GODOT -e --path . --quit-after 600
 fi
-run "smoke: quagmire"   timeout 120 "$GODOT" --headless --path . -s tests/smoke_quagmire.gd
-run "run_all (headless)" timeout 900 "$GODOT" --headless --path . -s tests/run_all.gd
+run "smoke: quagmire"   timeout 120 $GODOT --headless --path . -s tests/smoke_quagmire.gd
+run "run_all (headless)" timeout 900 $GODOT --headless --path . -s tests/run_all.gd
 
 printf '%-26s' "tracked files unchanged"
 changed=$(git -C "$WORK/repo" status --porcelain)

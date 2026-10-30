@@ -4,7 +4,8 @@
 # Quagmire SDK built for both platforms (tools/build-sdk.sh and the mingw cross-build).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GODOT="${GODOT:-$HOME/.local/bin/godot}"
+# shellcheck source=lib/godot.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib/godot.sh"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 echo "== Quagmire SDK (linux)"
@@ -20,9 +21,9 @@ fi
 
 mkdir -p "$ROOT/builds/linux" "$ROOT/builds/windows"
 echo "== Import"
-"$GODOT" --headless --path "$ROOT/app" --import >/dev/null 2>&1 || true
+$GODOT --headless --path "$ROOT/app" --import >/dev/null 2>&1 || true
 echo "== Export Linux"
-"$GODOT" --headless --path "$ROOT/app" --export-release "Linux x86_64" "$ROOT/builds/linux/testing-reality.x86_64"
+$GODOT --headless --path "$ROOT/app" --export-release "Linux x86_64" "$ROOT/builds/linux/testing-reality.x86_64"
 echo "== Export Windows"
-"$GODOT" --headless --path "$ROOT/app" --export-release "Windows x86_64" "$ROOT/builds/windows/testing-reality.exe"
+$GODOT --headless --path "$ROOT/app" --export-release "Windows x86_64" "$ROOT/builds/windows/testing-reality.exe"
 ls -la "$ROOT/builds/linux" "$ROOT/builds/windows"

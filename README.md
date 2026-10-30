@@ -33,10 +33,23 @@ docs/              plan, design docs, page content specs transcribed from the si
 Requirements: Godot 4.7.2, Rust (stable), Node 22, Blender 4.3 (only to rebuild models).
 
 ```bash
-tools/build-sdk.sh                      # builds the Quagmire GDExtension into app/addons/quagmire
-cd tools/mathgen && npm install && npm run build:png   # renders every chapter's equations
-godot --path app                        # run the app
+godot --path app                        # run the app (the extension binaries are committed)
+tools/build-sdk.sh                      # rebuild the Quagmire GDExtension (needs Rust)
+cd tools/mathgen && npm install && npm run build:png   # re-render the chapter equations
 ```
+
+The tool scripts find Godot on `PATH`, in `~/.local/bin`, or as the Flatpak
+(`org.godotengine.Godot`); set `GODOT=/path/to/godot` to override.
+
+### Desktop builds
+
+```bash
+tools/export.sh        # builds/linux/testing-reality.x86_64 and builds/windows/testing-reality.exe
+```
+
+Needs the Godot 4.7.2 export templates (Editor → Manage Export Templates). The Windows
+build also needs `rustup target add x86_64-pc-windows-gnu` and the `mingw-w64` package; it is
+skipped otherwise.
 
 The Quagmire GDExtension binaries (Linux, Windows) are committed in `app/addons/quagmire/bin`,
 so a fresh clone opens in Godot without a Rust toolchain; `tools/build-sdk.sh` rebuilds them.

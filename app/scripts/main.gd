@@ -15,6 +15,9 @@ var _shot_path := ""
 
 func _ready() -> void:
 	theme = ThemeBuilder.build()
+	# This full-screen Control must not swallow mouse events: in the laboratory the camera rig
+	# and the apparatus picking read them from _unhandled_input.
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bg = ColorRect.new()
 	_bg.color = Palette.BG
 	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)

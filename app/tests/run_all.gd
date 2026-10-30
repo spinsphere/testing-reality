@@ -501,16 +501,25 @@ func _drive_lab(ch: Dictionary) -> void:
 	await _frames(5)
 	cam.go_home()
 	await _frames(5)
-	await _mouse_drag(Vector2(800, 450), Vector2(900, 480), MOUSE_BUTTON_LEFT, false)
-	await _mouse_drag(Vector2(800, 450), Vector2(700, 420), MOUSE_BUTTON_LEFT, true)
-	await _mouse_drag(Vector2(800, 450), Vector2(820, 430), MOUSE_BUTTON_MIDDLE, false)
+	# mouse events go through the whole pipeline (Window → GUI → _unhandled_input), so this
+	# also proves no full-screen Control swallows them
+	var centre := Vector2(_root.size) * 0.5
+	var yaw0: float = cam._yaw_goal
+	var target0: Vector3 = cam._target_goal
+	var dist0: float = cam._distance_goal
+	await _mouse_drag(centre, centre + Vector2(100, 30), MOUSE_BUTTON_LEFT, false)
+	_ok(not is_equal_approx(cam._yaw_goal, yaw0), "lab %s: left drag did not orbit the camera" % id)
+	await _mouse_drag(centre, centre + Vector2(-100, -30), MOUSE_BUTTON_LEFT, true)
+	_ok(not (cam._target_goal as Vector3).is_equal_approx(target0), "lab %s: shift-drag did not pan the camera" % id)
+	await _mouse_drag(centre, centre + Vector2(20, -20), MOUSE_BUTTON_MIDDLE, false)
 	for i in 3:
 		var w := InputEventMouseButton.new()
 		w.button_index = MOUSE_BUTTON_WHEEL_UP
 		w.pressed = true
-		w.position = Vector2(800, 450)
+		w.position = centre
 		Input.parse_input_event(w)
 		await process_frame
+	_ok(cam._distance_goal < dist0, "lab %s: mouse wheel did not zoom the camera" % id)
 	cam.go_home(true)
 	await _frames(3)
 	# pick: project every component to the screen and click it
@@ -519,8 +528,19 @@ func _drive_lab(ch: Dictionary) -> void:
 		var pos3: Vector3 = (app as Node3D).global_position + Vector3(0, float(lab.get("BEAM_HEIGHT")), 0)
 		if cam.camera.is_position_behind(pos3):
 			continue
-		var sp: Vector2 = cam.camera.unproject_position(pos3)
-		lab.call("_try_pick", sp)
+		# parse_input_event takes window coordinates; the stretch transform maps them to the viewport
+		var sp: Vector2 = _root.get_final_transform() * (cam.camera.unproject_position(pos3) as Vector2)
+		var click := InputEventMouseButton.new()
+		click.button_index = MOUSE_BUTTON_LEFT
+		click.pressed = true
+		click.position = sp
+		Input.parse_input_event(click)
+		await process_frame
+		click = InputEventMouseButton.new()
+		click.button_index = MOUSE_BUTTON_LEFT
+		click.pressed = false
+		click.position = sp
+		Input.parse_input_event(click)
 		await process_frame
 		if lab.get("selected") == app:
 			picked += 1

@@ -9,7 +9,8 @@
 # Logs: builds/test-logs/<step>.log
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-GODOT="${GODOT:-$(command -v godot || echo "$HOME/.local/bin/godot")}"
+# shellcheck source=lib/godot.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib/godot.sh"
 LOG="$ROOT/builds/test-logs"
 mkdir -p "$LOG"
 QUICK=0
@@ -36,7 +37,7 @@ step() {  # step <name> <command...>   (runs in app/ unless the command cd's)
 }
 
 echo "== Testing Reality — full test ($(date -Is))"
-echo "godot: $("$GODOT" --version 2>/dev/null | head -1)"
+echo "godot: $($GODOT --version 2>/dev/null | head -1)"
 
 printf '%-28s' "cargo test (engine)"
 if ( cd "$ROOT/quagmire-engine" && cargo test --quiet ) > "$LOG/cargo-test.log" 2>&1; then
@@ -47,17 +48,17 @@ fi
 
 [ -e "$ROOT/app/addons/quagmire/bin/linux/libquagmire_godot.so" ] || { echo "GDExtension binary missing — run tools/build-sdk.sh"; exit 1; }
 
-step "godot import"         timeout 300 "$GODOT" --headless --path . --import
-step "smoke: quagmire"      timeout 120 "$GODOT" --headless --path . -s tests/smoke_quagmire.gd
-step "smoke: widgets"       timeout 120 "$GODOT" --headless --path . -s tests/smoke_widgets.gd
-step "run_all (headless)"   timeout 600 "$GODOT" --headless --path . -s tests/run_all.gd
+step "godot import"         timeout 300 $GODOT --headless --path . --import
+step "smoke: quagmire"      timeout 120 $GODOT --headless --path . -s tests/smoke_quagmire.gd
+step "smoke: widgets"       timeout 120 $GODOT --headless --path . -s tests/smoke_widgets.gd
+step "run_all (headless)"   timeout 600 $GODOT --headless --path . -s tests/run_all.gd
 if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
 	# This pass exists to catch shader/renderer errors, so it runs small: software GL (llvmpipe)
 	# manages about a frame a second on the 3D labs, so it runs at 640x360 with the harness's
 	# --quick sweeps (the headless pass above does the full sweep). Screenshots use the full size.
-	step "run_all (xvfb, GL)" timeout 5400 xvfb-run -a -s "-screen 0 640x360x24" "$GODOT" --path . -s tests/run_all.gd -- --quick
+	step "run_all (xvfb, GL)" timeout 5400 xvfb-run -a -s "-screen 0 640x360x24" $GODOT --path . -s tests/run_all.gd -- --quick
 	for route in hub chapter:intro:0 chapter:exp1:2 lab:exp1 lab:exp2 lab:exp3 lab:exp4 lab:exp5 lab:exp6 lab:exp7; do
-		step "shot $route" timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" "$GODOT" --path . -- "--go=$route" "--shot=$LOG/shot-${route//:/-}.png"
+		step "shot $route" timeout 300 xvfb-run -a -s "-screen 0 1600x900x24" $GODOT --path . -- "--go=$route" "--shot=$LOG/shot-${route//:/-}.png"
 	done
 fi
 
