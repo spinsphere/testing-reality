@@ -45,7 +45,7 @@ fn exp1_one_horizontal_polarizer_50_percent() {
 #[test]
 fn exp1_malus_law_table() {
     // site table: 45° → 100 %, 22.5° → ~85 %, 0° → 50 %, −45° → 0 %
-    for (deg, expect) in [(45.0, 1.0), (22.5, 0.853553), (0.0, 0.5), (-45.0, 0.0)] {
+    for (deg, expect) in [(45.0_f64, 1.0_f64), (22.5, 0.853553), (0.0, 0.5), (-45.0, 0.0)] {
         let mut s = diagonal_photon();
         s.polarizer("pol", POL, deg.to_radians(), "lost", None)
             .unwrap();
@@ -217,7 +217,7 @@ fn exp3_state_after_slit_polarizers() {
 fn exp3_third_polarizer_table() {
     // P1 angle → (centre intensity, visibility, sign of cos term at centre)
     for (deg, centre, vis) in [
-        (0.0, 0.25, 0.0),
+        (0.0_f64, 0.25_f64, 0.0_f64),
         (90.0, 0.25, 0.0),
         (45.0, 0.5, 1.0),
         (-45.0, 0.0, 1.0),
@@ -288,7 +288,7 @@ fn exp4_spdc_makes_phi_plus() {
 
 #[test]
 fn exp4_coincidence_is_half_cos_squared() {
-    let table = [
+    let table: [(f64, f64, f64); 5] = [
         (0.0, 0.0, 0.5),
         (0.0, 45.0, 0.25),
         (0.0, 90.0, 0.0),
@@ -408,7 +408,7 @@ fn exp5_3_local_eraser_fails_with_entanglement() {
 fn exp6_idler_polarizer_selects_fringes() {
     // I(γ) ∝ 1 + sin(2γ) cos kΔ  → visibility |sin 2γ|
     for (deg, vis, sign) in [
-        (0.0, 0.0, 0.0),
+        (0.0_f64, 0.0_f64, 0.0_f64),
         (90.0, 0.0, 0.0),
         (45.0, 1.0, 1.0),
         (-45.0, 1.0, -1.0),
