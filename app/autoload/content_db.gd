@@ -39,16 +39,17 @@ func equation(id: String, eq_id: String) -> Dictionary:
 	return _math_index[id].get(eq_id, {})
 
 
-## Texture for an equation (PNG at 3x preferred, SVG fallback), or null.
+## Texture for an equation: the SVG (imported at 3x by Godot's own rasteriser, which
+## handles MathJax output faithfully), with the PNG as a fallback.
 func equation_texture(id: String, eq_id: String) -> Texture2D:
 	var meta := equation(id, eq_id)
 	if meta.is_empty():
 		return null
 	var base := "res://assets/math/%s/" % id
-	if meta.has("png") and ResourceLoader.exists(base + meta["png"]):
-		return load(base + meta["png"])
 	if ResourceLoader.exists(base + meta["file"]):
 		return load(base + meta["file"])
+	if meta.has("png") and ResourceLoader.exists(base + meta["png"]):
+		return load(base + meta["png"])
 	return null
 
 

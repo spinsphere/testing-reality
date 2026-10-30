@@ -109,7 +109,33 @@ static func ketify(text: String) -> String:
 	return out
 
 
+const SUPERSCRIPTS := {"0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
+	"+": "⁺", "-": "⁻", "−": "⁻", "i": "ⁱ", "k": "ᵏ", "a": "ᵃ", "b": "ᵇ", "l": "ˡ", "n": "ⁿ", "s": "ˢ", "x": "ˣ", "m": "ᵐ", "t": "ᵗ", "d": "ᵈ", "e": "ᵉ"}
+
+
+## `e^{ika}` → `eⁱᵏᵃ`, `cos^2` → `cos²`; falls back to small text when a glyph is missing.
+static func _superscript(m: RegExMatch) -> String:
+	var body := m.get_string(2)
+	var out := ""
+	for ch in body:
+		if not SUPERSCRIPTS.has(ch):
+			return "%s[font_size=12]%s[/font_size]" % [m.get_string(1), body]
+		out += SUPERSCRIPTS[ch]
+	return m.get_string(1) + out
+
+
 static func _ketify_plain(text: String) -> String:
+	# superscripts: e^{ika}, cos^2
+	var sup_re := RegEx.new()
+	sup_re.compile("([A-Za-z0-9)⟩])\\^\\{?([A-Za-z0-9+\\-−]{1,4})\\}?")
+	var pos := 0
+	while true:
+		var m := sup_re.search(text, pos)
+		if m == null:
+			break
+		var rep := _superscript(m)
+		text = text.substr(0, m.get_start()) + rep + text.substr(m.get_end())
+		pos = m.get_start() + rep.length()
 	# subscripts: P_↔, Ψ_0, lost_PA → small raised-baseline text
 	var sub_re := RegEx.new()
 	sub_re.compile("([A-Za-zΨψΦφ⟩])_([A-Za-z0-9↔↕↗↙↘↖±⁺⁻]{1,4})")

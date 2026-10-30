@@ -67,6 +67,13 @@ window/size/window_height_override=900
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[importer_defaults]
+
+texture={
+"svg/scale": 3.0,
+"mipmaps/generate": true
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
