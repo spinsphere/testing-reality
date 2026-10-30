@@ -1,0 +1,43 @@
+{
+  "$comment": "Experiment 5 (putting it all together: entangled pairs through the marked double slit) equations E1-E23 transcribed from docs/content/06-experiment-5-putting-it-all-together.md, plus helper equations for the maths check-ins (and_list_three, factor_common, trace_rule, survival_half, cross_term_rule, visibility_rule, exp3_vs_exp5, visibility_angles, p2_eraser_preview). Site ids: bell_state=E1, psi1_full=E2, propagation_signal=E3, propagation_idler=E4, psi2_screen=E5, path_difference=E6, spatial_amplitude=E7, intensity_derivation=E8, intensity_boxed_51=E9, psi1_expanded=E10, psi2_filtered_lost=E11, psi2_filtered=E12, which_path_idler=E13, psi3_screen_52=E14, intensity_sum_52=E15, intensity_boxed_52=E16, path_tags_52=E17, psi1_53=E18, p1_projection=E19, psi2_53=E20, path_tags_53=E21, intensity_sum_53=E22, intensity_boxed_53=E23. Rendered by tools/mathgen into app/assets/math/exp5/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "VV": "\\ket{\\V}_1\\ket{\\V}_2",
+    "HH": "\\ket{\\H}_1\\ket{\\H}_2",
+    "half": "\\tfrac{1}{2}",
+    "isqtwo": "\\tfrac{1}{\\sqrt{2}}"
+  },
+  "equations": {
+    "bell_state": "\\ket{\\Phi^{+}} = \\isqtwo\\Big(\\VV + \\HH\\Big).",
+    "and_list_three": "\\underbrace{\\ket{\\V}_1}_{\\text{signal pol.}}\\;\\underbrace{\\ket{\\V}_2}_{\\text{idler pol.}}\\;\\underbrace{\\ket{A}_1}_{\\text{signal slit}}\\;\\underbrace{\\ket{S}_2}_{\\text{idler place}} \\;=\\; \\text{``signal } \\V \\text{ and idler } \\V \\text{ and slit } A \\text{ and idler at } S\\text{''}",
+    "psi1_full": "\\ket{\\psi_1} = \\isqtwo\\Big(\\VV + \\HH\\Big) \\otimes \\isqtwo\\Big(\\ket{A}_1 + \\ket{B}_1\\Big) \\otimes \\ket{S}_2 .",
+    "propagation_signal": "\\ket{A}_1 \\rightarrow e^{ika}\\ket{y}_1, \\qquad \\ket{B}_1 \\rightarrow e^{ikb}\\ket{y}_1 .",
+    "propagation_idler": "\\ket{S}_2 \\rightarrow e^{ikm}\\ket{D}_2 .",
+    "psi2_screen": "\\ket{\\psi_2} = \\cdots + \\half\\Big(\\VV + \\HH\\Big) \\otimes \\Big(e^{ika} + e^{ikb}\\Big)\\ket{y}_1 \\otimes e^{ikm}\\ket{D}_2 + \\cdots .",
+    "factor_common": "\\ket{\\psi_2} \\supset \\underbrace{\\isqtwo\\Big(\\VV + \\HH\\Big)}_{\\text{same for both slits, length } 1} \\otimes \\underbrace{\\isqtwo\\Big(e^{ika} + e^{ikb}\\Big)}_{\\mathcal{A}(y)}\\ket{y}_1\\ket{D}_2",
+    "trace_rule": "I(y) \\;\\propto\\; \\big|\\mathcal{A}_{\\V}(y)\\big|^{2} + \\big|\\mathcal{A}_{\\H}(y)\\big|^{2} \\qquad \\text{(D}_1\\text{ never asks the idler: both idler outcomes are added)}",
+    "path_difference": "a - b \\approx \\frac{d\\cdot y}{L}.",
+    "spatial_amplitude": "\\mathcal{A}(y) = \\isqtwo\\Big(e^{ika(y)} + e^{ikb(y)}\\Big).",
+    "intensity_derivation": "I(y) \\propto |\\mathcal{A}(y)|^{2} = \\half\\big|e^{ika} + e^{ikb}\\big|^{2} = \\half\\Big(2 + 2\\cos\\big(k(a-b)\\big)\\Big) = 1 + \\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big).",
+    "intensity_boxed_51": "\\boxed{\\,I(y) \\propto 1 + \\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big)\\,}",
+    "psi1_expanded": "\\ket{\\psi_1} = \\half\\Big(\\VV\\ket{A}_1 + \\VV\\ket{B}_1 + \\HH\\ket{A}_1 + \\HH\\ket{B}_1\\Big) \\otimes \\ket{S}_2 .",
+    "psi2_filtered_lost": "\\ket{\\psi_2} = \\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\otimes\\ket{S}_2 + \\half\\Big(\\HH\\ket{A}_1 + \\VV\\ket{B}_1\\Big)\\otimes\\lost .",
+    "survival_half": "\\text{Prob(photon survives)} = \\Big\\|\\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\Big\\|^{2} = \\tfrac{1}{4} + \\tfrac{1}{4} = \\half",
+    "psi2_filtered": "\\ket{\\psi_2} \\rightarrow \\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\otimes\\ket{S}_2 .",
+    "which_path_idler": "\\text{Idler } \\ket{\\V}_2 \\Rightarrow \\text{signal went through } A, \\qquad \\text{Idler } \\ket{\\H}_2 \\Rightarrow \\text{signal went through } B.",
+    "psi3_screen_52": "\\ket{\\psi_3} = \\cdots + \\half\\Big(e^{ika}\\VV + e^{ikb}\\HH\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+    "cross_term_rule": "\\Big|\\isqtwo\\Big(e^{ika}\\ket{\\chi_A} + e^{ikb}\\ket{\\chi_B}\\Big)\\Big|^{2} = 1 + \\braket{\\chi_A}{\\chi_B}\\,\\cos\\big(k(a-b)\\big) \\qquad (\\text{real overlap})",
+    "visibility_rule": "\\begin{aligned} V &= \\big|\\braket{\\chi_A}{\\chi_B}\\big| \\\\ \\text{5.1:}\\quad \\chi_A = \\chi_B &\\;\\Rightarrow\\; V = 1 \\\\ \\text{5.2:}\\quad \\braket{\\V_1\\V_2}{\\H_1\\H_2} &= 0 \\;\\Rightarrow\\; V = 0 \\\\ \\text{5.3:}\\quad \\braket{\\diag_1\\,\\V_2}{\\diag_1\\,\\H_2} &= 1\\cdot 0 \\;\\Rightarrow\\; V = 0 \\end{aligned}",
+    "intensity_sum_52": "I(y) \\propto \\Big|\\half e^{ika}\\Big|^{2} + \\Big|\\half e^{ikb}\\Big|^{2} = \\tfrac{1}{4} + \\tfrac{1}{4} = \\half.",
+    "intensity_boxed_52": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+    "path_tags_52": "\\text{Path } A:\\; \\VV \\qquad\\qquad \\text{Path } B:\\; \\HH",
+    "exp3_vs_exp5": "\\begin{aligned} \\text{Exp. 3:}\\quad e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V} \\;&\\xrightarrow{\\;P_1 = 45^{\\circ}\\;}\\; \\big(e^{ika} + e^{ikb}\\big)\\ket{\\diag} \\\\ \\text{Exp. 5:}\\quad e^{ika}\\VV + e^{ikb}\\HH \\;&\\xrightarrow{\\;P_1 = 45^{\\circ}\\;}\\; \\ket{\\diag}_1\\big(e^{ika}\\ket{\\V}_2 + e^{ikb}\\ket{\\H}_2\\big) \\end{aligned}",
+    "psi1_53": "\\ket{\\psi_1} = \\cdots + \\half\\Big(e^{ika}\\VV + e^{ikb}\\HH\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+    "p1_projection": "\\ket{\\V} \\rightarrow \\isqtwo\\ket{\\diag}, \\qquad \\ket{\\H} \\rightarrow \\isqtwo\\ket{\\diag}.",
+    "psi2_53": "\\ket{\\psi_2} = \\cdots + \\frac{1}{2\\sqrt{2}}\\Big(e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+    "path_tags_53": "\\text{Path } A:\\; e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 \\qquad\\qquad \\text{Path } B:\\; e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2",
+    "intensity_sum_53": "I(y) \\propto \\Big|\\frac{1}{2\\sqrt{2}}e^{ika}\\Big|^{2} + \\Big|\\frac{1}{2\\sqrt{2}}e^{ikb}\\Big|^{2} = \\tfrac{1}{8} + \\tfrac{1}{8} = \\tfrac{1}{4}.",
+    "intensity_boxed_53": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+    "visibility_angles": "V = \\big|\\braket{\\theta_A}{\\theta_B}\\big|^{2} = \\cos^{2}(\\theta_A - \\theta_B) \\qquad\\text{(entangled pairs, no } P_1\\text{)}",
+    "p2_eraser_preview": "I_{c}(y) \\propto \\tfrac{1}{8}\\Big[1 + \\sin(2\\theta)\\,\\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big)\\Big] \\qquad\\text{(coincidences, } P_2 \\text{ at angle } \\theta \\text{ on the idler)}"
+  }
+}

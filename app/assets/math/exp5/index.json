@@ -1,0 +1,298 @@
+{
+  "generated": "2026-10-30T11:36:15.753Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "bell_state": {
+      "file": "bell_state.svg",
+      "width": 542.96,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\Phi^{+}} = \\isqtwo\\Big(\\VV + \\HH\\Big).",
+      "hash": "70602ced22a2ee35",
+      "png": "bell_state.png"
+    },
+    "and_list_three": {
+      "file": "and_list_three.svg",
+      "width": 1276,
+      "height": 94.22,
+      "baseline": 66.27,
+      "tex": "\\underbrace{\\ket{\\V}_1}_{\\text{signal pol.}}\\;\\underbrace{\\ket{\\V}_2}_{\\text{idler pol.}}\\;\\underbrace{\\ket{A}_1}_{\\text{signal slit}}\\;\\underbrace{\\ket{S}_2}_{\\text{idler place}} \\;=\\; \\text{``signal } \\V \\text{ and idler } \\V \\text{ and slit } A \\text{ and idler at } S\\text{''}",
+      "hash": "21e09397d0b2fc99",
+      "png": "and_list_three.png"
+    },
+    "psi1_full": {
+      "file": "psi1_full.svg",
+      "width": 952.62,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_1} = \\isqtwo\\Big(\\VV + \\HH\\Big) \\otimes \\isqtwo\\Big(\\ket{A}_1 + \\ket{B}_1\\Big) \\otimes \\ket{S}_2 .",
+      "hash": "92864c1e122f0454",
+      "png": "psi1_full.png"
+    },
+    "propagation_signal": {
+      "file": "propagation_signal.svg",
+      "width": 569.66,
+      "height": 43.04,
+      "baseline": 10.34,
+      "tex": "\\ket{A}_1 \\rightarrow e^{ika}\\ket{y}_1, \\qquad \\ket{B}_1 \\rightarrow e^{ikb}\\ket{y}_1 .",
+      "hash": "36bc441fb52bd2a9",
+      "png": "propagation_signal.png"
+    },
+    "propagation_idler": {
+      "file": "propagation_idler.svg",
+      "width": 264.1,
+      "height": 43.04,
+      "baseline": 10.34,
+      "tex": "\\ket{S}_2 \\rightarrow e^{ikm}\\ket{D}_2 .",
+      "hash": "0db0582f14fa1d8f",
+      "png": "propagation_idler.png"
+    },
+    "psi2_screen": {
+      "file": "psi2_screen.svg",
+      "width": 1162.53,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_2} = \\cdots + \\half\\Big(\\VV + \\HH\\Big) \\otimes \\Big(e^{ika} + e^{ikb}\\Big)\\ket{y}_1 \\otimes e^{ikm}\\ket{D}_2 + \\cdots .",
+      "hash": "1443d5987aed98c2",
+      "png": "psi2_screen.png"
+    },
+    "factor_common": {
+      "file": "factor_common.svg",
+      "width": 936.7,
+      "height": 122.83,
+      "baseline": 81.22,
+      "tex": "\\ket{\\psi_2} \\supset \\underbrace{\\isqtwo\\Big(\\VV + \\HH\\Big)}_{\\text{same for both slits, length } 1} \\otimes \\underbrace{\\isqtwo\\Big(e^{ika} + e^{ikb}\\Big)}_{\\mathcal{A}(y)}\\ket{y}_1\\ket{D}_2",
+      "hash": "2cffc6f325bbcd6a",
+      "png": "factor_common.png"
+    },
+    "trace_rule": {
+      "file": "trace_rule.svg",
+      "width": 1391.07,
+      "height": 51.86,
+      "baseline": 13.92,
+      "tex": "I(y) \\;\\propto\\; \\big|\\mathcal{A}_{\\V}(y)\\big|^{2} + \\big|\\mathcal{A}_{\\H}(y)\\big|^{2} \\qquad \\text{(D}_1\\text{ never asks the idler: both idler outcomes are added)}",
+      "hash": "bfb32b0294675199",
+      "png": "trace_rule.png"
+    },
+    "path_difference": {
+      "file": "path_difference.svg",
+      "width": 215.9,
+      "height": 74.43,
+      "baseline": 24.83,
+      "tex": "a - b \\approx \\frac{d\\cdot y}{L}.",
+      "hash": "cddf29e94573fd33",
+      "png": "path_difference.png"
+    },
+    "spatial_amplitude": {
+      "file": "spatial_amplitude.svg",
+      "width": 445.42,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\mathcal{A}(y) = \\isqtwo\\Big(e^{ika(y)} + e^{ikb(y)}\\Big).",
+      "hash": "a5cb1cf5819f3d0b",
+      "png": "spatial_amplitude.png"
+    },
+    "intensity_derivation": {
+      "file": "intensity_derivation.svg",
+      "width": 1223.54,
+      "height": 74.86,
+      "baseline": 25.26,
+      "tex": "I(y) \\propto |\\mathcal{A}(y)|^{2} = \\half\\big|e^{ika} + e^{ikb}\\big|^{2} = \\half\\Big(2 + 2\\cos\\big(k(a-b)\\big)\\Big) = 1 + \\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big).",
+      "hash": "02f50960c5bb851a",
+      "png": "intensity_derivation.png"
+    },
+    "intensity_boxed_51": {
+      "file": "intensity_boxed_51.svg",
+      "width": 395.1,
+      "height": 94.19,
+      "baseline": 34.93,
+      "tex": "\\boxed{\\,I(y) \\propto 1 + \\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big)\\,}",
+      "hash": "067d04ee9cba5841",
+      "png": "intensity_boxed_51.png"
+    },
+    "psi1_expanded": {
+      "file": "psi1_expanded.svg",
+      "width": 1239.92,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_1} = \\half\\Big(\\VV\\ket{A}_1 + \\VV\\ket{B}_1 + \\HH\\ket{A}_1 + \\HH\\ket{B}_1\\Big) \\otimes \\ket{S}_2 .",
+      "hash": "b39f24b4498a8a0e",
+      "png": "psi1_expanded.png"
+    },
+    "psi2_filtered_lost": {
+      "file": "psi2_filtered_lost.svg",
+      "width": 1436.77,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_2} = \\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\otimes\\ket{S}_2 + \\half\\Big(\\HH\\ket{A}_1 + \\VV\\ket{B}_1\\Big)\\otimes\\lost .",
+      "hash": "b0f59dec3128f405",
+      "png": "psi2_filtered_lost.png"
+    },
+    "survival_half": {
+      "file": "survival_half.svg",
+      "width": 1202.56,
+      "height": 69.1,
+      "baseline": 23.5,
+      "tex": "\\text{Prob(photon survives)} = \\Big\\|\\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\Big\\|^{2} = \\tfrac{1}{4} + \\tfrac{1}{4} = \\half",
+      "hash": "f5b4dfd45d91b8ee",
+      "png": "survival_half.png"
+    },
+    "psi2_filtered": {
+      "file": "psi2_filtered.svg",
+      "width": 756.54,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_2} \\rightarrow \\half\\Big(\\VV\\ket{A}_1 + \\HH\\ket{B}_1\\Big)\\otimes\\ket{S}_2 .",
+      "hash": "8e226e91529f57a6",
+      "png": "psi2_filtered.png"
+    },
+    "which_path_idler": {
+      "file": "which_path_idler.svg",
+      "width": 1203.39,
+      "height": 39.07,
+      "baseline": 11.12,
+      "tex": "\\text{Idler } \\ket{\\V}_2 \\Rightarrow \\text{signal went through } A, \\qquad \\text{Idler } \\ket{\\H}_2 \\Rightarrow \\text{signal went through } B.",
+      "hash": "26af798108e8c93f",
+      "png": "which_path_idler.png"
+    },
+    "psi3_screen_52": {
+      "file": "psi3_screen_52.svg",
+      "width": 994.43,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_3} = \\cdots + \\half\\Big(e^{ika}\\VV + e^{ikb}\\HH\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+      "hash": "d891c9074be6ef20",
+      "png": "psi3_screen_52.png"
+    },
+    "cross_term_rule": {
+      "file": "cross_term_rule.svg",
+      "width": 1185.12,
+      "height": 69.1,
+      "baseline": 23.5,
+      "tex": "\\Big|\\isqtwo\\Big(e^{ika}\\ket{\\chi_A} + e^{ikb}\\ket{\\chi_B}\\Big)\\Big|^{2} = 1 + \\braket{\\chi_A}{\\chi_B}\\,\\cos\\big(k(a-b)\\big) \\qquad (\\text{real overlap})",
+      "hash": "dd251168bbce9db8",
+      "png": "cross_term_rule.png"
+    },
+    "visibility_rule": {
+      "file": "visibility_rule.svg",
+      "width": 680.37,
+      "height": 187.81,
+      "baseline": 84.85,
+      "tex": "\\begin{aligned} V &= \\big|\\braket{\\chi_A}{\\chi_B}\\big| \\\\ \\text{5.1:}\\quad \\chi_A = \\chi_B &\\;\\Rightarrow\\; V = 1 \\\\ \\text{5.2:}\\quad \\braket{\\V_1\\V_2}{\\H_1\\H_2} &= 0 \\;\\Rightarrow\\; V = 0 \\\\ \\text{5.3:}\\quad \\braket{\\diag_1\\,\\V_2}{\\diag_1\\,\\H_2} &= 1\\cdot 0 \\;\\Rightarrow\\; V = 0 \\end{aligned}",
+      "hash": "2d07effe4e141eb9",
+      "png": "visibility_rule.png"
+    },
+    "intensity_sum_52": {
+      "file": "intensity_sum_52.svg",
+      "width": 639.58,
+      "height": 65.92,
+      "baseline": 20.32,
+      "tex": "I(y) \\propto \\Big|\\half e^{ika}\\Big|^{2} + \\Big|\\half e^{ikb}\\Big|^{2} = \\tfrac{1}{4} + \\tfrac{1}{4} = \\half.",
+      "hash": "51219bc1d475a294",
+      "png": "intensity_sum_52.png"
+    },
+    "intensity_boxed_52": {
+      "file": "intensity_boxed_52.svg",
+      "width": 547.49,
+      "height": 55.54,
+      "baseline": 18.72,
+      "tex": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+      "hash": "7b0a9bc19be15c15",
+      "png": "intensity_boxed_52.png"
+    },
+    "path_tags_52": {
+      "file": "path_tags_52.svg",
+      "width": 720.3,
+      "height": 39.07,
+      "baseline": 11.12,
+      "tex": "\\text{Path } A:\\; \\VV \\qquad\\qquad \\text{Path } B:\\; \\HH",
+      "hash": "c1f026e04f18eca1",
+      "png": "path_tags_52.png"
+    },
+    "exp3_vs_exp5": {
+      "file": "exp3_vs_exp5.svg",
+      "width": 1161.09,
+      "height": 132.96,
+      "baseline": 57.44,
+      "tex": "\\begin{aligned} \\text{Exp. 3:}\\quad e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V} \\;&\\xrightarrow{\\;P_1 = 45^{\\circ}\\;}\\; \\big(e^{ika} + e^{ikb}\\big)\\ket{\\diag} \\\\ \\text{Exp. 5:}\\quad e^{ika}\\VV + e^{ikb}\\HH \\;&\\xrightarrow{\\;P_1 = 45^{\\circ}\\;}\\; \\ket{\\diag}_1\\big(e^{ika}\\ket{\\V}_2 + e^{ikb}\\ket{\\H}_2\\big) \\end{aligned}",
+      "hash": "3a597095ce0437d8",
+      "png": "exp3_vs_exp5.png"
+    },
+    "psi1_53": {
+      "file": "psi1_53.svg",
+      "width": 994.43,
+      "height": 65.12,
+      "baseline": 23.5,
+      "tex": "\\ket{\\psi_1} = \\cdots + \\half\\Big(e^{ika}\\VV + e^{ikb}\\HH\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+      "hash": "c13cadb44ff07a09",
+      "png": "psi1_53.png"
+    },
+    "p1_projection": {
+      "file": "p1_projection.svg",
+      "width": 595.89,
+      "height": 52.66,
+      "baseline": 21.34,
+      "tex": "\\ket{\\V} \\rightarrow \\isqtwo\\ket{\\diag}, \\qquad \\ket{\\H} \\rightarrow \\isqtwo\\ket{\\diag}.",
+      "hash": "8c3184a0238f92d0",
+      "png": "p1_projection.png"
+    },
+    "psi2_53": {
+      "file": "psi2_53.svg",
+      "width": 1127.12,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_2} = \\cdots + \\frac{1}{2\\sqrt{2}}\\Big(e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 + e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2\\Big)\\otimes\\ket{y}_1\\otimes\\ket{D}_2 + \\cdots",
+      "hash": "5166fa16a70fcee0",
+      "png": "psi2_53.png"
+    },
+    "path_tags_53": {
+      "file": "path_tags_53.svg",
+      "width": 907.31,
+      "height": 43.84,
+      "baseline": 11.12,
+      "tex": "\\text{Path } A:\\; e^{ika}\\ket{\\diag}_1\\ket{\\V}_2 \\qquad\\qquad \\text{Path } B:\\; e^{ikb}\\ket{\\diag}_1\\ket{\\H}_2",
+      "hash": "a006a7eecc3e16a2",
+      "png": "path_tags_53.png"
+    },
+    "intensity_sum_53": {
+      "file": "intensity_sum_53.svg",
+      "width": 748.14,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "I(y) \\propto \\Big|\\frac{1}{2\\sqrt{2}}e^{ika}\\Big|^{2} + \\Big|\\frac{1}{2\\sqrt{2}}e^{ikb}\\Big|^{2} = \\tfrac{1}{8} + \\tfrac{1}{8} = \\tfrac{1}{4}.",
+      "hash": "da52a657e46ab491",
+      "png": "intensity_sum_53.png"
+    },
+    "intensity_boxed_53": {
+      "file": "intensity_boxed_53.svg",
+      "width": 547.49,
+      "height": 55.54,
+      "baseline": 18.72,
+      "tex": "\\boxed{\\,I(y) = \\text{constant (no interference)}\\,}",
+      "hash": "7b0a9bc19be15c15",
+      "png": "intensity_boxed_53.png"
+    },
+    "visibility_angles": {
+      "file": "visibility_angles.svg",
+      "width": 947.04,
+      "height": 50.61,
+      "baseline": 12.67,
+      "tex": "V = \\big|\\braket{\\theta_A}{\\theta_B}\\big|^{2} = \\cos^{2}(\\theta_A - \\theta_B) \\qquad\\text{(entangled pairs, no } P_1\\text{)}",
+      "hash": "01df45624e7de0a2",
+      "png": "visibility_angles.png"
+    },
+    "p2_eraser_preview": {
+      "file": "p2_eraser_preview.svg",
+      "width": 1255.01,
+      "height": 74.86,
+      "baseline": 25.26,
+      "tex": "I_{c}(y) \\propto \\tfrac{1}{8}\\Big[1 + \\sin(2\\theta)\\,\\cos\\Big(\\frac{2\\pi d y}{\\lambda L}\\Big)\\Big] \\qquad\\text{(coincidences, } P_2 \\text{ at angle } \\theta \\text{ on the idler)}",
+      "hash": "afaa4625e9a1019c",
+      "png": "p2_eraser_preview.png"
+    }
+  }
+}

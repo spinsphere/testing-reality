@@ -1,0 +1,849 @@
+{
+  "$comment": "Experiment 5: Putting it all together (entangled pairs through the marked double slit; 5.1 bare slit, 5.2 marked slits, 5.3 local eraser). Transcribed from docs/content/06-experiment-5-putting-it-all-together.md following docs/design/content-authoring.md. The site has no Literature and video content for this page, so that section is omitted. Angle convention of the site text: 0° = vertical, 90° = horizontal; the 3D lab's dials read from horizontal (PA shows 90°, PB 0°): same physics, A → ↕, B → ↔.",
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "Putting it all together",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This section presents experiments 5.1–5.3, which set up the puzzle that the quantum eraser will resolve in Experiment 6. Starting from the entanglement setup of Experiment 4, we add a double slit and polarizers on the signal path. The detector D_1 is mounted on a linear actuator to scan the diffraction and interference patterns."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.3_Diagram.png",
+              "height": 300,
+              "caption": "The full setup of Experiment 5.3. The pair source of Experiment 4 (LASER, conditioning optics, BBO crystals BB) sends the signal photon through the double slit, with PA on slit A and PB on slit B, then through a third polarizer P1 to the scanning detector D1. The idler photon is reflected by a mirror straight to D2. Both detectors feed the coincidence counter (\"coin\"). Ψ_0 … Ψ_6 mark the state at each stage."
+            },
+            {
+              "type": "text",
+              "text": "This section presents one of the most counterintuitive aspects of entanglement. If we reproduce the same experiment as Experiment 3 (double slit with polarizers), but using entangled photon pairs instead of single photons, the results change completely."
+            },
+            {
+              "type": "text",
+              "text": "We proceed step by step, adding one component at a time to observe how each affects the final pattern. For details on the entanglement source and BBO crystal, refer to Experiment 4. The development is split into three parts:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]5.1[/b]: Double slit only. We observe interference.",
+                "[b]5.2[/b]: Orthogonal polarizers on each slit. Interference disappears due to which-path information.",
+                "[b]5.3[/b]: A third polarizer at 45°. Surprisingly, interference does [i]not[/i] return."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "The key puzzle",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "The local eraser fails",
+              "text": "In Experiment 3, the third polarizer restored interference by erasing which-path information. With entangled photons, it fails. Same double slit, same two slit polarizers, same 45° polarizer after them, and yet the fringes stay away. The which-path information is no longer stored in the signal photon's polarization. Instead, it is encoded in the [i]idler[/i] photon, which never goes anywhere near the slits. No local operation on the signal path can erase it."
+            },
+            {
+              "type": "text",
+              "text": "Keep this question in mind as you read: if the signal photon's polarization has been made identical for both slits, what is left to tell the two paths apart?"
+            },
+            {
+              "type": "subheading",
+              "text": "Try it yourself!"
+            },
+            {
+              "type": "text",
+              "text": "Here is a simulation of Experiment 5. The source emits entangled pairs; the signal photon meets the double slit whose slits carry the markers (A → ↕, B → ↔) and then the eraser P1, while the idler flies to D2. The purple curve shows the singles at D1, the second curve the D1·D2 coincidences. Untick [b]markers[/b] to get 5.1, tick them for 5.2, and tick [b]P1 in[/b] at 45° for 5.3. Leave the idler polarizer P2 [i]out[/i] for now: that is Experiment 6."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/eraser_widget.tscn",
+              "params": {
+                "p1_angle": 45,
+                "entangled": true
+              },
+              "height": 400
+            },
+            {
+              "type": "text",
+              "text": "Things to try: with the markers on, toggle P1 in and out and rotate it to 0°, 45°, 90°, −45°. In Experiment 3 the 45° setting brought the fringes back; here the curve only changes height. Then examine the real results below."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "Exp 5.1: Adding the double slit",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "We start with the same setup as in Experiment 4, but remove the two polarizers in front of the detectors (they were only needed to verify the polarization state). Detector D_1 is mounted on a linear actuator to scan the full pattern."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.1_Diagram.png",
+              "height": 300,
+              "caption": "Setup for Experiment 5.1: double slit with entangled photons and no polarizers. Ψ_0 just after the laser, Ψ_1 after the BBO crystals, Ψ_2 at the double slit, Ψ_3 at the detectors. The hatched disc after the laser stands for the beam-conditioning optics of Experiment 4 (lenses, half-wave plate, beam splitter)."
+            },
+            {
+              "type": "text",
+              "text": "From the BBO crystals the two photons of a pair leave in different directions. The upper one, the [b]idler[/b], is sent by a mirror straight to the fixed detector D_2. The lower one, the [b]signal[/b], reaches the double slit and, from there, the scanning detector D_1. A coincidence counter records the events where D_1 and D_2 both click within a 10 ns window."
+            },
+            {
+              "type": "subheading",
+              "text": "Graphics"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/double_slit.png",
+              "height": 320,
+              "caption": "The home-made double slit: a clear acrylic plate held by four hex bolts over a thin metal foil with a stadium-shaped aperture. The two fine vertical lines inside the aperture are the slits (200 μm wide, 200 μm apart). The plate sits on a rotation mount on the optical breadboard."
+            }
+          ]
+        },
+        {
+          "title": "Exp 5.2: Covering the slits with polarizers",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "We place a vertical polarizer (P_A at 0°) in front of slit A and a horizontal polarizer (P_B at 90°) in front of slit B. This encodes which-path information in the polarization."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.2_Diagram.png",
+              "height": 300,
+              "caption": "Setup for Experiment 5.2: double slit with orthogonal polarizers and entangled photons. PA (horizontal hatching, 0° = vertical transmission) sits on slit A, PB (vertical hatching, 90° = horizontal transmission) on slit B. The idler path to D2 is unchanged. Ψ_3 is the state just after PA/PB, Ψ_4 at the detectors."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Angles on this page",
+              "text": "The site measures polarizer angles from the vertical: 0° means the polarizer transmits |↕⟩, 90° means it transmits |↔⟩. The dials in this chapter's 3D lab read from the horizontal instead, so there PA shows 90° and PB 0°. The physics is the same either way: slit A is tagged with ↕, slit B with ↔."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/slit_exp4.png",
+              "height": 320,
+              "caption": "The double slit covered by two polarizers, with a close-up of the two film polarizers meeting over the slits."
+            }
+          ]
+        },
+        {
+          "title": "Exp 5.3: Adding a third polarizer",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "We now add a third polarizer at 45° after the double slit, just as we did in Experiment 3."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.3_Diagram.png",
+              "height": 300,
+              "caption": "Setup for Experiment 5.3: double slit with orthogonal polarizers, a third polarizer, and entangled photons. P1 (diagonal hatching, 45°) sits on the signal path only, where the two slit rays have nearly merged; the idler path still has no polarizer. Ψ_4 is the state just before P1, Ψ_5 just after it, Ψ_6 at the detectors."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/P1.png",
+              "height": 320,
+              "caption": "The addition of P1 after the double slit. The double slit is hidden behind the lens mounts; P1 sits in a rotatable mount on the right."
+            },
+            {
+              "type": "table",
+              "header": [
+                "Name",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "LASER",
+                  "Diode laser (405 nm) pumping the pair source of Experiment 4"
+                ],
+                [
+                  "BBO",
+                  "Two thin BBO crystals of type 1 placed at 90°, producing the Bell state |Φ⁺⟩"
+                ],
+                [
+                  "Double slit",
+                  "Dimension (200-200-200 μm), made in-house"
+                ],
+                [
+                  "Polarizers",
+                  "Mounted linear polarizers: PA, PB on the slits, P1 in a rotation mount"
+                ],
+                [
+                  "Lenses",
+                  "Plano-convex lenses, f = 50 cm in each path (L4 signal, L5 idler)"
+                ],
+                [
+                  "Detectors",
+                  "Single photon detection modules; D1 on a motorised linear actuator, D2 fixed"
+                ],
+                [
+                  "Coincidence counter",
+                  "Counts D1, D2 and D1·D2 coincidences within a 10 ns window, in 20-second acquisitions"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "5.1: No polarizers",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/nolpol_A.png",
+              "height": 300,
+              "caption": "Number of counts on D1 per second, no polarizer. Grey dashed: theory. Blue: fit of the data. Black dots: our data. A clear three-lobe interference pattern over a background of about 180 counts/s."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/nolpol_AB.png",
+              "height": 300,
+              "caption": "Number of coincidences (D1-D2) per second, no polarizer. The same shape as the singles, with a central peak of about 7.7 coincidences/s."
+            },
+            {
+              "type": "text",
+              "text": "Both graphs show a clear interference pattern. The right graph has fewer counts because it records only coincidences: events where D_1 and D_2 both detect a photon within a 10 ns window."
+            },
+            {
+              "type": "text",
+              "text": "As expected, a double slit produces interference."
+            },
+            {
+              "type": "subheading",
+              "text": "Raw data"
+            },
+            {
+              "type": "text",
+              "text": "The data file data5_1.csv contains seven columns: polarizer angle 1 (not applicable here), polarizer angle 2 (not applicable here), actuator position, sweep number, counts at D_1, counts at D_2, and coincidences between D_1 and D_2. All counts are recorded over 20-second windows; the plots show counts per second."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "The raw data in the lab",
+              "text": "The three data files (5.1, 5.2, 5.3) are loaded into this chapter's lab, each as a singles overlay and a coincidence overlay. Switch on an overlay on the D1 plot and run your own scan over it to compare."
+            }
+          ]
+        },
+        {
+          "title": "5.2: PA + PB",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/4.2_A.png",
+              "height": 300,
+              "caption": "Number of counts on D1 per second with PA and PB. A single smooth bell, no fringes; the peak is about 320 counts/s."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/4.2_AB.png",
+              "height": 300,
+              "caption": "Number of coincidences (D1-D2) per second with PA and PB. A noisy bell peaking at about 1 coincidence/s."
+            },
+            {
+              "type": "text",
+              "text": "Interference has disappeared. As in Experiment 3, orthogonal polarizers on each slit make the paths distinguishable, destroying interference. We observe only diffraction (the sum of two single-slit patterns)."
+            },
+            {
+              "type": "text",
+              "text": "The count rate also drops significantly because each polarizer blocks half the photons."
+            },
+            {
+              "type": "subheading",
+              "text": "Raw data"
+            },
+            {
+              "type": "text",
+              "text": "You can download the data as data5_2.csv. The column format is identical to Exp 5.1. All counts are recorded over 20-second windows."
+            }
+          ]
+        },
+        {
+          "title": "5.3: PA + PB + P1",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/4.3A.png",
+              "height": 300,
+              "caption": "Number of counts on D1 per second with PA, PB and P1 at 45°. A broad bell, no fringes, peaking near 200 counts/s. The whole pattern is shifted to positive y compared with 5.1 and 5.2."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/4.3AB.png",
+              "height": 300,
+              "caption": "Number of coincidences (D1-D2) per second with PA, PB and P1. Still a bell, now peaking at about 0.35 coincidences/s."
+            },
+            {
+              "type": "text",
+              "text": "This result is surprising. In Experiment 3 (with non-entangled photons), the 45° polarizer restored interference by erasing which-path information. Here, with entangled photons, interference does [i]not[/i] return."
+            },
+            {
+              "type": "text",
+              "text": "By \"losing interference\", we mean that each slit acts as an independent single slit. The observed pattern is the sum of two diffraction envelopes, with no oscillating fringes."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Is that real?",
+              "text": "Three things in these plots are not in the ideal theory. The 5.3 pattern is centred about half a millimetre to the right of the others: the alignment moved when P1 was inserted. The coincidence peak drops by a factor of about 8 from 5.1 to 5.2 and by 3 from 5.2 to 5.3, more than the ideal halving each time: the central peak of a fringe pattern is twice its envelope, and real film polarizers pass less than 100 % of the matching polarization. And the 5.1 fringes do not reach the floor: the visibility is partial, as in Experiment 3. None of this changes the conclusion: no fringes in 5.2, and still none in 5.3."
+            },
+            {
+              "type": "subheading",
+              "text": "Raw data"
+            },
+            {
+              "type": "text",
+              "text": "You can download the data as data5_3.csv. The column format is identical to the previous experiments; the first two columns (polarizer angles) can be ignored. All counts are recorded over 20-second windows."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Experiment 5.1: No polarizers",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "In this experiment, entangled photon pairs pass through a double slit with no polarizers. We track both polarization and position."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. Initial entangled state"
+            },
+            {
+              "type": "text",
+              "text": "The BBO crystal produces polarization-entangled pairs in the Bell state |Φ⁺⟩. Using subscript 1 for the signal photon and 2 for the idler:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_state"
+            },
+            {
+              "type": "text",
+              "text": "The signal photon travels toward the double slit. The idler travels directly to detector D_2."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 2. Signal photon at the double slit"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "A longer \"and\" list: polarization ⊗ signal path ⊗ idler",
+              "text": "In Experiment 3 a state was a two-entry list, |pol⟩|path⟩, read as \"polarization [i]and[/i] position\". Now there are two photons, so the list gets longer: the signal's polarization, the idler's polarization, the signal's position (slit A or B) and the idler's position. The symbol ⊗ between entries just means \"and\". The rules do not change with the length of the list: a sum in one entry is distributed over the others, and a device acting on one entry (a slit on the signal's position, a polarizer on one photon's polarization) leaves every other entry alone. Try it below: choose amplitudes for the polarization pair and for the slit, and watch the product expand into four terms."
+            },
+            {
+              "type": "equation",
+              "id": "and_list_three",
+              "caption": "One term of the list, entry by entry."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/tensor_widget.tscn",
+              "params": {
+                "left": [
+                  "↕↕",
+                  "↔↔"
+                ],
+                "right": [
+                  "A",
+                  "B"
+                ]
+              },
+              "height": 340
+            },
+            {
+              "type": "text",
+              "text": "The signal photon can pass through slit A or slit B, entering a spatial superposition. The full state (polarization ⊗ signal position ⊗ idler position) is:"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_full"
+            },
+            {
+              "type": "text",
+              "text": "Here |A⟩_1 and |B⟩_1 denote the signal photon's position at slit A or B, and |S⟩_2 is the idler's position (traveling toward D_2). The symbol ⊗ just means \"and\": we are combining polarization and position into one complete description."
+            }
+          ]
+        },
+        {
+          "title": "Propagation and detection (5.1)",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "Step 3. Propagation to detectors"
+            },
+            {
+              "type": "text",
+              "text": "The signal photon propagates from each slit to position y on the detection screen. The path lengths differ: distance a from slit A, distance b from slit B. Each path acquires a phase factor, exactly as in Experiment 2:"
+            },
+            {
+              "type": "equation",
+              "id": "propagation_signal"
+            },
+            {
+              "type": "text",
+              "text": "The idler propagates distance m to detector D_2:"
+            },
+            {
+              "type": "equation",
+              "id": "propagation_idler"
+            },
+            {
+              "type": "text",
+              "text": "After the propagation on the screen, the full state is decomposed as a sum of various terms at different locations. Making explicit one such location, the state becomes:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_screen"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 4. Detection probability at D_1"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Tracing over the partner: what D_1 alone can show",
+              "text": "D_1 is a plain detector: it clicks for a signal photon at y whatever its polarization, and it knows nothing about the idler. So the singles rate at y is the probability of \"signal at y [i]and[/i] idler in any state\", which by the rule for distinguishable outcomes is a sum: the probability with the idler ↕ plus the probability with the idler ↔. Physicists call this [i]tracing over[/i] the partner. Two consequences follow. First, a factor of the list that is the same for both slits has length 1 and simply drops out of the probability. Second, if the two slits come attached to [i]different[/i], perpendicular idler states, the two contributions are added as probabilities, never as amplitudes."
+            },
+            {
+              "type": "equation",
+              "id": "trace_rule"
+            },
+            {
+              "type": "text",
+              "text": "To find the probability of detecting the signal photon at position y, we compute the squared amplitude. The key observation: both polarization terms (|↕↕⟩ and |↔↔⟩) have [i]identical[/i] spatial amplitudes. The polarization does not encode any which-path information."
+            },
+            {
+              "type": "equation",
+              "id": "factor_common",
+              "caption": "The polarization pair factors out of the sum over the two slits. It has unit length, so only the spatial amplitude 𝒜(y) matters."
+            },
+            {
+              "type": "text",
+              "text": "The path lengths a and b depend on the detection position y. Using the path-difference geometry from Experiment 2:"
+            },
+            {
+              "type": "equation",
+              "id": "path_difference"
+            },
+            {
+              "type": "text",
+              "text": "The spatial amplitude is:"
+            },
+            {
+              "type": "equation",
+              "id": "spatial_amplitude"
+            },
+            {
+              "type": "text",
+              "text": "The intensity (proportional to the squared amplitude) is:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_derivation"
+            },
+            {
+              "type": "text",
+              "text": "This is the standard double-slit interference pattern:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_boxed_51"
+            },
+            {
+              "type": "text",
+              "text": "The intensity oscillates between 0 (destructive interference) and a maximum of 2 (constructive interference), with fringe spacing Δy = λL/d. We omit the single-slit diffraction envelope here for clarity."
+            },
+            {
+              "type": "subheading",
+              "text": "Interpretation"
+            },
+            {
+              "type": "text",
+              "text": "Without polarizers at the slits, the paths remain indistinguishable. Both polarization components (|↕↕⟩ and |↔↔⟩) traverse both slits with identical amplitudes. The entanglement does not destroy interference because no which-path information is encoded anywhere."
+            },
+            {
+              "type": "text",
+              "text": "This matches our experimental observation: clear interference fringes in both singles and coincidences."
+            }
+          ]
+        },
+        {
+          "title": "Experiment 5.2: Adding polarizers",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.2_Diagram.png",
+              "height": 260,
+              "caption": "Setup for Experiment 5.2: double slit with orthogonal polarizers and entangled photons."
+            },
+            {
+              "type": "text",
+              "text": "We place a vertical polarizer (0°) in front of slit A and a horizontal polarizer (90°) in front of slit B. This encodes which-path information in the polarization."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. Initial entangled state"
+            },
+            {
+              "type": "text",
+              "text": "As before, the BBO produces the Bell state, and before the polarizers the signal photon is in a spatial superposition of both slits:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_state"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_full"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 2. Polarizer filtering"
+            },
+            {
+              "type": "text",
+              "text": "The polarizers act as filters, not state assigners. Each polarizer transmits only the matching polarization component:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Vertical polarizer at A: transmits |↕⟩_1, blocks |↔⟩_1",
+                "Horizontal polarizer at B: transmits |↔⟩_1, blocks |↕⟩_1"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Expanding the state before filtering (distributing the polarization pair over the two slits):"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_expanded"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Filtering with |lost⟩, then dropping it",
+              "text": "A polarizer does not rotate the photon's polarization; it keeps the matching entry of the list and sends the other one to the bookkeeping state |lost⟩, which is perpendicular to everything else. Of the four terms above, the vertical polarizer on slit A keeps the ↕↕ term and loses the ↔↔ term; the horizontal polarizer on slit B does the opposite. Two terms survive, each with amplitude ½, so the surviving probability is ¼ + ¼ = ½: half the photons are gone, as the lab's count rates confirm. Since lost photons never reach a detector, we drop the |lost⟩ term from the algebra and keep the surviving half, remembering that its length-squared is ½, not 1."
+            },
+            {
+              "type": "text",
+              "text": "After filtering, the blocked components are absorbed:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_filtered_lost"
+            },
+            {
+              "type": "equation",
+              "id": "survival_half",
+              "caption": "The surviving part has length-squared ½: each polarizer blocks half the photons."
+            },
+            {
+              "type": "text",
+              "text": "The |lost⟩ term represents photons blocked by the polarizers, half the total. Since these do not reach the detector, we drop them from subsequent analysis:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_filtered"
+            }
+          ]
+        },
+        {
+          "title": "The key insight: which-path information",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "Step 3. The key insight"
+            },
+            {
+              "type": "text",
+              "text": "Look carefully at the surviving state. The polarization is now perfectly correlated with the slit:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "|↕⟩_1|↕⟩_2|A⟩_1: signal is vertical, idler is vertical, path is slit A",
+                "|↔⟩_1|↔⟩_2|B⟩_1: signal is horizontal, idler is horizontal, path is slit B"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The idler photon's polarization now reveals which slit the signal photon passed through:"
+            },
+            {
+              "type": "equation",
+              "id": "which_path_idler"
+            },
+            {
+              "type": "text",
+              "text": "This is which-path information, encoded in the entangled partner."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 4. Propagation to detector"
+            },
+            {
+              "type": "text",
+              "text": "The signal photon propagates to position y on the screen, with path lengths a (from slit A) and b (from slit B):"
+            },
+            {
+              "type": "equation",
+              "id": "psi3_screen_52"
+            }
+          ]
+        },
+        {
+          "title": "Why the fringes disappear (5.2)",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "Step 5. Detection intensity"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Identical tags interfere, orthogonal tags do not",
+              "text": "Write each slit's amplitude as a phase arrow times a \"tag\", the state of everything else on the list: |χ_A⟩ for slit A and |χ_B⟩ for slit B. Squaring the sum of the two arrows gives the usual 1 + cos, but the cosine is multiplied by the overlap ⟨χ_A|χ_B⟩ of the two tags. In 5.1 the tags were identical, overlap 1, full fringes. Here the tags are |↕⟩_1|↕⟩_2 and |↔⟩_1|↔⟩_2, which are perpendicular: overlap 0, and the cosine term, where the fringes live, is wiped out. Perpendicular means distinguishable, and Pythagoras then says that the two probabilities simply add. The overlap is the fringe [i]visibility[/i]: it is the one number to compute in every version of this experiment."
+            },
+            {
+              "type": "equation",
+              "id": "cross_term_rule",
+              "caption": "Two equal-size arrows with tags: the overlap of the tags multiplies the cosine."
+            },
+            {
+              "type": "equation",
+              "id": "visibility_rule",
+              "caption": "The fringe visibility V is the overlap of the two tags. Keep this for 5.3: the third line is computed there."
+            },
+            {
+              "type": "text",
+              "text": "To find the intensity at position y, we compute the squared amplitude. The key observation: the two terms correspond to orthogonal polarization states of the idler (|↕⟩_2 vs. |↔⟩_2)."
+            },
+            {
+              "type": "text",
+              "text": "Orthogonal states cannot combine: they remain distinct contributions that add independently. This means the phases e^{ika} and e^{ikb} never add or cancel. Each term contributes its own intensity:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_sum_52"
+            },
+            {
+              "type": "text",
+              "text": "The intensity is independent of position y:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_boxed_52"
+            },
+            {
+              "type": "text",
+              "text": "There are no oscillating fringes. The observed pattern is the sum of two single-slit diffraction envelopes."
+            },
+            {
+              "type": "subheading",
+              "text": "Interpretation"
+            },
+            {
+              "type": "text",
+              "text": "The polarizers have tagged each path with a distinct polarization, and because the photons are entangled, this tagging is mirrored in the idler:"
+            },
+            {
+              "type": "equation",
+              "id": "path_tags_52"
+            },
+            {
+              "type": "text",
+              "text": "The idler states |↕⟩_2 and |↔⟩_2 are orthogonal, so these two terms in the wavefunction cannot recombine. The phases e^{ika} and e^{ikb} contribute independently; they never add constructively or cancel destructively. This is the physical origin of the lost interference."
+            },
+            {
+              "type": "text",
+              "text": "Compare to Experiment 3 (non-entangled photons): there, the which-path information was stored only in the signal photon's polarization, and a 45° polarizer could erase it. Here, the distinguishing property is in the [i]idler[/i], beyond our reach on the signal path."
+            }
+          ]
+        },
+        {
+          "title": "Experiment 5.3: Adding a third polarizer",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/exp4.3_Diagram.png",
+              "height": 260,
+              "caption": "Setup for Experiment 5.3: double slit with orthogonal polarizers, a third polarizer, and entangled photons."
+            },
+            {
+              "type": "text",
+              "text": "We now add a 45° polarizer after the double slit, just as we did in Experiment 3. With non-entangled photons, this restored interference. Will it work here?"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. State after the slit polarizers"
+            },
+            {
+              "type": "text",
+              "text": "From Exp 5.2, after the orthogonal polarizers at the slits and propagation to position y:"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_53"
+            },
+            {
+              "type": "text",
+              "text": "The signal polarization is correlated with the path, and this correlation is mirrored in the idler."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 2. Applying the 45° polarizer"
+            },
+            {
+              "type": "text",
+              "text": "The 45° (diagonal) polarizer projects both |↕⟩ and |↔⟩ onto |↗↙⟩, each with amplitude 1/√2 (the cosine of 45°, as in Experiment 1):"
+            },
+            {
+              "type": "equation",
+              "id": "p1_projection"
+            },
+            {
+              "type": "text",
+              "text": "After the polarizer, the signal photon's polarization is |↗↙⟩_1 for both paths. P1 acts on the signal's polarization entry only; the idler's entry rides along untouched. The state becomes:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_53"
+            }
+          ]
+        },
+        {
+          "title": "Why interference still fails",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "Step 3. Why interference still fails"
+            },
+            {
+              "type": "text",
+              "text": "At first glance, the signal photon now has the same polarization |↗↙⟩_1 regardless of which slit it passed through. In Experiment 3, this was enough to restore interference."
+            },
+            {
+              "type": "text",
+              "text": "But look at the full state. The two amplitudes are:"
+            },
+            {
+              "type": "equation",
+              "id": "path_tags_53"
+            },
+            {
+              "type": "text",
+              "text": "The signal polarizations are now identical. But the [b]idler polarizations are still orthogonal[/b]: |↕⟩_2 and |↔⟩_2 are perpendicular states that cannot combine."
+            },
+            {
+              "type": "equation",
+              "id": "exp3_vs_exp5",
+              "caption": "Side by side. In Experiment 3 the 45° polarizer leaves one common ket in front of the sum of phases. In Experiment 5 it leaves a common signal ket, but the idler kets still sit inside the sum, one per slit."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 4. Computing the detection intensity"
+            },
+            {
+              "type": "text",
+              "text": "For interference to occur, the two path amplitudes must be indistinguishable in [i]every[/i] degree of freedom. Here, they differ in the idler's polarization. In the language of the check-in above: the tags are |↗↙⟩_1|↕⟩_2 and |↗↙⟩_1|↔⟩_2, and their overlap is 1 · 0 = 0."
+            },
+            {
+              "type": "text",
+              "text": "Because the idler states are orthogonal, the two terms contribute independently to the intensity. The phases e^{ika} and e^{ikb} never add or cancel; each term contributes its own intensity separately:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_sum_53"
+            },
+            {
+              "type": "text",
+              "text": "The cross-terms that would produce interference (containing e^{i(ka−kb)} and e^{−i(ka−kb)}) vanish because they multiply orthogonal idler states."
+            },
+            {
+              "type": "equation",
+              "id": "intensity_boxed_53"
+            },
+            {
+              "type": "subheading",
+              "text": "Interpretation"
+            },
+            {
+              "type": "text",
+              "text": "The 45° polarizer erased the which-path information from the [i]signal[/i] photon. But the information still exists in the [i]idler[/i] photon:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Idler is |↕⟩_2 ⇒ signal came through slit A",
+                "Idler is |↔⟩_2 ⇒ signal came through slit B"
+              ]
+            },
+            {
+              "type": "text",
+              "text": "No operation on the signal path alone can erase information stored in the idler. The which-path information has been \"exported\" to the entangled partner, where it remains intact."
+            },
+            {
+              "type": "text",
+              "text": "This is the fundamental difference from Experiment 3: with non-entangled photons, all which-path information was local to the signal photon, so a local polarizer could erase it. With entangled photons, the information is also encoded in a remote system."
+            }
+          ]
+        },
+        {
+          "title": "What would restore interference?",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "To recover interference, we would need to erase the which-path information from the idler as well. This can be done by measuring the idler in the diagonal basis and post-selecting on the result. This is the quantum eraser protocol, explored in the next experiment."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp5/Exp5_Diagram.png",
+              "height": 280,
+              "caption": "A preview of Experiment 6: a polarizer P2 at 45° on the idler path, in front of D2. Nothing changes on the signal side."
+            },
+            {
+              "type": "equation",
+              "id": "p2_eraser_preview",
+              "caption": "Not on the original site: what the coincidences become with P2 at angle θ on the idler. At θ = 45° the fringes return in full, at −45° they are inverted, at 0° or 90° they stay flat. The singles at D1 stay flat whatever θ."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "Into the laboratory",
+              "text": "Your turn at the bench. The lab has the pair source of Experiment 4, the signal photon through L4 and the double slit with PA (slit A, ↕) and PB (slit B, ↔) toggles, the eraser P1 (45°) toggle and the scanning D1 with its pattern plot; the idler goes through L5 to D2. The results show two plots, D1 singles and D1·D2 coincidences, with our data as overlays.\n\n1. Preset [b]5.1 bare slit[/b]: PA, PB and P1 all out. Scan D1. Switch on the 5.1 singles and 5.1 coincidences overlays: fringes in both.\n2. Preset [b]5.2 marked slits[/b]: PA and PB in. Scan. Overlay 5.2: a smooth envelope, no fringes, and about half the counts.\n3. Preset [b]5.3 + P1 45°[/b]: P1 in. Scan. Overlay 5.3: still no fringes, counts halved again. Rotate P1 to 0°, 90°, −45°: only the height changes.\n4. Now make the two slit tags [b]not[/b] perpendicular: keep PA at ↕ and set PB to 45° (P1 out). Scan: partial fringes appear. Explain them with the visibility rule below, then check: ⟨↕|↗↙⟩ = cos 45° for the signal, the same for the idler copy, so V = ½. Compare with Experiment 3, where a single photon would give a different value.\n5. Prediction: PB at 30° from PA. Compute V = cos² 30° ≈ 0.75 before scanning, then scan and check the contrast."
+            },
+            {
+              "type": "equation",
+              "id": "visibility_angles",
+              "caption": "Not on the original site: with PA at angle θ_A and PB at θ_B (no P1), each slit's tag is |θ⟩_1|θ⟩_2, so the overlap is squared: V = cos²(θ_A − θ_B). It is 1 for parallel tags, 0 for perpendicular ones, ½ at 45°."
+            },
+            {
+              "type": "lab",
+              "label": "◆  Enter the Experiment 5 lab"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
