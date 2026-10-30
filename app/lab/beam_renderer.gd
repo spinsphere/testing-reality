@@ -32,10 +32,10 @@ func set_segments(segments: Array) -> void:
 		if not Palette.is_visible(nm):
 			color = Color(0.55, 0.08, 0.1)  # "visualised" infrared: deep red, dimmer
 			intensity *= 0.6
-		# core
-		_place(_pool[i], from, to, 0.0016, Color(color.lightened(0.45), 0.25 + 0.7 * intensity))
+		# core (alpha tracks the surviving fraction so a 12.5 % beam looks faint)
+		_place(_pool[i], from, to, 0.0016, Color(color.lightened(0.45), 0.04 + 0.9 * intensity))
 		# glow
-		_place(_pool[i + 1], from, to, 0.006, Color(color, 0.05 + 0.35 * intensity))
+		_place(_pool[i + 1], from, to, 0.006, Color(color, 0.02 + 0.4 * intensity))
 		i += 2
 
 
