@@ -12,3 +12,6 @@ __pycache__/
 # OS / editors
 .DS_Store
 *.swp
+
+# Built GDExtension binaries (tools/build-sdk.sh, tools/export.sh)
+app/addons/quagmire/bin/
