@@ -26,8 +26,8 @@ page-by-page source material.
 
 | # | Phase | Output | Status |
 |---|-------|--------|--------|
-| 0 | Ingest source PDFs, research, plan | `docs/content/*.md`, this plan, architecture doc | in progress |
-| 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | pending |
+| 0 | Ingest source PDFs, research, plan | `docs/content/*.md`, this plan, architecture doc | done |
+| 1 | Quagmire Engine core | `quagmire-engine/core` crate, tests with golden values from the site | done |
 | 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | pending |
 | 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | pending |
 | 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | pending |
@@ -45,22 +45,22 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] Install Blender 4.3.2 (apt), Godot 4.7.2 (`~/.local/bin/godot`) + export templates
 - [x] Install Rust toolchain (rustup), verify gdext 0.5.5 has `api-4-7`
 - [x] Verify MathJax (node) TeX → SVG works offline
-- [ ] Content specs written: `docs/content/00-home.md` … `08-experiment-7-detecting-not-recording.md`
+- [x] Content specs written: `docs/content/00-home.md` … `08-experiment-7-detecting-not-recording.md`
 - [ ] Review content specs, fix gaps, write `docs/design/physics-model.md` (unified model of all 7 experiments)
 - [ ] Try to fetch the site's lab CSV files (nice-to-have; "lab data overlay" feature)
 - [x] Write `docs/PLAN.md`, `docs/design/architecture.md`
-- [ ] Commit Phase 0
+- [x] Commit Phase 0
 
 ### Phase 1 — Quagmire Engine core (Rust)
-- [ ] Workspace `quagmire-engine/Cargo.toml`, crate `quagmire-core`
-- [ ] `Complex`, labelled `Property` (qudit with named basis + dynamic sink labels), `System` (sparse state vector over tuples)
-- [ ] Operators: unitary on one property (Jones matrices: rotation, HWP, QWP, general retarder), diagonal phase, relabel/permutation conditioned on predicates (PBS), beam splitter, `project_or_sink` (polarizer with |lost⟩)
-- [ ] Sources: single photon with polarization, SPDC pair `cos χ|HH⟩ + e^{iφ} sin χ|VV⟩`, double-slit path split
-- [ ] Queries: `probability(predicate)`, `marginals`, `conditional(predicate)`, `amplitudes`, pretty ket string (Unicode + LaTeX)
-- [ ] Measurement: Born sampling with seedable PCG RNG, forced outcomes, `measure_in_basis(angle)`
-- [ ] Optics screen: `intensity_profile(path_property, geometry, ys)` with Fraunhofer envelope + exact path phases; coincidence post-selection; box convolution (detector slit); inverse-CDF photon sampling
-- [ ] Golden tests from the site: 3-polarizer 12.5 %, cos² law, Exp 3 table (0/90/±45), Exp 4 table, Exp 5.x constants, Exp 6 `1 + sin 2γ cos kΔ`
-- [ ] `quagmire-core` README + rustdoc
+- [x] Workspace `quagmire-engine/Cargo.toml`, crate `quagmire-core`
+- [x] `Complex`, labelled `Property` (qudit with named basis + dynamic sink labels), `System` (sparse state vector over tuples)
+- [x] Operators: unitary on one property (Jones matrices: rotation, HWP, QWP, general retarder), diagonal phase, relabel/permutation conditioned on predicates (PBS), beam splitter, `project_or_sink` (polarizer with |lost⟩)
+- [x] Sources: single photon with polarization, SPDC pair `cos χ|HH⟩ + e^{iφ} sin χ|VV⟩`, double-slit path split
+- [x] Queries: `probability(predicate)`, `marginals`, `conditional(predicate)`, `amplitudes`, pretty ket string (Unicode + LaTeX)
+- [x] Measurement: Born sampling with seedable PCG RNG, forced outcomes, `measure_in_basis(angle)`
+- [x] Optics screen: `intensity_profile(path_property, geometry, ys)` with Fraunhofer envelope + exact path phases; coincidence post-selection; box convolution (detector slit); inverse-CDF photon sampling
+- [x] Golden tests from the site: 3-polarizer 12.5 %, cos² law, Exp 3 table (0/90/±45), Exp 4 table, Exp 5.x constants, Exp 6 `1 + sin 2γ cos kΔ`
+- [x] `quagmire-core` README + rustdoc
 - [ ] Commit
 
 ### Phase 2 — Quagmire SDK for Godot
