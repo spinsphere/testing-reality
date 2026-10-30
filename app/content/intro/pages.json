@@ -9,8 +9,192 @@
           "blocks": [
             {"type": "text", "text": "Here, we explain how quantum mechanics works: the mathematical objects it uses, the predictions it makes, and how those predictions are tested experimentally."},
             {"type": "text", "text": "Rather than beginning with rigorous formalism, we start in the middle — by offering simple statements that capture the core ideas. The downside of simplicity is that it can be inaccurate, but as you move through the chapters, we'll gradually refine and deepen the presentation."},
-            {"type": "callout", "kind": "math", "title": "What you need to know", "text": "Almost nothing. For now, you only need [b]arrows in a plane[/b] (vectors in 2 dimensions). Every time a new piece of maths appears, a short check-in like this one introduces it first."},
-            {"type": "equation", "id": "psi0", "caption": "A quantum apple: our first quantum state. Don't worry about the notation yet."}
+            {"type": "text", "text": "The upshot is that you can begin understanding quantum theory with only minimal mathematical background. For now, you only need vectors in 2 dimensions."},
+            {"type": "callout", "kind": "note", "title": "How this chapter is built", "text": "Two passes. First, [b]The quantum apple[/b] tells the whole story by analogy: a state, how it evolves, and what a measurement returns. Second, [b]The mathematical arena[/b] makes each of those statements precise. Whenever a new piece of maths is needed for the first time, a short [b]Maths check-in[/b] introduces it in plain words, usually with a picture you can play with. No trigonometry, no complex numbers, no prior knowledge of vectors is assumed."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apple",
+      "title": "The quantum apple",
+      "pages": [
+        {
+          "title": "States: the story of an apple",
+          "blocks": [
+            {"type": "text", "text": "As is customary in physics, systems are described by their [i]states[/i]. As the system evolves in time, the state evolves too, providing us with a state for each moment. Think of it like a movie: each frame shows the state of a particular scene at a specific instant. As the film runs, the frames change, and we see how the story evolves over time. The same applies to states in physics."},
+            {"type": "text", "text": "For instance, an apple may be in the state \"red\", or \"eaten\". These are its [i]classical states[/i] — definite properties that describe the system and which we can measure. Consider the fridge of someone who enjoys red apples. The red apple may evolve to the state \"eaten\", while the \"eaten\" apple remains \"eaten\"."},
+            {"type": "subheading", "text": "Description"},
+            {"type": "text", "text": "In quantum mechanics, systems are still described by states — but now they are [i]quantum states[/i]."},
+            {"type": "text", "text": "A quantum apple can also be in one of two definite states: |red⟩, |eaten⟩ (don't worry about this special notation for now). But unlike a classical apple, a quantum apple doesn't have to be in just one of these states. It can be in a [i]superposition[/i] of being red and being eaten — a kind of combination of two equally real states. For example, the apple might be in the state:"},
+            {"type": "equation", "id": "psi0", "caption": "Our first quantum state. Don't worry about the notation yet; the next page takes it apart piece by piece."}
+          ]
+        },
+        {
+          "title": "Ψ and its amplitudes",
+          "blocks": [
+            {"type": "equation", "id": "psi0"},
+            {"type": "text", "text": "The letter Ψ (\"Psi\") is often used to denote the quantum state. We could have called it \"A\", \"Some-Incredible-Name\", or anything else. It's simply a convention to call it Ψ, no need to overthink it. The subscript \"0\" serves to label the state at an initial time (t = 0); it helps us see this is the initial state we're talking about. As we can see, Ψ, a quantum state, is made out of other states (|red⟩ and |eaten⟩)."},
+            {"type": "text", "text": "The numbers √(2/3) and 1/√3 are called [i]amplitudes[/i]. We will cover them in more detail later, but in the meantime, we can think of them as indications of how much of each state we're adding into the \"mix\" that is Ψ, and as a result, how likely we are to find it. Sort of like weights for ingredients in a recipe."},
+            {"type": "callout", "kind": "math", "title": "Those odd-looking numbers", "text": "√(2/3) simply means \"the positive number whose square is 2/3\" — about 0.82. Likewise 1/√3 is about 0.58, and its square is 1/3. Notice that 2/3 + 1/3 = 1: the [b]squares[/b] of the two weights add up to exactly 1. Keep that in mind; it is the first hint of why amplitudes are written with square roots."}
+          ]
+        },
+        {
+          "title": "Evolution",
+          "blocks": [
+            {"type": "text", "text": "Between time 0 and time 1, our quantum apple may evolve in the following way: the red apple rots, while the eaten apple remains eaten. Simple as that! Mathematically:"},
+            {"type": "equation", "id": "evolution"},
+            {"type": "text", "text": "Therefore the quantum state of the apple at time 1 would be:"},
+            {"type": "equation", "id": "psi1"},
+            {"type": "subheading", "text": "Gradual evolution"},
+            {"type": "text", "text": "Let's now make this more interesting. When it starts rotting, the red apple won't rot all at once. It will be a gradual process over time. At first, the apple is mostly red, with just a tiny chance of being rotten. But as time moves forward, the \"red\" part shrinks while the \"rotten\" part grows."},
+            {"type": "text", "text": "So instead of the apple flipping from red → rotten in one step, it gradually shifts, like this:"},
+            {"type": "list", "items": [
+              "At t = 0: all red, no rotten yet.",
+              "At t = 0.25: mostly red, a little rotten.",
+              "At t = 0.75: almost all rotten, barely red.",
+              "At t = 1: fully rotten."
+            ]},
+            {"type": "text", "text": "But in the meantime, the \"eaten\" part stays exactly as it was. So for example, the state could evolve step by step like this:"},
+            {"type": "equation", "id": "gradual", "caption": "Check any line: the squares of the amplitudes always add up to 1 (for instance ½ + ⅙ + ⅓ = 1), and the eaten amplitude 1/√3 never changes. Only the red and rotten parts trade weight between them."}
+          ]
+        },
+        {
+          "title": "Amplitudes that flow",
+          "blocks": [
+            {"type": "text", "text": "[b]Try it yourself.[/b] Drag the time slider from t = 0 to t = 1 and watch the amplitude drain out of |red⟩ and into |rotten⟩, while |eaten⟩ stays put. The ket underneath is rewritten live."},
+            {"type": "widget", "scene": "apple_evolution.tscn", "params": {}, "height": 340},
+            {"type": "text", "text": "This is a simple model of how amplitudes can flow continuously between states. True physical processes, like radioactive decay, have a similar evolution. In a decay, a particle doesn't just suddenly vanish, it gradually shifts from one state into another, with the mixture of states changing step by step."},
+            {"type": "text", "text": "Changes in quantum states are gradual, like the apple that smoothly flows from one state into another, via a superposition. As we are often interested in the state at some key moments, for instance at times 0 and 1, the gradual change accumulates into a discrete change."},
+            {"type": "subheading", "text": "Classical versus quantum evolution"},
+            {"type": "text", "text": "This is a major difference with the classical picture, where our classical apple was described by [i]either[/i] of the states \"red\", or \"eaten\". It was therefore evolving according to [i]either[/i]"},
+            {"type": "equation", "id": "classical"},
+            {"type": "text", "text": "On the other hand, our quantum apple is initially in a [i]superposition[/i] of |red⟩ and |eaten⟩."},
+            {"type": "text", "text": "Therefore, between time 0 and time 1, the evolution of |red⟩ ↦ |rotten⟩ and |eaten⟩ ↦ |eaten⟩ happens [i]in superposition[/i]."}
+          ]
+        },
+        {
+          "title": "Measurement",
+          "blocks": [
+            {"type": "text", "text": "After time 1, suppose that we want to measure our quantum apple in order to determine if it is rotten or eaten. What should we expect?"},
+            {"type": "text", "text": "This is like opening Schrödinger's famous box with the cat inside, which is either alive or dead. Before we open the box, the apple's state includes both \"rotten\" and \"eaten\" at once. But when we check, we only observe one of the two outcomes: either a rotten apple, or an eaten apple."},
+            {"type": "text", "text": "The measurement device (our eyes, or any detector) will register one definite result. Quantum mechanics doesn't let us predict which one we will see, it only gives us probabilities. To find these probabilities, we simply square the amplitudes of the given states."},
+            {"type": "text", "text": "The outcome \"rotten\" will be recorded with probability"},
+            {"type": "equation", "id": "prob_rotten"},
+            {"type": "text", "text": "The outcome \"eaten\" will be recorded with probability"},
+            {"type": "equation", "id": "prob_eaten"},
+            {"type": "callout", "kind": "math", "title": "Squares are probabilities", "text": "An amplitude is a weight; its [b]square[/b] is the probability of seeing that outcome. Squaring is what turns the odd-looking √(2/3) into the plain fraction 2/3. Because the squares add up to 1 (2/3 + 1/3 = 1), exactly one of the outcomes is certain to happen — that is what forces amplitudes to be chosen so that their squares total 1. Below, edit an amplitude: the others readjust so that the squares always sum to 1, and the bars show the resulting probabilities."},
+            {"type": "widget", "scene": "probability_bars.tscn", "params": {"amplitudes": [0.8165, 0.5774], "labels": ["rotten", "eaten"]}, "height": 320},
+            {"type": "text", "text": "This is just like Schrödinger's cat: the description includes multiple possibilities at once (the states in superposition), but our experience of opening the box always returns just one clear outcome."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arena",
+      "title": "The mathematical arena",
+      "pages": [
+        {
+          "title": "What is a ket?",
+          "blocks": [
+            {"type": "text", "text": "The quantum apple is a good teaser to get a generic idea of quantum mechanics. The superposition of states, the evolution that also happens in superposition, and the seemingly probabilistic measurement has already been expressed."},
+            {"type": "text", "text": "But in order to dive deeper into quantum mechanics, we must be able to go into the more mathematically precise descriptions of quantum systems, and for that, understand the various tools that are used. What even is a ket, \"| ⟩\"? And why are we allowed to add them like we did in the description of |Ψ0⟩? What about the amplitudes... can they be any number?"},
+            {"type": "text", "text": "In this section, we address those questions by giving further details on what the mathematical objects are that are involved in quantum mechanics."},
+            {"type": "subheading", "text": "Describing quantum systems"},
+            {"type": "callout", "kind": "math", "title": "Arrows in a plane", "text": "So far a state was just a label inside a ket: |red⟩, |A⟩. From now on, picture every state as an [b]arrow[/b] drawn from a fixed starting point (the origin) on a flat sheet of paper. Such an arrow is called a [i]vector[/i]. It has a direction and a [b]length[/b], and that is all. We will only ever need arrows in a plane, i.e. in 2 dimensions. Below, drag the tip of the arrow: whatever direction you choose, its length stays exactly 1 — and an arrow of length 1 is the only kind of arrow we accept as a state."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["A", "B"], "angle": 30, "mode": "unit"}, "height": 360},
+            {"type": "text", "text": "Quantum states are represented by vectors of unit length, namely, of length equal to 1. This is what a [i]ket[/i] is: a vector of unit length. Commonly, we write inside the ket a convenient label representing the state, such as |red⟩ for the color red or |A⟩ for a property labeled by A."}
+          ]
+        },
+        {
+          "title": "Distinguishable states",
+          "blocks": [
+            {"type": "text", "text": "Two states, like |A⟩ and |B⟩, are [i]distinguishable[/i] if it is possible to tell them apart with certainty, in which case they are then [i]orthogonal[/i]. One can imagine orthogonality as two perpendicular arrows in 2D."},
+            {"type": "callout", "kind": "math", "title": "Perpendicular means distinguishable", "text": "Two arrows that meet at a right angle are called [i]orthogonal[/i] (or perpendicular). Neither casts any shadow along the other: |A⟩ contains no |B⟩ at all, and |B⟩ contains no |A⟩. That is the geometric picture of \"telling them apart with certainty\". Our apple states |red⟩, |rotten⟩ and |eaten⟩ were orthogonal too — we just never drew them."},
+            {"type": "figure", "src": "res://assets/figures/intro/Intro_1.png", "height": 300, "caption": "Distinguishable states are orthogonal kets. |A⟩ (red-orange) points to the right and |B⟩ (purple) points straight up; both have unit length and meet at a right angle."}
+          ]
+        },
+        {
+          "title": "The superposition principle",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/intro/Intro_2.png", "height": 300, "caption": "The states |φ1⟩, |φ2⟩ and |φ3⟩ defined in the equations below. They arise from superposing |A⟩ and |B⟩: |φ1⟩ sits at 45°, exactly between |A⟩ and |B⟩; |φ3⟩ is steeper, at 60°, closer to |B⟩; |φ2⟩ is the mirror image of |φ1⟩ below the |A⟩ axis, at −45°."},
+            {"type": "callout", "kind": "math", "title": "Adding and scaling arrows", "text": "[b]Scaling:[/b] multiplying an arrow by a number stretches or shrinks it — ½|A⟩ points the same way as |A⟩ but is half as long, and a [i]negative[/i] number flips it to point the opposite way. [b]Adding:[/b] place the tail of the second arrow at the tip of the first; the sum is the arrow from the origin to where you end up. So ½|A⟩ + (√3/2)|B⟩ means \"go ½ along |A⟩, then √3/2 along |B⟩\". Below, drag the arrow and watch how it decomposes into a scaled |A⟩ plus a scaled |B⟩ — those two scale factors are its amplitudes."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["A", "B"], "angle": 60, "mode": "superposition"}, "height": 360},
+            {"type": "text", "text": "The superposition principle states that combinations of distinguishable states also form a valid quantum state, so long as the newly formed vector is also of unit length."},
+            {"type": "text", "text": "Thus, if |A⟩ and |B⟩ are valid orthogonal states, then by the superposition principle, all of the following states are also valid states:"},
+            {"type": "equation", "id": "phi123", "caption": "Note the minus sign in |φ2⟩: a negative amplitude sends the |B⟩ part downwards, which is why |φ2⟩ hangs below the |A⟩ axis in the figure."}
+          ]
+        },
+        {
+          "title": "Checking the length of |φ3⟩",
+          "blocks": [
+            {"type": "text", "text": "Let us verify that |φ3⟩ is a vector of length one (also called a valid state, or a normalized state)."},
+            {"type": "text", "text": "Geometrically, the length of |φ3⟩ can be computed from the lengths of the horizontal and vertical projections. The horizontal projection, or the projection onto |A⟩, has length 1/2; and the vertical projection onto |B⟩ has length √3/2."},
+            {"type": "callout", "kind": "math", "title": "Pythagoras: the length of an arrow", "text": "An arrow with horizontal part [i]a[/i] and vertical part [i]b[/i] is the long side of a right-angled triangle whose two short sides are [i]a[/i] and [i]b[/i]. Pythagoras's theorem (the one fact from school geometry we need) says the long side has length √(a² + b²). If that comes out as exactly 1, the arrow is a valid state. The figure below draws this triangle for |φ3⟩."},
+            {"type": "equation", "id": "pythagoras"},
+            {"type": "figure", "src": "res://assets/figures/intro/Intro_fig4.png", "height": 300, "caption": "Computing the length of |φ3⟩. A dashed line drops from the tip of |φ3⟩ onto the |A⟩ axis: the horizontal projection measures 1/2 and the vertical projection measures √3/2. Together with |φ3⟩ they form a right-angled triangle."},
+            {"type": "text", "text": "Using Pythagoras's theorem, we find that the length of |φ3⟩ is"},
+            {"type": "equation", "id": "length_phi3"},
+            {"type": "text", "text": "Algebraically, we took the amplitudes, 1/2 and √3/2, squared them, and summed them to obtain 1. More generally, any state of the form α|A⟩ + β|B⟩ is a valid state, so long as the numbers α and β satisfy |α|² + |β|² = 1. In general, α and β can be [i]complex numbers[/i] — not just real numbers like 1/√2. The notation |α|² means the squared magnitude (modulus) of α."},
+            {"type": "equation", "id": "normalization", "caption": "The normalization condition. It is the same rule we met with the apple: the squares of the amplitudes add up to 1."},
+            {"type": "text", "text": "For real numbers, this is just the square; for complex numbers, it accounts for both real and imaginary parts. We will encounter complex amplitudes in later experiments, where they encode [i]phase[/i] information that determines interference patterns."},
+            {"type": "text", "text": "The process of multiplying |A⟩ by α, multiplying |B⟩ by β, and adding them together is called [i]taking a linear combination[/i] of |A⟩ and |B⟩."},
+            {"type": "text", "text": "The [i]superposition principle of quantum mechanics[/i] tells us that linear combinations of valid states yield other valid states — as long as the normalization condition, |α|² + |β|² = 1, is satisfied."},
+            {"type": "callout", "kind": "note", "title": "Complex numbers? Not yet.", "text": "Every amplitude in this chapter is an ordinary real number, so |α|² is just α². Complex amplitudes first become necessary in Experiment 2 (the slits), and they get their own check-in there."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evolving",
+      "title": "Evolving quantum systems",
+      "pages": [
+        {
+          "title": "Transformations must keep the length",
+          "blocks": [
+            {"type": "text", "text": "One of the central questions of quantum mechanics is how states change over time. A quantum system is described by a state vector, say |A⟩, for example. Over time, or through an interaction of some kind (measurement, rotation, etc.), the system's state evolves."},
+            {"type": "text", "text": "A strict rule of quantum theory is that when a physical transformation is applied to a valid state, meaning a state of unit length, the resulting state after the physical transformation must also be a valid state. This is important as length in this context relates to probabilities, and the probabilities must always add up to 1. Let's take an example."},
+            {"type": "text", "text": "Suppose we have two states, |A⟩ and |B⟩. Let's assume these states are orthogonal (like \"up\" and \"down\" directions, for example). Let's now imagine that the system can transform |A⟩ into another state |φ2⟩, and |B⟩ into |φ1⟩, as follows:"},
+            {"type": "equation", "id": "r45_def"},
+            {"type": "text", "text": "We called this transformation R45 for reasons we will clarify later, but intuitively it can be thought of as a kind of 45° rotation in a two-dimensional space. So far so good. But how does it act on [i]other[/i] quantum states, meaning states other than |A⟩ or |B⟩?"},
+            {"type": "callout", "kind": "math", "title": "Linear maps", "text": "A transformation is a rule that turns every arrow into a new arrow. It is [i]linear[/i] when it respects adding and scaling: the image of a sum is the sum of the images, and the image of a scaled arrow is the scaled image. The payoff is huge: once you know where |A⟩ and |B⟩ go, you know where [i]every[/i] arrow goes, because every state is just a scaled |A⟩ plus a scaled |B⟩. R45 sends |A⟩ and |B⟩ onto the two diagonal arrows |φ2⟩ and |φ1⟩. Below, the diagonal pair is drawn next to |A⟩ and |B⟩: drag the arrow and read off its amplitudes in both pairs."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["A", "B"], "angle": 45, "mode": "basis_change"}, "height": 360},
+            {"type": "text", "text": "Quantum transformations are [i]linear[/i]. Linearity in this context means if it is known how R45 affects a certain set of states (|A⟩ and |B⟩, for example), it is also known how it applies to any [i]combination[/i] of those states. This may seem unimportant, or even trivial, but it's not, because quantum states are often in a superposition of different states. Linearity is very useful in those situations."}
+          ]
+        },
+        {
+          "title": "Linearity at work: R45 on |φ1⟩",
+          "blocks": [
+            {"type": "text", "text": "Let's compute how R45 acts on the state |φ1⟩ to illustrate this. We previously defined |φ1⟩ as |φ1⟩ = (1/√2)|A⟩ + (1/√2)|B⟩. Let's now apply R45 and use linearity:"},
+            {"type": "equation", "id": "r45_linearity"},
+            {"type": "text", "text": "Think of R45 as an [i]operator[/i] that we apply to states. We can now substitute |A⟩ and |B⟩ with the transformation equations of R45."},
+            {"type": "equation", "id": "r45_substitute"},
+            {"type": "text", "text": "After simplifying, we find |A⟩ as the answer:"},
+            {"type": "equation", "id": "r45_simplify"},
+            {"type": "text", "text": "So to summarize, using linearity, we were able to find that"},
+            {"type": "equation", "id": "r45_result"},
+            {"type": "text", "text": "The simplification that occurs in the above equation is an example of [i]constructive[/i] and [i]destructive[/i] interference. The contributions involving |A⟩ added together, resulting in constructive interference, while the contributions involving |B⟩ canceled each other out, showing a case of destructive interference. This is how interference manifests itself algebraically."},
+            {"type": "callout", "kind": "math", "title": "Interference is just algebra", "text": "Collect like terms. The two |A⟩ pieces, +½ and +½, point the same way and add up to a full 1: that is [b]constructive[/b] interference. The two |B⟩ pieces, −½ and +½, point opposite ways and cancel to 0: that is [b]destructive[/b] interference. Nothing more mysterious is going on. When the double slit produces bright and dark fringes in Experiment 2, it is this same adding and cancelling of amplitudes — one term per path."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "measuring",
+      "title": "Measuring quantum systems",
+      "pages": [
+        {
+          "title": "Measuring a superposition",
+          "blocks": [
+            {"type": "text", "text": "Taking our two orthogonal |A⟩ and |B⟩ states again, these represent two distinct outcomes that can be obtained when performing a measurement on the system. So if the system is in state |A⟩, it will return that result, and similarly if it's in |B⟩."},
+            {"type": "text", "text": "But what if the system is in a superposition of these two states? Take the following system, where |Ψ⟩ is normalized such that |α|² + |β|² = 1:"},
+            {"type": "equation", "id": "psi_general"},
+            {"type": "text", "text": "With the above system, if we apply a measurement, we get one of the two outcomes, either |A⟩ or |B⟩. We can't predict which of those outcomes we will get, but if we were to theoretically perform the measurement over and over again, the number of times we get |A⟩ and |B⟩ relative to the number of measurements will align with |α|² and |β|² respectively."},
+            {"type": "equation", "id": "measure_probs", "caption": "The amplitudes α and β are the projections of |Ψ⟩ onto |A⟩ and |B⟩; their squares are the long-run frequencies of the two outcomes, and they add up to 1."},
+            {"type": "text", "text": "[b]Try it yourself.[/b] Drag the state |Ψ⟩ around. Its projections onto |A⟩ and |B⟩ are the amplitudes; the squares of those projections are the probabilities shown next to them. However you turn the arrow, the two probabilities always add up to 1 — the geometry of the unit arrow guarantees it."},
+            {"type": "widget", "scene": "vector_playground.tscn", "params": {"labels": ["A", "B"], "angle": 35, "mode": "projection", "show_probabilities": true}, "height": 360},
+            {"type": "text", "text": "That is the whole formalism in one picture: a state is a unit arrow, distinguishable outcomes are perpendicular arrows, evolution is a linear map that keeps the length, and measurement returns one outcome with probability given by the squared projection."},
+            {"type": "callout", "kind": "note", "title": "Next: Experiment 1 — Polarizers", "text": "Everything in this chapter is about to become real light. In Experiment 1, |A⟩ and |B⟩ turn into the horizontal and vertical polarization states |↔⟩ and |↕⟩, the 45° rotation R45 turns out to be exactly what a polarizer at 45° does to the state, and the squared projections become the measured intensity behind the polarizer, I = Prob · I_0. Open [b]Experiment 1[/b] from the hub to put the arrows to the test."}
           ]
         }
       ]

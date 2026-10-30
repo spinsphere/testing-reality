@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-30T09:13:02.164Z",
+  "generated": "2026-10-30T11:24:37.434Z",
   "manifest": "equations.json",
   "color": "#e8e4ff",
   "displayScale": 1,
@@ -149,6 +149,24 @@
       "tex": "\\ket{\\Psi} = \\alpha\\ket{A} + \\beta\\ket{B}\\,.",
       "hash": "a8b6fe17a8a3bc45",
       "png": "psi_general.png"
+    },
+    "pythagoras": {
+      "file": "pythagoras.svg",
+      "width": 571.73,
+      "height": 49.38,
+      "baseline": 9.06,
+      "tex": "\\text{length of } a\\ket{A} + b\\ket{B} \\;=\\; \\sqrt{a^{2} + b^{2}}\\,.",
+      "hash": "8da2eea5577fe76f",
+      "png": "pythagoras.png"
+    },
+    "measure_probs": {
+      "file": "measure_probs.svg",
+      "width": 698.02,
+      "height": 41.02,
+      "baseline": 9.02,
+      "tex": "P_A = |\\alpha|^{2}, \\qquad P_B = |\\beta|^{2}, \\qquad P_A + P_B = 1\\,.",
+      "hash": "304a57734e3af62f",
+      "png": "measure_probs.png"
     }
   }
 }

@@ -32,6 +32,10 @@
 
     "r45_result": "R_{45}\\ket{\\phi_1} = \\ket{A}\\,.",
 
-    "psi_general": "\\ket{\\Psi} = \\alpha\\ket{A} + \\beta\\ket{B}\\,."
+    "psi_general": "\\ket{\\Psi} = \\alpha\\ket{A} + \\beta\\ket{B}\\,.",
+
+    "pythagoras": "\\text{length of } a\\ket{A} + b\\ket{B} \\;=\\; \\sqrt{a^{2} + b^{2}}\\,.",
+
+    "measure_probs": "P_A = |\\alpha|^{2}, \\qquad P_B = |\\beta|^{2}, \\qquad P_A + P_B = 1\\,."
   }
 }
