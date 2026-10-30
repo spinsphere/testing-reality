@@ -31,7 +31,7 @@ page-by-page source material.
 | 2 | Quagmire SDK for Godot | gdext crate, `app/addons/quagmire/`, headless smoke test | done |
 | 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | mostly done (widgets in progress) |
 | 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | in progress (agent) |
-| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | in progress (all 7 labs built; intro/exp1/exp2/exp3 text done; exp4–7 text via agents) |
+| 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | done (widgets integration pending) |
 | 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
 
 Phases 1, 3 and 4 are independent and run in parallel where agents allow. Phase 5 chapters are
@@ -90,16 +90,16 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 - [x] 02 Experiment 1 — Polarizers (lab + 16 pages)
 - [x] 03 Experiment 2 — Single/double slit (lab + 16 pages)
 - [x] 04 Experiment 3 — Polarized double slit (lab + 16 pages)
-- [~] 05 Experiment 4 — Entanglement: lab done; pages via agent
-- [~] 06 Experiment 5 — lab done; pages via agent
-- [~] 07 Experiment 6 — lab done; pages via agent
-- [~] 08 Experiment 7 — lab done; pages via agent
+- [x] 05 Experiment 4 — Entanglement: lab done; pages done
+- [x] 06 Experiment 5 — lab done; pages done
+- [x] 07 Experiment 6 — lab done; pages done
+- [x] 08 Experiment 7 — lab done; pages done
 - [ ] Commit after each chapter
 
 ### Phase 6 — Polish and release
-- [ ] Settings (volume, quality), save progress, keyboard map
-- [ ] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
-- [ ] README with screenshots, engine docs ready for split-off
+- [x] Settings (reduce motion, quality), save progress, keyboard map
+- [x] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
+- [~] README written; screenshots and engine split-off notes pending
 - [ ] Final commit
 
 ## Resume notes (updated 2026-10-31)
