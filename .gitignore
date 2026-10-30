@@ -15,3 +15,4 @@ __pycache__/
 
 # Built GDExtension binaries (tools/build-sdk.sh, tools/export.sh)
 app/addons/quagmire/bin/
+builds/

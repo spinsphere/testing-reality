@@ -19,6 +19,15 @@ tools/             mathgen (TeX → SVG/PNG), build and export scripts, lab-data
 docs/              plan, design docs, page content specs transcribed from the site, assets
 ```
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Hub](docs/screenshots/hub.jpg) | ![Experiment 1 theory page](docs/screenshots/chapter-exp1-theory.jpg) |
+| ![Experiment 2 simulator widget](docs/screenshots/chapter-exp2-widget.jpg) | ![Experiment 1 lab](docs/screenshots/lab-exp1.jpg) |
+| ![Experiment 3 lab](docs/screenshots/lab-exp3.jpg) | ![Experiment 4 lab](docs/screenshots/lab-exp4.jpg) |
+| ![Experiment 5 lab](docs/screenshots/lab-exp5.jpg) | |
+
 ## Running
 
 Requirements: Godot 4.7.2, Rust (stable), Node 22, Blender 4.3 (only to rebuild models).

@@ -32,7 +32,7 @@ page-by-page source material.
 | 3 | App framework | theme, navigation hub, chapter/page system, math rendering pipeline, lab camera, inspector UI, plot widget | done |
 | 4 | Blender apparatus pipeline | model scripts per instrument, glTF export, import into Godot | done |
 | 5 | Chapters | Home, Introduction, Experiments 1–7 (story pages + labs) | done |
-| 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | pending |
+| 6 | Polish, builds, docs | Linux + Windows exports, README, engine docs for split-off | done |
 
 Phases 1, 3 and 4 are independent and run in parallel where agents allow. Phase 5 chapters are
 independent of each other once Phases 2–4 exist; Experiment 1 is built first as the template.
@@ -99,8 +99,8 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 ### Phase 6 — Polish and release
 - [x] Settings (reduce motion, quality), save progress, keyboard map
 - [x] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
-- [~] README written; screenshots and engine split-off notes pending
-- [ ] Final commit
+- [x] README with screenshots, engine docs ready for split-off (`quagmire-engine/docs/split-off.md`)
+- [x] Final commit
 
 ## Resume notes (updated 2026-10-31)
 
