@@ -161,6 +161,10 @@ function finishSvg(raw, color, scale) {
   // MathJax wraps everything in <g fill="currentColor" stroke="currentColor">;
   // Godot has no notion of currentColor, so bake the colour in.
   body = body.replace(/currentColor/g, color);
+  // ImageMagick's SVG rasteriser does not inherit fill into <rect>/<line> (stretchy
+  // braces, arrow rules), so set it explicitly where missing.
+  body = body.replace(/<(rect|line)\b([^>]*)>/g, (m, tag, attrs) =>
+    /\bfill=/.test(attrs) ? m : `<${tag} fill="${color}" stroke="${color}"${attrs}>`);
   const svg = `<?xml version="1.0" encoding="UTF-8"?>\n${tag}${body}`;
   const textFallbacks = [...svg.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].map((m) => m[1]);
   return {svg, width, height, baseline, textFallbacks};

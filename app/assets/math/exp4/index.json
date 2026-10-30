@@ -1,0 +1,253 @@
+{
+  "generated": "2026-10-30T11:40:23.423Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "two_particle_list": {
+      "file": "two_particle_list.svg",
+      "width": 893.18,
+      "height": 37.47,
+      "baseline": 10.34,
+      "tex": "\\ket{\\H}_1\\ket{\\H}_2 \\quad\\text{reads}\\quad \\text{``photon 1 is}\\ \\H\\ \\text{and photon 2 is}\\ \\H\\text{''}",
+      "hash": "e3629b39ded155d7",
+      "png": "two_particle_list.png"
+    },
+    "product_expand": {
+      "file": "product_expand.svg",
+      "width": 938.82,
+      "height": 89.01,
+      "baseline": 35.46,
+      "tex": "\\begin{aligned} \\left(a\\ket{\\H} + b\\ket{\\V}\\right)_1\\left(c\\ket{\\H} + d\\ket{\\V}\\right)_2 &= ac\\,\\HH + ad\\,\\HV\\\\ &\\quad + bc\\,\\VH + bd\\,\\VV \\end{aligned}",
+      "hash": "0d03bb239c8909f3",
+      "png": "product_expand.png"
+    },
+    "independent_diagonals": {
+      "file": "independent_diagonals.svg",
+      "width": 992.29,
+      "height": 43.97,
+      "baseline": 12.66,
+      "tex": "\\ket{\\diag}_1\\ket{\\diag}_2 = \\tfrac12\\left(\\HH + \\HV + \\VH + \\VV\\right)",
+      "hash": "d09962c6c82a52d7",
+      "png": "independent_diagonals.png"
+    },
+    "bell_phi_plus": {
+      "file": "bell_phi_plus.svg",
+      "width": 537.17,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Phi^+} = \\frac{1}{\\sqrt2}\\left(\\HH + \\VV\\right)",
+      "hash": "443cf63974d4c168",
+      "png": "bell_phi_plus.png"
+    },
+    "bell_phi_minus": {
+      "file": "bell_phi_minus.svg",
+      "width": 537.17,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Phi^-} = \\frac{1}{\\sqrt2}\\left(\\HH - \\VV\\right)",
+      "hash": "3c1bc6deaf8dc129",
+      "png": "bell_phi_minus.png"
+    },
+    "bell_psi_plus": {
+      "file": "bell_psi_plus.svg",
+      "width": 539.2,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Psi^+} = \\frac{1}{\\sqrt2}\\left(\\HV + \\VH\\right)",
+      "hash": "0a23b5c695f23755",
+      "png": "bell_psi_plus.png"
+    },
+    "bell_psi_minus": {
+      "file": "bell_psi_minus.svg",
+      "width": 549.26,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Psi^-} = \\frac{1}{\\sqrt2}\\left(\\HV - \\VH\\right).",
+      "hash": "7614f25d6c02948c",
+      "png": "bell_psi_minus.png"
+    },
+    "state_produced": {
+      "file": "state_produced.svg",
+      "width": 547.23,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\Phi^+} = \\frac{1}{\\sqrt2}\\left(\\HH + \\VV\\right).",
+      "hash": "2395a8a49fbbbc8c",
+      "png": "state_produced.png"
+    },
+    "not_a_product": {
+      "file": "not_a_product.svg",
+      "width": 997.71,
+      "height": 116.16,
+      "baseline": 49.02,
+      "tex": "\\begin{aligned} \\ket{\\Phi^+} &= \\tfrac{1}{\\sqrt2}\\,\\HH + 0\\cdot\\HV + 0\\cdot\\VH + \\tfrac{1}{\\sqrt2}\\,\\VV\\\\ &\\Rightarrow\\quad ad = 0,\\quad bc = 0,\\quad ac = bd = \\tfrac{1}{\\sqrt2}\\qquad\\text{(impossible)} \\end{aligned}",
+      "hash": "c3b0da9c95cf418b",
+      "png": "not_a_product.png"
+    },
+    "alpha_basis": {
+      "file": "alpha_basis.svg",
+      "width": 986.35,
+      "height": 46,
+      "baseline": 13.95,
+      "tex": "\\ket{\\alpha} = \\cos\\alpha\\,\\ket{\\H} + \\sin\\alpha\\,\\ket{\\V}, \\qquad \\aperp = -\\sin\\alpha\\,\\ket{\\H} + \\cos\\alpha\\,\\ket{\\V}",
+      "hash": "176724605d0a8176",
+      "png": "alpha_basis.png"
+    },
+    "diag_in_alpha_basis": {
+      "file": "diag_in_alpha_basis.svg",
+      "width": 705.68,
+      "height": 46,
+      "baseline": 13.95,
+      "tex": "\\ket{\\diag} = \\cos(\\alpha - 45^\\circ)\\ket{\\alpha} + \\sin(\\alpha - 45^\\circ)\\aperp",
+      "hash": "a6af5bbd3a610159",
+      "png": "diag_in_alpha_basis.png"
+    },
+    "p_alpha_diag": {
+      "file": "p_alpha_diag.svg",
+      "width": 795.65,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "P(\\alpha)\\ket{\\diag} = \\cos(\\alpha - 45^\\circ)\\ket{\\alpha} + \\sin(\\alpha - 45^\\circ)\\lost",
+      "hash": "ff227af2513f54c4",
+      "png": "p_alpha_diag.png"
+    },
+    "polarizer_general": {
+      "file": "polarizer_general.svg",
+      "width": 706.38,
+      "height": 88.11,
+      "baseline": 35.01,
+      "tex": "\\begin{aligned} P(\\alpha)\\ket{\\varphi} &= \\cos(\\alpha-\\varphi)\\ket{\\alpha} + \\sin(\\alpha-\\varphi)\\lost,\\\\ \\text{Prob} &= \\cos^2(\\alpha-\\varphi) \\end{aligned}",
+      "hash": "4c83fd2ab9488dac",
+      "png": "polarizer_general.png"
+    },
+    "verify_alpha_0": {
+      "file": "verify_alpha_0.svg",
+      "width": 840.9,
+      "height": 179.62,
+      "baseline": 80.77,
+      "tex": "\\begin{aligned} P(0^\\circ)\\ket{\\diag} &= \\cos(45^\\circ - 0^\\circ)\\ket{\\H} + \\sin(45^\\circ - 0^\\circ)\\lost\\\\ &= \\cos(45^\\circ)\\ket{\\H} + \\cdots\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\cdots \\end{aligned}",
+      "hash": "9dad3658b98729f4",
+      "png": "verify_alpha_0.png"
+    },
+    "verify_prob": {
+      "file": "verify_prob.svg",
+      "width": 341.63,
+      "height": 96.56,
+      "baseline": 36.93,
+      "tex": "\\text{Prob} = \\left(\\frac{1}{\\sqrt2}\\right)^2 = \\frac12",
+      "hash": "57bb151d0b17d7af",
+      "png": "verify_prob.png"
+    },
+    "psi0_pump": {
+      "file": "psi0_pump.svg",
+      "width": 202.29,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} = \\ket{\\diag}",
+      "hash": "9aed1926313c727b",
+      "png": "psi0_pump.png"
+    },
+    "psi1_bell": {
+      "file": "psi1_bell.svg",
+      "width": 522.5,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_1} = \\frac{1}{\\sqrt2}\\left(\\VV + \\HH\\right)",
+      "hash": "dd9f067c2baaff0d",
+      "png": "psi1_bell.png"
+    },
+    "cos_shift": {
+      "file": "cos_shift.svg",
+      "width": 685.5,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\cos(\\theta - 90^\\circ) = \\sin\\theta, \\qquad \\cos(\\theta - 0^\\circ) = \\cos\\theta",
+      "hash": "936f064a8bf2f0c9",
+      "png": "cos_shift.png"
+    },
+    "psi2_polarizers": {
+      "file": "psi2_polarizers.svg",
+      "width": 876.37,
+      "height": 268.13,
+      "baseline": 125.01,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\tfrac{1}{\\sqrt2}\\left(P_1(\\beta)\\ket{\\V}_1\\,P_2(\\alpha)\\ket{\\V}_2 + P_1(\\beta)\\ket{\\H}_1\\,P_2(\\alpha)\\ket{\\H}_2\\right)\\\\ &= \\tfrac{1}{\\sqrt2}\\Big(\\cos(\\beta - 90^\\circ)\\ket{\\beta}_1\\cos(\\alpha - 90^\\circ)\\ket{\\alpha}_2\\\\ &\\qquad\\quad + \\cos(\\beta - 0^\\circ)\\ket{\\beta}_1\\cos(\\alpha - 0^\\circ)\\ket{\\alpha}_2\\Big)\\\\ &= \\tfrac{1}{\\sqrt2}\\left(\\sin\\beta\\sin\\alpha + \\cos\\beta\\cos\\alpha\\right)\\ket{\\beta}_1\\ket{\\alpha}_2 \\end{aligned}",
+      "hash": "9ca4144bcecfc28d",
+      "png": "psi2_polarizers.png"
+    },
+    "p_coincidence_amp": {
+      "file": "p_coincidence_amp.svg",
+      "width": 649.89,
+      "height": 99.12,
+      "baseline": 36.93,
+      "tex": "P(\\alpha,\\beta) = \\left|\\frac{1}{\\sqrt2}\\left(\\sin\\beta\\sin\\alpha + \\cos\\beta\\cos\\alpha\\right)\\right|^2",
+      "hash": "07b01aca93710230",
+      "png": "p_coincidence_amp.png"
+    },
+    "cos_diff_identity": {
+      "file": "cos_diff_identity.svg",
+      "width": 566.32,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\cos(\\alpha - \\beta) = \\cos\\alpha\\cos\\beta + \\sin\\alpha\\sin\\beta",
+      "hash": "f09cdc8f18f4ba97",
+      "png": "cos_diff_identity.png"
+    },
+    "cos_diff_as_overlap": {
+      "file": "cos_diff_as_overlap.svg",
+      "width": 797.06,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\braket{\\beta}{\\alpha} = (\\cos\\beta)(\\cos\\alpha) + (\\sin\\beta)(\\sin\\alpha) = \\cos(\\alpha - \\beta)",
+      "hash": "aedb3e1b9abeca20",
+      "png": "cos_diff_as_overlap.png"
+    },
+    "p_coincidence": {
+      "file": "p_coincidence.svg",
+      "width": 695.31,
+      "height": 99.12,
+      "baseline": 36.93,
+      "tex": "P(\\alpha,\\beta) = \\left|\\frac{1}{\\sqrt2}\\cos(\\alpha - \\beta)\\right|^2 = \\frac12\\cos^2(\\alpha - \\beta)",
+      "hash": "f3c58f046989ae55",
+      "png": "p_coincidence.png"
+    },
+    "singles_flat": {
+      "file": "singles_flat.svg",
+      "width": 721.44,
+      "height": 43.79,
+      "baseline": 12.5,
+      "tex": "P_1(\\beta) = \\tfrac12, \\qquad P_2(\\alpha) = \\tfrac12 \\qquad\\text{for every angle}",
+      "hash": "0149010260420149",
+      "png": "singles_flat.png"
+    },
+    "unbalanced_pair": {
+      "file": "unbalanced_pair.svg",
+      "width": 655.06,
+      "height": 106.66,
+      "baseline": 44.29,
+      "tex": "\\begin{aligned} \\ket{\\psi_1} &= a\\,\\HH + b\\,e^{i\\varphi}\\,\\VV,\\\\ P(\\alpha,\\beta) &= \\left|a\\cos\\alpha\\cos\\beta + b\\,e^{i\\varphi}\\sin\\alpha\\sin\\beta\\right|^2 \\end{aligned}",
+      "hash": "1a87ff9971889f51",
+      "png": "unbalanced_pair.png"
+    },
+    "pump_hwp": {
+      "file": "pump_hwp.svg",
+      "width": 899.94,
+      "height": 107.18,
+      "baseline": 44.54,
+      "tex": "\\begin{aligned} \\lambda/2\\ \\text{at}\\ \\theta:\\quad \\ket{\\text{pump}} &= \\cos 2\\theta\\,\\ket{\\H} + \\sin 2\\theta\\,\\ket{\\V}\\\\ &\\overset{\\text{BBO}}{\\longrightarrow}\\ \\cos 2\\theta\\,\\VV + \\sin 2\\theta\\,\\HH \\end{aligned}",
+      "hash": "bd8ca8b4d09a459b",
+      "png": "pump_hwp.png"
+    },
+    "phi_minus_coincidence": {
+      "file": "phi_minus_coincidence.svg",
+      "width": 636.94,
+      "height": 99.89,
+      "baseline": 40.9,
+      "tex": "\\begin{aligned} \\varphi = 180^\\circ:\\quad e^{i\\varphi} &= -1, \\qquad \\ket{\\psi_1} = \\ket{\\Phi^-},\\\\ P(\\alpha,\\beta) &= \\tfrac12\\cos^2(\\alpha + \\beta) \\end{aligned}",
+      "hash": "4ceddfdf77ed0e8d",
+      "png": "phi_minus_coincidence.png"
+    }
+  }
+}

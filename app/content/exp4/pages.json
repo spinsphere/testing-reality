@@ -1,0 +1,796 @@
+{
+  "$comment": "Experiment 4: Entanglement and Bell state. Transcribed from docs/content/05-experiment-4-entanglement.md following docs/design/content-authoring.md. The site has no Literature and video section for this page, so it is omitted. Site convention kept throughout: photon 1 -> P1 at angle beta, photon 2 -> P2 at angle alpha; the lab's results panel uses the same letters.",
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "Entanglement: Bell state",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "In this experiment, we will discover quantum entanglement and how it can be generated. Entanglement means that one or more properties of two particles are correlated in a way that cannot be explained by classical physics."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/Exp4Fig7.png",
+              "height": 300,
+              "caption": "Schematic of the entanglement experiment. The laser pumps the BBO crystal pair; two photons leave it (the upper one is folded by a mirror in the drawing), each passes a rotatable polarizer (P2 at angle α, P1 at angle β) and reaches its detector (D2, D1). The detectors are wired to a coincidence counter, \"coin\". Ψ_0, Ψ_1, Ψ_2 label the state at each stage."
+            },
+            {
+              "type": "text",
+              "text": "A tempting analogy: imagine two marbles, one blue and one red. One is given to Alice, the other to Bob. When Alice sees her marble's color, she instantly knows Bob's. We might call their colors \"correlated.\" However, this classical analogy is misleading: the marbles had definite colors all along; Alice simply learned which one she had. Quantum entanglement is fundamentally different: the photons do not have definite polarizations until measured. The measurement itself determines the outcome, and Bell's theorem proves that no classical \"hidden color\" explanation can account for the observed correlations."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Correlated is not the same as independent",
+              "text": "Two things are [b]independent[/b] when learning one tells you nothing about the other. Toss two coins: heads–heads, heads–tails, tails–heads and tails–tails each happen a quarter of the time, and seeing Alice's coin does not change the odds for Bob's.\n\nThe marbles are [b]correlated[/b]: only red–blue and blue–red ever happen, half the time each. Seeing Alice's marble fixes Bob's completely. That is a strong correlation, and it is perfectly classical: the bag already contained one red and one blue marble.\n\nOur photon pairs will also come out \"both the same\" (both horizontal or both vertical) half the time each, never mixed. So far, that looks exactly like the marbles. The difference, which the whole chapter builds towards, is what happens when Alice and Bob [i]tilt[/i] their polarizers: the marbles' colours are fixed in advance, but a pair of entangled photons stays \"both the same\" for [i]every[/i] common tilt angle, and no pre-written list of colours can do that."
+            }
+          ]
+        },
+        {
+          "title": "Spooky, but not faster than light",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This experiment may seem to break the laws of physics. It took many years to understand entanglement, but rest assured: entanglement does not allow information to travel faster than the speed of light, nor can it be used to change the past."
+            },
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "\"Spooky action at a distance\"",
+              "text": "Measure one photon and its partner, however far away, instantly \"knows\" the result. Einstein called this a spooky action at a distance and did not believe it could be the whole story. If the two photons really settle their polarization only at the moment of measurement, can Alice use her polarizer to send Bob a message faster than light?\n\nShe cannot, and the reason is subtle but important: each [i]individual[/i] measurement yields a random outcome that the observer cannot control. Whatever angle Alice chooses, Bob sees a coin-flip sequence of clicks and no-clicks, and that sequence looks exactly the same whether Alice measured, did not measure, or set her polarizer anywhere. The correlations only become visible when the two observers [i]compare[/i] their results, and that comparison requires ordinary communication, limited by the speed of light. In the lab, this is the coincidence counter: the pattern lives in the coincidences, never in the singles."
+            },
+            {
+              "type": "subheading",
+              "text": "How the pairs are made"
+            },
+            {
+              "type": "text",
+              "text": "To create entanglement, we use two thin nonlinear crystals called [b]BBO[/b] (beta barium borate). Through a process known as [i]Spontaneous Parametric Down-Conversion[/i] (SPDC), a single high-energy photon from the laser is converted into two lower-energy photons whose polarizations are entangled. The two photons are emitted at symmetric angles from the BBO. We place a rotatable polarizer in each path and count coincident detections: events where both detectors register a photon simultaneously."
+            }
+          ]
+        },
+        {
+          "title": "Try it yourself!",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The BBO produces photon pairs with parallel polarizations: if one is vertical, so is the other. Experiment with the animation to understand why the coincidence rate increases or decreases with different combinations of polarizer angles. The polarizers can be rotated using the pink handles. The presets highlight the most instructive angle combinations."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/coincidence_widget.tscn",
+              "params": {
+                "alpha": 0,
+                "beta": 0
+              },
+              "height": 400
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "The photons are supposed to get out of the BBO with the same angle: in the drawings the two arms are spread apart and folded for readability."
+            },
+            {
+              "type": "text",
+              "text": "Things to try: keep the two dials equal and turn them together — the coincidence rate should not budge. Then hold one at 0° and sweep the other from 0° to 90°: the rate falls from its maximum to zero. Watch the single-detector rates while you do this. Do they change at all?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "Our setup",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Curious about what an optical entanglement setup looks like? Here are a few pictures of our apparatus:"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/photo_exp4_(1).png",
+              "height": 360,
+              "caption": "The whole table seen from above. The solid purple line is the 405 nm pump: laser (top), U-turn down the left side, then Berek and BBO at the bottom left. The two dashed lines are the invisible 810 nm photon pairs fanning out from the BBO, each through a lens to its polarizer + detector pair, D1 + P1 and D2 + P2 (right). The red boxes at the top right are the single-photon detector modules."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/preBBO_exp4.png",
+              "height": 340,
+              "caption": "The pump-preparation line, following the beam from right to left: LASER, λ/2, beam splitter, two lenses, the first mirror (a faint violet glow is visible on it), then towards the camera: lens, second mirror, λ/2, Berek compensator and the BBO crystal mount."
+            },
+            {
+              "type": "text",
+              "text": "Following the pump from the laser:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]LASER[/b] — a 405 nm diode laser at the back of the table.",
+                "[b]λ/2[/b] and [b]beam splitter[/b] — the half-wave plate turns the polarization; the polarizing beam splitter keeps only the vertical part and sends the rest to a beam dump. Together they set the pump power.",
+                "[b]Lenses L1, L2[/b] — a telescope that shrinks the beam and keeps it parallel.",
+                "[b]Two mirrors[/b] — a U-turn, needed only because the table is too short.",
+                "[b]Lens L3[/b] — focuses the beam onto the crystal, so that all pairs are born at the same spot.",
+                "[b]λ/2 and Berek[/b] — set the pump to 45° with zero relative phase between its horizontal and vertical parts. This is the preparation that decides which entangled state comes out.",
+                "[b]BBO[/b] — the crystal pair where, very rarely, one pump photon becomes two."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "A closer look",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/berek_exp4.png",
+              "height": 340,
+              "caption": "Just before the crystal: the pump λ/2 in its rotation mount (degree scale), the Berek compensator (the large black cylinder with a tilt scale), an iris to clip stray light, and the BBO crystal pair in its small kinematic mount."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/detector_exp4.png",
+              "height": 340,
+              "caption": "One detector arm, looking back towards the crystal. The polarizer (black tube) sits in a rotation mount driven by a motor (red circuit board); behind it a long-pass filter rejects the 405 nm pump, and a collimator couples the 810 nm photons into the orange optical fibre that leads to the single-photon detector module. The linear actuator underneath is not used in this experiment."
+            },
+            {
+              "type": "text",
+              "text": "Both output paths (1 and 2) contain a focusing lens and a rotatable polarizer in front of the detector. The polarizers are rotated by motorized stages, which is what makes a full scan of both angles practical: 19 × 19 settings at one second each."
+            },
+            {
+              "type": "text",
+              "text": "The final component (not shown in the pictures) is the coincidence counting system. The detectors are [i]single-photon avalanche diodes[/i] (SPADs). Each detector is coupled to an optical fiber via a collimator and bandpass filter. The electronics record the number of photons detected within a specified time window and, crucially, the number of [b]coincidences[/b]: simultaneous detections at both D1 and D2 within a narrow time gate (typically a few nanoseconds; 10 ns in our data)."
+            }
+          ]
+        },
+        {
+          "title": "Technical set-up and equipment",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Here is a schematic representation of the setup. All equipment is shown, albeit not at scale."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/exp4_MontageT_(3).png",
+              "height": 320,
+              "caption": "BS: beam splitter. BD: beam dump. λ/2: half-wave plate. Berek: Berek compensator. L: plano-convex lens. M: motor. Solid red: the pump; dashed red: the down-converted pairs."
+            },
+            {
+              "type": "text",
+              "text": "The setup begins in the top right corner with a laser emitting at 405 nm. Before reaching a polarizing beam splitter, the beam passes through a half-wave plate to control its polarization and intensity. The beam splitter transmits only vertically polarized light; the horizontal component is directed to a beam dump."
+            },
+            {
+              "type": "text",
+              "text": "The beam then passes through a pair of collimating lenses, which reduce the beam diameter and ensure it remains parallel. A set of two mirrors redirects the beam (a U-turn was necessary due to limited space on the optical table). A third lens focuses the beam onto the BBO crystal, ensuring all photon pairs are generated at the same location."
+            },
+            {
+              "type": "text",
+              "text": "Before reaching the BBO, the beam's polarization must be set to 45° with zero relative phase between components. This is achieved using a half-wave plate and a [i]Berek compensator[/i], an optical device that finely adjusts the phase difference between the horizontal and vertical polarization components."
+            },
+            {
+              "type": "table",
+              "header": [
+                "Name",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "LASER",
+                  "Diode laser (405 nm)"
+                ],
+                [
+                  "Lenses",
+                  "L1 is LA1509 (10 cm) and L2 is LA1986 (2.5 cm); L3 is LA1461 (25 cm), all from Thorlabs"
+                ],
+                [
+                  "Berek compensator",
+                  "New Focus, variable wave plate"
+                ],
+                [
+                  "BBO",
+                  "2 thin BBO placed at 90 degrees, from Eksma Optics"
+                ],
+                [
+                  "Polarizers",
+                  "Mounted linear polarizers from Thorlabs"
+                ],
+                [
+                  "Lenses",
+                  "L4 and L5 are 50 cm plano-convex lenses from Thorlabs"
+                ],
+                [
+                  "Motor",
+                  "Rotation mount bundle (to rotate the polarizers)"
+                ],
+                [
+                  "Detectors",
+                  "Single photon detection module"
+                ]
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "The site's equipment table also lists the in-house double slit (200-200-200 μm) from Experiments 2 and 3; it is not in the beam here and is left out. The down-converted photons are at 810 nm, twice the pump wavelength, as energy conservation requires for a degenerate pair."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data and graphs",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The data file contains five columns. The first two are the polarizer angles, ranging from −90° to 90°. The remaining three columns are detector counts: D1 singles, D2 singles, and D1–D2 coincidences. All counts were recorded in one-second acquisition windows."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "The raw data in the lab",
+              "text": "The full 19 × 19 angle scan (10° steps, 1 s windows, 10 ns coincidence gate) is loaded into this chapter's lab. Fix P2 at any angle and the results panel draws our measured coincidences along that row, next to the prediction."
+            },
+            {
+              "type": "text",
+              "text": "On the left is the data measured in the lab; on the right is the theoretical prediction. The two plots look quite different, but the key features remain. When both polarizers are set to the same angle, coincidence counts reach a maximum. When the polarizers are rotated 90° relative to each other, the counts drop to nearly zero."
+            },
+            {
+              "type": "subheading",
+              "text": "In 3D"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/3d_experiemental.png",
+              "height": 300,
+              "caption": "Measured coincidences, normalised to 1 at the maximum, against the two polarizer angles. The tall red ridge at the back right is both polarizers near vertical; the lower green hump near the centre is both near horizontal."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/3d_theoric.png",
+              "height": 300,
+              "caption": "Theory: the same surface for a perfect |Φ⁺⟩ pair, ½cos²(α − β) normalised to 1. A corrugated sheet whose ridges run along the diagonal P1 = P2."
+            },
+            {
+              "type": "text",
+              "text": "Ideally, this pattern indicates the creation of a [i]parallel Bell state[/i]: an entangled state in which the two photons always share the same polarization. (Bell states are explained in detail in the theory section.)"
+            }
+          ]
+        },
+        {
+          "title": "Same graphs, with a top view",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/exp_2D.png",
+              "height": 320,
+              "caption": "Measured coincidences as a heat map (blue low, red high). The dark-red blob at the top right is vertical–vertical; the pale patch near the centre is horizontal–horizontal; the two deep-blue holes are the crossed settings ±45° / ∓45°."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/theo_2D.png",
+              "height": 320,
+              "caption": "Theory as a heat map. Clean diagonal stripes: red along P2 = P1, blue along P2 = P1 ± 90°. The pattern depends on the difference of the angles only, which is why it is made of straight 45° bands."
+            },
+            {
+              "type": "text",
+              "text": "Let us analyze these graphs. As noted above, there is a significant discrepancy between the theoretical prediction and the experimental data, though this does not fundamentally affect the conclusions. The key pattern remains: when the polarizer angles are parallel, coincidence counts are high; when perpendicular, they drop to nearly zero. The main deviation from theory is an asymmetry: vertical polarization pairs are detected more frequently than horizontal ones."
+            },
+            {
+              "type": "text",
+              "text": "This asymmetry reveals the actual polarization state produced in our setup. Ideally, the photons would be created in a balanced Bell state with equal contributions from horizontal and vertical polarizations. The data indicate, however, that vertical polarization is favored over horizontal."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Is that real?",
+              "text": "Yes, and the numbers are in the file. With both polarizers vertical we counted about 1 200 coincidences per second; with both horizontal, about 380 per second, roughly three times fewer. The best crossed settings fall to a handful of counts, close to the accidental rate. The pair was real and entangled, just not balanced: more |↕⟩|↕⟩ than |↔⟩|↔⟩."
+            },
+            {
+              "type": "text",
+              "text": "The [i]Berek compensator[/i] is designed to correct exactly this problem by fine-tuning the balance between the horizontal and vertical components. With proper adjustment, it should produce a cleaner Bell state. For reasons we could not identify, however, the compensation did not work as expected in this experimental run. This imbalance will appear in later experiments as well, but at least its origin is now understood."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Entanglement",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "In this section, we describe quantum entanglement mathematically and apply it to our experiment, where two entangled photons each pass through a variable polarizer."
+            },
+            {
+              "type": "text",
+              "text": "Entanglement is one of the most striking features of quantum mechanics. When two particles are entangled, their properties are correlated in a way that does not have a classical explanation. Experiments have confirmed this: entanglement is real, and it cannot be explained by hidden variables or pre-existing properties. Some tie the surprisingly strong correlations of entangled systems to the effect that measurement of one particle may have on the other. The effect is thought to be instantaneous, and irrespective of the distance between the particles. This was described by Einstein as a \"spooky action at a distance\"."
+            },
+            {
+              "type": "callout",
+              "kind": "history",
+              "title": "Bell, 1964",
+              "text": "In 1935 Einstein, Podolsky and Rosen argued that quantum mechanics must be incomplete: the correlations, they said, should be explained by properties the particles carry with them, like the colours of the marbles. For thirty years this was taken to be a matter of taste. In 1964 John Bell showed it is a matter of arithmetic. He proved that [i]any[/i] explanation of that kind, whatever the hidden properties, obeys an inequality, and that the correlations predicted by quantum mechanics for entangled pairs break it. The cos²(α − β) law you will derive in this chapter is precisely a quantity that no pre-written list can reproduce. Experiments from the 1970s on (Clauser, Aspect, Zeilinger and many others, Nobel Prize 2022) have sided with quantum mechanics every time."
+            },
+            {
+              "type": "text",
+              "text": "Using a nonlinear crystal such as BBO, a single high-energy photon from a laser can be converted into two lower-energy photons through Spontaneous Parametric Down-Conversion (SPDC). These daughter photons are created with entangled polarizations: measuring one immediately reveals the polarization of the other. Crucially, this does not enable faster-than-light communication: each individual measurement yields a random result, and the correlations only become apparent when results are compared via ordinary (light-speed-limited) communication. In SPDC experiments, the two photons are conventionally called:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "The [b]signal[/b] photon: the one sent through the optical setup under study.",
+                "The [b]idler[/b] photon: the partner, typically sent directly to a reference detector."
+              ]
+            },
+            {
+              "type": "text",
+              "text": "These names are standard in quantum optics, originating from early parametric amplifier experiments. Because the signal and idler are entangled, measuring the idler provides information about the signal, even without directly interacting with it."
+            }
+          ]
+        },
+        {
+          "title": "Writing two photons at once",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Two particles, one \"and\" list",
+              "text": "In Experiment 3 we wrote a photon's polarization [i]and[/i] its position as two kets side by side, |↗↙⟩|S⟩. Two photons work the same way: the state |↔⟩₁|↔⟩₂ is the list \"photon 1 is ↔ and photon 2 is ↔\". The subscripts say which photon each entry belongs to. Nothing is multiplied; it is a list, and it obeys the same rule as before: if one entry is a sum, distribute the other entry over it.\n\nWhen each photon has its own state, the pair state is simply the list of the two, and expanding it gives four terms whose amplitudes are [i]products[/i]: a·c, a·d, b·c, b·d. Try it in the widget: pick amplitudes for photon 1 and for photon 2 and watch the four-term state appear. Every state you can build this way describes two [b]independent[/b] photons."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/tensor_widget.tscn",
+              "params": {
+                "left": [
+                  "↔",
+                  "↕"
+                ],
+                "right": [
+                  "↔",
+                  "↕"
+                ]
+              },
+              "height": 340
+            },
+            {
+              "type": "equation",
+              "id": "two_particle_list"
+            },
+            {
+              "type": "equation",
+              "id": "product_expand",
+              "caption": "Two independent photons: the four amplitudes are products of one amplitude from each photon."
+            },
+            {
+              "type": "text",
+              "text": "For example, two independent diagonal photons give all four combinations with the same amplitude ½, that is, probability ¼ each, exactly like two coins:"
+            },
+            {
+              "type": "equation",
+              "id": "independent_diagonals"
+            },
+            {
+              "type": "text",
+              "text": "An operation that acts on one photon (polarizer P1 acts on photon 1) leaves the other entry of the list alone. This is all the machinery we need."
+            }
+          ]
+        },
+        {
+          "title": "The four Bell states",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The four maximally entangled two-photon polarization states are called the [i]Bell states[/i], named after John Bell. They represent the four \"perfect\" ways in which the polarizations of two photons can be correlated or anti-correlated:"
+            },
+            {
+              "type": "equation",
+              "id": "bell_phi_plus"
+            },
+            {
+              "type": "equation",
+              "id": "bell_phi_minus"
+            },
+            {
+              "type": "equation",
+              "id": "bell_psi_plus"
+            },
+            {
+              "type": "equation",
+              "id": "bell_psi_minus"
+            },
+            {
+              "type": "text",
+              "text": "The first two states (|Φ^±⟩) have [i]correlated[/i] polarizations: both photons are horizontal, or both are vertical. The last two (|Ψ^±⟩) have [i]anti-correlated[/i] polarizations: if one is horizontal, the other is vertical. The ± sign determines the relative phase between the two terms, which affects interference in certain measurements."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Why these states are not \"two photons\"",
+              "text": "Compare |Φ⁺⟩ with the product states of the previous page. It has only two of the four terms: the mixed ones, |↔⟩₁|↕⟩₂ and |↕⟩₁|↔⟩₂, are missing. Could some choice of a, b, c, d produce it? The mixed amplitudes a·d and b·c would have to vanish, so a or d is zero, and b or c is zero; but then one of the two surviving products a·c or b·d is zero too. No choice works. |Φ⁺⟩ is a legitimate two-photon state (a unit-length arrow in the four-term space), yet it cannot be split into \"a state for photon 1\" and \"a state for photon 2\". Neither photon has a polarization of its own. That is what entangled means."
+            },
+            {
+              "type": "equation",
+              "id": "not_a_product"
+            },
+            {
+              "type": "table",
+              "header": [
+                "Outcome at 0° / 0°",
+                "Two independent diagonal photons",
+                "|Φ⁺⟩ pair"
+              ],
+              "rows": [
+                [
+                  "↔ and ↔",
+                  "¼",
+                  "½"
+                ],
+                [
+                  "↔ and ↕",
+                  "¼",
+                  "0"
+                ],
+                [
+                  "↕ and ↔",
+                  "¼",
+                  "0"
+                ],
+                [
+                  "↕ and ↕",
+                  "¼",
+                  "½"
+                ]
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Which Bell state is produced depends on the crystal orientation and pump laser preparation. In our setup, the BBO alignment produces the correlated state:"
+            },
+            {
+              "type": "equation",
+              "id": "state_produced"
+            }
+          ]
+        },
+        {
+          "title": "Polarizer with variable angle",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Each photon passes through a polarizer mounted on a motorized rotation stage. Since the polarizer can be set to any angle, we denote the angles by Greek letters: α for one polarizer, β for the other."
+            },
+            {
+              "type": "text",
+              "text": "When a photon encounters a polarizer set to angle α, we can understand what happens by decomposing the photon's polarization into two components: one aligned with the polarizer (|α⟩) and one perpendicular to it (|α^⊥⟩)."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "A polarizer at any angle",
+              "text": "In Experiment 1 the polarizer was horizontal, vertical or diagonal. A polarizer at angle α is nothing new: its axis is the unit arrow |α⟩ = cos α |↔⟩ + sin α |↕⟩, and the arrow perpendicular to it is |α^⊥⟩. Any polarization arrow can be written as a shadow on |α⟩ plus a shadow on |α^⊥⟩, and the lengths of the shadows are the cosine and sine of the angle between the arrow and the axis. The polarizer keeps the first shadow and throws the second into |lost⟩. Drag the arrow in the widget and read off the two components."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/vector_playground.tscn",
+              "params": {
+                "labels": [
+                  "α",
+                  "α⊥"
+                ],
+                "angle": 45,
+                "mode": "projection",
+                "show_probabilities": true
+              },
+              "height": 340
+            },
+            {
+              "type": "equation",
+              "id": "alpha_basis"
+            },
+            {
+              "type": "text",
+              "text": "Any polarization state can be written in this basis. For example, a diagonally polarized photon (45°) encountering a polarizer at angle α decomposes as:"
+            },
+            {
+              "type": "equation",
+              "id": "diag_in_alpha_basis"
+            },
+            {
+              "type": "text",
+              "text": "The polarizer transmits only the component aligned with its axis and blocks the perpendicular component:"
+            },
+            {
+              "type": "equation",
+              "id": "p_alpha_diag"
+            },
+            {
+              "type": "text",
+              "text": "The transmitted amplitude is cos(α − 45°), so the transmission probability is cos²(α − 45°). The same recipe works for any incoming angle φ, not just 45°:"
+            },
+            {
+              "type": "equation",
+              "id": "polarizer_general",
+              "caption": "Malus's law from Experiment 1, written as an operator on the state."
+            },
+            {
+              "type": "subheading",
+              "text": "Verification with a familiar case"
+            },
+            {
+              "type": "text",
+              "text": "Let us check this formula with an example we have already seen: a diagonal photon passing through a horizontal polarizer (α = 0°)."
+            },
+            {
+              "type": "equation",
+              "id": "verify_alpha_0",
+              "caption": "The dots stand for the |lost⟩ term, which the site drops from this point on."
+            },
+            {
+              "type": "text",
+              "text": "The amplitude is 1/√2, so the transmission probability is (1/√2)² = ½, the result of Experiment 1."
+            },
+            {
+              "type": "equation",
+              "id": "verify_prob"
+            }
+          ]
+        },
+        {
+          "title": "Full approach: steps 1 to 3",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp4/Exp4Fig7.png",
+              "height": 280,
+              "caption": "Schematic of the entanglement experiment. Ψ_0: the pump photon. Ψ_1: the pair leaving the crystal. Ψ_2: after both polarizers, just before the detectors."
+            },
+            {
+              "type": "text",
+              "text": "Let us now work through the full calculation for two entangled photons, each passing through a polarizer at some angle."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. Initial state"
+            },
+            {
+              "type": "text",
+              "text": "The pump laser produces a diagonally polarized photon:"
+            },
+            {
+              "type": "equation",
+              "id": "psi0_pump"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 2. Entanglement"
+            },
+            {
+              "type": "text",
+              "text": "After passing through the BBO crystal, the pump photon is converted into a pair of entangled photons in the correlated Bell state |Φ⁺⟩:"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_bell"
+            },
+            {
+              "type": "text",
+              "text": "This state is a superposition: both photons are vertical, or both are horizontal, with equal probability. Upon measurement, the outcomes are perfectly correlated: if one is found vertical, so is the other."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 3. Polarizers"
+            },
+            {
+              "type": "text",
+              "text": "Each photon passes through a rotatable polarizer:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "Photon 1 encounters a polarizer at angle β.",
+                "Photon 2 encounters a polarizer at angle α."
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Transmission through a polarizer depends on the cosine of the angle between the photon's polarization and the polarizer axis. Vertical polarization is at 90°; horizontal is at 0°. Each polarizer acts on its own entry of the list and leaves the other alone. Applying the polarizers:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_polarizers"
+            },
+            {
+              "type": "text",
+              "text": "In the last line, we used cos(θ − 90°) = sin θ. Note that the perpendicular components are blocked by the polarizers: they become \"lost\" photons. The state shown above includes only the photons that pass through both polarizers, which is why it is unnormalized."
+            },
+            {
+              "type": "equation",
+              "id": "cos_shift",
+              "caption": "A shadow measured from the vertical axis is a sine; from the horizontal axis, a cosine."
+            }
+          ]
+        },
+        {
+          "title": "Step 4. Coincidence probability",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The probability that both photons pass their respective polarizers is the squared magnitude of the amplitude:"
+            },
+            {
+              "type": "equation",
+              "id": "p_coincidence_amp"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "cos(α − β) = cos α cos β + sin α sin β",
+              "text": "Draw two unit arrows in the plane, one at angle α and one at angle β. The shadow of the first on the second is cos(α − β): the cosine of the angle [i]between[/i] them. Now compute the same shadow component by component. The arrow at α has horizontal part cos α and vertical part sin α; the one at β has cos β and sin β. The shadow of one arrow on another is \"horizontal times horizontal plus vertical times vertical\", so the same quantity is also cos α cos β + sin α sin β. Two ways of measuring one shadow, hence the identity. In ket language it is just the overlap ⟨β|α⟩. Set the widget below to the α axis and read off the components of the arrow at β."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/vector_playground.tscn",
+              "params": {
+                "labels": [
+                  "↔",
+                  "↕"
+                ],
+                "angle": 60,
+                "mode": "projection",
+                "show_probabilities": false
+              },
+              "height": 320
+            },
+            {
+              "type": "equation",
+              "id": "cos_diff_as_overlap"
+            },
+            {
+              "type": "text",
+              "text": "Using the trigonometric identity cos(α − β) = cos α cos β + sin α sin β:"
+            },
+            {
+              "type": "equation",
+              "id": "cos_diff_identity"
+            },
+            {
+              "type": "equation",
+              "id": "p_coincidence",
+              "caption": "The coincidence probability depends only on the [i]difference[/i] of the two angles: the diagonal stripes of the heat map."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "What each detector sees on its own",
+              "text": "Not on the site, but worth checking in the lab: the single-detector probabilities are ½ whatever the angles. Photon 1 alone is a 50/50 coin at every β, and photon 2 alone at every α. Only the coincidences carry the cos²(α − β) pattern. This is the mathematical form of the \"no faster-than-light signalling\" argument from the Abstract."
+            },
+            {
+              "type": "equation",
+              "id": "singles_flat"
+            }
+          ]
+        },
+        {
+          "title": "Step 5. Interpretation",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This result has a clear physical meaning:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]Parallel polarizers[/b] (α = β): the probability is maximized at ½.",
+                "[b]Perpendicular polarizers[/b] (α = β + 90°): the probability is zero."
+              ]
+            },
+            {
+              "type": "subheading",
+              "text": "Why does the maximum reach only ½ rather than 1?"
+            },
+            {
+              "type": "text",
+              "text": "Recall that the perpendicular components become \"lost\" photons. The Bell state |Φ⁺⟩ contains equal contributions of horizontal and vertical polarization. If both polarizers are set to 0° (horizontal), only the |↔⟩|↔⟩ component passes: half the pairs are lost. If both are set to 45°, each photon has a 50 % chance to pass, but the correlations ensure that when one passes, so does the other, again yielding 50 % coincidences. No polarizer setting achieves 100 % transmission for this entangled state."
+            },
+            {
+              "type": "subheading",
+              "text": "Intuitive examples"
+            },
+            {
+              "type": "text",
+              "text": "The following table shows coincidence probabilities for several angle combinations:"
+            },
+            {
+              "type": "table",
+              "header": [
+                "Polarizer angles (α, β)",
+                "Angle difference (α − β)",
+                "Coincidence probability"
+              ],
+              "rows": [
+                [
+                  "(0°, 0°)",
+                  "0°",
+                  "½"
+                ],
+                [
+                  "(0°, 45°)",
+                  "−45°",
+                  "¼"
+                ],
+                [
+                  "(0°, 90°)",
+                  "−90°",
+                  "0"
+                ],
+                [
+                  "(45°, 45°)",
+                  "0°",
+                  "½"
+                ],
+                [
+                  "(30°, 60°)",
+                  "−30°",
+                  "⅜"
+                ]
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The pattern is clear: the closer the polarizers are aligned, the higher the coincidence rate, with a maximum of ½. At 90° separation, coincidences vanish entirely. This angular dependence, specifically the cos²(α − β) form, is a hallmark of quantum entanglement and cannot be reproduced by classical correlations (as Bell's theorem demonstrates)."
+            },
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "Back to the marbles",
+              "text": "The marbles reproduce the first row: at 0° / 0° a bag of \"both horizontal\" and \"both vertical\" pairs, half and half, gives ½ coincidences and 0 at 0° / 90°. Now try to extend the bag so that it also gives ½ at 45° / 45°, ¼ at 0° / 45° and ⅜ at 30° / 60°, for every pair of angles at once. Bell's theorem says this is impossible: whatever list of pre-decided answers you write on the marbles, some combination of angles comes out wrong. The photons manage it because they do not carry answers; they carry one shared arrow in the four-term space."
+            }
+          ]
+        },
+        {
+          "title": "Into the laboratory",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "Your turn at the bench",
+              "text": "The lab has the whole table: the 405 nm laser, beam splitter, the two λ/2 plates, the lens telescope, the mirror U-turn, the pump λ/2 (22.5° makes the pump diagonal), the Berek compensator, the BBO crystal pair, and on each output arm a lens, a motorised polarizer and a detector. The results panel shows the coincidence probability next to ½cos²(α − β), the singles, the pair state leaving the crystal with its VV/HH split, and a plot of coincidences against β with our 19 × 19 scan points on it.\n\n1. Preset [b]Parallel 0°, 0°[/b]. Confirm a coincidence probability of 0.500 and singles of 0.50 each.\n2. Preset [b]45°, 45°[/b]: still 0.500. The correlation survives a change of basis. This is the row the marbles cannot do.\n3. Preset [b]Crossed 0°, 90°[/b]: 0. Then [b]0°, 45°[/b]: 0.250, and [b]30°, 60°[/b]: 0.375. Check each against the table above.\n4. Hold P2 at 0° and drag P1 from −90° to 90°. The singles stay at 0.50 the whole way while the coincidence curve traces cos². Compare the curve with our measured points on the same plot.\n5. Move the pump [b]λ/2 to 15°[/b]. Watch the pair state in the panel: the VV and HH shares leave 50/50 and the predicted curve shrinks on the HH side. One of the two directions (15° or −15°, depending on which way your plate turns) reproduces the roughly 3 : 1 VV : HH imbalance of our data. Put it back to 22.5°.\n6. Set the [b]BBO phase to 180°[/b]. The pair becomes |Φ⁻⟩. Preset 0°, 0° still gives 0.500, but 45°, 45° now gives 0: correlated in the ↔/↕ basis, anti-correlated in the diagonal basis. The sign in a Bell state is not cosmetic."
+            },
+            {
+              "type": "equation",
+              "id": "pump_hwp",
+              "caption": "Not on the original site: how the pump λ/2 angle θ sets the VV/HH split of the pair. At θ = 22.5° the pump is diagonal and the split is 50/50; at 15° it is 75/25."
+            },
+            {
+              "type": "equation",
+              "id": "unbalanced_pair",
+              "caption": "Not on the original site: the unbalanced pair that fits our data, with a² the HH share, b² the VV share and φ the phase set by the Berek compensator and the crystal."
+            },
+            {
+              "type": "equation",
+              "id": "phi_minus_coincidence",
+              "caption": "Not on the original site: with a 180° phase the pair is |Φ⁻⟩ and the coincidences follow cos²(α + β) instead of cos²(α − β)."
+            },
+            {
+              "type": "lab",
+              "label": "◆  Enter the Experiment 4 lab"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$comment": "Experiment 4 (entanglement, Bell state) equations E1-E13 transcribed from docs/content/05-experiment-4-entanglement.md, plus check-in helpers the site implies but does not print (two_particle_list, product_expand, not_a_product, alpha_basis, polarizer_general, cos_shift, cos_diff_identity, cos_diff_as_overlap, singles_flat) and three lab helpers that are NOT on the site (unbalanced_pair, pump_hwp, phi_minus_coincidence). Site convention: photon 1 -> P1 at beta, photon 2 -> P2 at alpha. Rendered by tools/mathgen into app/assets/math/exp4/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "HH": "\\ket{\\H}_1\\ket{\\H}_2",
+    "VV": "\\ket{\\V}_1\\ket{\\V}_2",
+    "HV": "\\ket{\\H}_1\\ket{\\V}_2",
+    "VH": "\\ket{\\V}_1\\ket{\\H}_2",
+    "aperp": "\\ket{\\alpha^{\\perp}}"
+  },
+  "equations": {
+    "two_particle_list": "\\ket{\\H}_1\\ket{\\H}_2 \\quad\\text{reads}\\quad \\text{``photon 1 is}\\ \\H\\ \\text{and photon 2 is}\\ \\H\\text{''}",
+    "product_expand": "\\begin{aligned} \\left(a\\ket{\\H} + b\\ket{\\V}\\right)_1\\left(c\\ket{\\H} + d\\ket{\\V}\\right)_2 &= ac\\,\\HH + ad\\,\\HV\\\\ &\\quad + bc\\,\\VH + bd\\,\\VV \\end{aligned}",
+    "independent_diagonals": "\\ket{\\diag}_1\\ket{\\diag}_2 = \\tfrac12\\left(\\HH + \\HV + \\VH + \\VV\\right)",
+    "bell_phi_plus": "\\ket{\\Phi^+} = \\frac{1}{\\sqrt2}\\left(\\HH + \\VV\\right)",
+    "bell_phi_minus": "\\ket{\\Phi^-} = \\frac{1}{\\sqrt2}\\left(\\HH - \\VV\\right)",
+    "bell_psi_plus": "\\ket{\\Psi^+} = \\frac{1}{\\sqrt2}\\left(\\HV + \\VH\\right)",
+    "bell_psi_minus": "\\ket{\\Psi^-} = \\frac{1}{\\sqrt2}\\left(\\HV - \\VH\\right).",
+    "state_produced": "\\ket{\\Phi^+} = \\frac{1}{\\sqrt2}\\left(\\HH + \\VV\\right).",
+    "not_a_product": "\\begin{aligned} \\ket{\\Phi^+} &= \\tfrac{1}{\\sqrt2}\\,\\HH + 0\\cdot\\HV + 0\\cdot\\VH + \\tfrac{1}{\\sqrt2}\\,\\VV\\\\ &\\Rightarrow\\quad ad = 0,\\quad bc = 0,\\quad ac = bd = \\tfrac{1}{\\sqrt2}\\qquad\\text{(impossible)} \\end{aligned}",
+    "alpha_basis": "\\ket{\\alpha} = \\cos\\alpha\\,\\ket{\\H} + \\sin\\alpha\\,\\ket{\\V}, \\qquad \\aperp = -\\sin\\alpha\\,\\ket{\\H} + \\cos\\alpha\\,\\ket{\\V}",
+    "diag_in_alpha_basis": "\\ket{\\diag} = \\cos(\\alpha - 45^\\circ)\\ket{\\alpha} + \\sin(\\alpha - 45^\\circ)\\aperp",
+    "p_alpha_diag": "P(\\alpha)\\ket{\\diag} = \\cos(\\alpha - 45^\\circ)\\ket{\\alpha} + \\sin(\\alpha - 45^\\circ)\\lost",
+    "polarizer_general": "\\begin{aligned} P(\\alpha)\\ket{\\varphi} &= \\cos(\\alpha-\\varphi)\\ket{\\alpha} + \\sin(\\alpha-\\varphi)\\lost,\\\\ \\text{Prob} &= \\cos^2(\\alpha-\\varphi) \\end{aligned}",
+    "verify_alpha_0": "\\begin{aligned} P(0^\\circ)\\ket{\\diag} &= \\cos(45^\\circ - 0^\\circ)\\ket{\\H} + \\sin(45^\\circ - 0^\\circ)\\lost\\\\ &= \\cos(45^\\circ)\\ket{\\H} + \\cdots\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\cdots \\end{aligned}",
+    "verify_prob": "\\text{Prob} = \\left(\\frac{1}{\\sqrt2}\\right)^2 = \\frac12",
+    "psi0_pump": "\\ket{\\psi_0} = \\ket{\\diag}",
+    "psi1_bell": "\\ket{\\psi_1} = \\frac{1}{\\sqrt2}\\left(\\VV + \\HH\\right)",
+    "cos_shift": "\\cos(\\theta - 90^\\circ) = \\sin\\theta, \\qquad \\cos(\\theta - 0^\\circ) = \\cos\\theta",
+    "psi2_polarizers": "\\begin{aligned} \\ket{\\psi_2} &= \\tfrac{1}{\\sqrt2}\\left(P_1(\\beta)\\ket{\\V}_1\\,P_2(\\alpha)\\ket{\\V}_2 + P_1(\\beta)\\ket{\\H}_1\\,P_2(\\alpha)\\ket{\\H}_2\\right)\\\\ &= \\tfrac{1}{\\sqrt2}\\Big(\\cos(\\beta - 90^\\circ)\\ket{\\beta}_1\\cos(\\alpha - 90^\\circ)\\ket{\\alpha}_2\\\\ &\\qquad\\quad + \\cos(\\beta - 0^\\circ)\\ket{\\beta}_1\\cos(\\alpha - 0^\\circ)\\ket{\\alpha}_2\\Big)\\\\ &= \\tfrac{1}{\\sqrt2}\\left(\\sin\\beta\\sin\\alpha + \\cos\\beta\\cos\\alpha\\right)\\ket{\\beta}_1\\ket{\\alpha}_2 \\end{aligned}",
+    "p_coincidence_amp": "P(\\alpha,\\beta) = \\left|\\frac{1}{\\sqrt2}\\left(\\sin\\beta\\sin\\alpha + \\cos\\beta\\cos\\alpha\\right)\\right|^2",
+    "cos_diff_identity": "\\cos(\\alpha - \\beta) = \\cos\\alpha\\cos\\beta + \\sin\\alpha\\sin\\beta",
+    "cos_diff_as_overlap": "\\braket{\\beta}{\\alpha} = (\\cos\\beta)(\\cos\\alpha) + (\\sin\\beta)(\\sin\\alpha) = \\cos(\\alpha - \\beta)",
+    "p_coincidence": "P(\\alpha,\\beta) = \\left|\\frac{1}{\\sqrt2}\\cos(\\alpha - \\beta)\\right|^2 = \\frac12\\cos^2(\\alpha - \\beta)",
+    "singles_flat": "P_1(\\beta) = \\tfrac12, \\qquad P_2(\\alpha) = \\tfrac12 \\qquad\\text{for every angle}",
+    "unbalanced_pair": "\\begin{aligned} \\ket{\\psi_1} &= a\\,\\HH + b\\,e^{i\\varphi}\\,\\VV,\\\\ P(\\alpha,\\beta) &= \\left|a\\cos\\alpha\\cos\\beta + b\\,e^{i\\varphi}\\sin\\alpha\\sin\\beta\\right|^2 \\end{aligned}",
+    "pump_hwp": "\\begin{aligned} \\lambda/2\\ \\text{at}\\ \\theta:\\quad \\ket{\\text{pump}} &= \\cos 2\\theta\\,\\ket{\\H} + \\sin 2\\theta\\,\\ket{\\V}\\\\ &\\overset{\\text{BBO}}{\\longrightarrow}\\ \\cos 2\\theta\\,\\VV + \\sin 2\\theta\\,\\HH \\end{aligned}",
+    "phi_minus_coincidence": "\\begin{aligned} \\varphi = 180^\\circ:\\quad e^{i\\varphi} &= -1, \\qquad \\ket{\\psi_1} = \\ket{\\Phi^-},\\\\ P(\\alpha,\\beta) &= \\tfrac12\\cos^2(\\alpha + \\beta) \\end{aligned}"
+  }
+}
