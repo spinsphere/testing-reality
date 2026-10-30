@@ -142,6 +142,9 @@ func place(app: Apparatus, x: float, z: float = 0.0, yaw_deg: float = 0.0) -> Ap
 	app.rotation_degrees.y = yaw_deg
 	apparatus_root.add_child(app)
 	controller.add(app)
+	# alternate label heights so neighbouring labels do not overlap
+	if controller.components.size() % 2 == 0 and app._label3d:
+		app._label3d.position.y += 0.035
 	return app
 
 
@@ -320,7 +323,7 @@ func _refresh_state_panel(snapshots: Array) -> void:
 		var ket := Label.new()
 		ket.text = "|%s⟩ = %s" % [s["stage"], s["ket"]]
 		ket.theme_type_variation = "Ket"
-		ket.add_theme_font_size_override("font_size", 17)
+		ket.add_theme_font_size_override("font_size", 17 if ket.text.length() < 70 else 14)
 		ket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		row.add_child(ket)
 		state_box.add_child(row)

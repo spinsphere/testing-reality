@@ -12,7 +12,7 @@ class Laser extends Apparatus:
 	func _init(p_wavelength: float = 405.0, p_pol: float = 45.0, p_label: String = "LASER") -> void:
 		label = p_label
 		display_name = "Diode laser (%d nm)" % int(p_wavelength)
-		model = "laser_module"
+		model = "laser_405"
 		wavelength_nm = p_wavelength
 		polarization_deg = p_pol
 		description = "A laser diode. Its light is prepared with a definite polarization before it reaches the first element."
@@ -93,7 +93,7 @@ class Lens extends Apparatus:
 	func _init(p_label: String = "L1", p_focal_mm: float = 500.0) -> void:
 		label = p_label
 		display_name = "Plano-convex lens"
-		model = "lens_mount"
+		model = "lens_mount_f500"
 		focal_mm = p_focal_mm
 		description = "Focuses or collimates the beam. It does not change the quantum state we track here; it only keeps the photons on the detector."
 
@@ -135,3 +135,77 @@ class Detector extends Apparatus:
 
 	func summary() -> String:
 		return "%s · %d %%" % [label, roundi(last_probability * 100.0)]
+
+
+class SlitMask extends Apparatus:
+	## The in-house double slit. Creates the path property: |S⟩ → (|A⟩ + |B⟩)/√2.
+	## Mode "double" opens both slits; "A only" / "B only" cover one slit.
+	const MODES := ["double", "A only", "B only"]
+
+	func _init(p_label: String = "SLIT", p_width_um: float = 200.0, p_sep_um: float = 400.0) -> void:
+		label = p_label
+		display_name = "Double slit mask"
+		model = "double_slit_mask"
+		description = "Two parallel slits cut in an opaque plate (made in-house). A photon that passes is in a superposition of 'through slit A' and 'through slit B'. Cover one slit to see a single-slit pattern."
+		add_param("mode", {"label": "Open slits", "type": "enum", "options": MODES, "value": "double", "help": "Cover one slit to compare single-slit diffraction with the double-slit pattern."})
+		add_param("width", {"label": "Slit width w", "type": "float", "min": 50.0, "max": 400.0, "step": 10.0, "unit": " µm", "value": p_width_um, "help": "Narrower slits spread the light more (wider envelope)."})
+		add_param("separation", {"label": "Slit separation d", "type": "float", "min": 150.0, "max": 1000.0, "step": 10.0, "unit": " µm", "value": p_sep_um, "help": "Centre-to-centre distance. Larger d → closer fringes (spacing λL/d)."})
+
+	func open_slits() -> PackedStringArray:
+		match str(get_param("mode")):
+			"A only":
+				return PackedStringArray(["A"])
+			"B only":
+				return PackedStringArray(["B"])
+		return PackedStringArray(["A", "B"])
+
+	func apply(sys: QuagmireSystem, ctx: Dictionary) -> void:
+		sys.add_property(ctx["path"], PackedStringArray(["S"]))
+		var slits := open_slits()
+		sys.slits(ctx["path"], "S", slits, 1.0, 0.0, "")
+		# make sure both labels exist so the screen geometry resolves
+		sys.add_label(ctx["path"], "A")
+		sys.add_label(ctx["path"], "B")
+
+	func summary() -> String:
+		return "%s · w %d µm · d %d µm · %s" % [label, int(get_param("width")), int(get_param("separation")), str(get_param("mode"))]
+
+	func refresh_visual() -> void:
+		super()
+		var cover := model_root.find_child("Cover", true, false) as Node3D
+		if cover:
+			match str(get_param("mode")):
+				"A only":
+					cover.visible = true
+					cover.position.z = -0.0004
+				"B only":
+					cover.visible = true
+					cover.position.z = 0.0004
+				_:
+					cover.visible = false
+
+
+class ScanningDetector extends Apparatus:
+	## Single-photon detector on a motorised linear stage, with a narrow slit in front.
+	## The lab computes the full scan profile; `position_mm` is where the detector sits now.
+	var last_rate := 0.0
+
+	func _init(p_label: String = "D1", p_half_range_mm: float = 3.0) -> void:
+		label = p_label
+		display_name = "Scanning single-photon detector"
+		model = "spcm_detector"
+		description = "A single-photon counting module behind a 200 µm slit, carried by a motorised stage that steps across the beam. Counting at each step builds up the pattern."
+		add_param("position", {"label": "Detector position", "type": "float", "min": -p_half_range_mm, "max": p_half_range_mm, "step": 0.05, "unit": " mm", "value": 0.0, "help": "Move the detector across the pattern; the count rate follows the curve."})
+		add_param("slit", {"label": "Detector slit", "type": "float", "min": 50.0, "max": 500.0, "step": 10.0, "unit": " µm", "value": 200.0, "help": "A wider slit collects more light but blurs fine fringes."})
+		add_param("range", {"label": "Scan half-range", "type": "float", "min": 1.0, "max": 6.0, "step": 0.5, "unit": " mm", "value": p_half_range_mm})
+		add_param("distance", {"label": "Effective slit → detector distance L", "type": "float", "min": 0.2, "max": 2.0, "step": 0.05, "unit": " m", "value": 0.5, "help": "With a lens between the slits and the detector, L is the focal length (the far-field pattern forms in the focal plane)."})
+
+	func is_detector() -> bool:
+		return true
+
+	func summary() -> String:
+		return "%s · %.2f mm · %d /s" % [label, float(get_param("position")), roundi(last_rate)]
+
+	func refresh_visual() -> void:
+		super()
+		model_root.position.z = float(get_param("position")) / 1000.0 * 40.0  # exaggerated ×40 so motion is visible
