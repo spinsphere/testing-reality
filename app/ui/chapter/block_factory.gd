@@ -255,6 +255,10 @@ static func callout(kind: String, title: String, text: String) -> Control:
 static func widget(scene_path: String, params: Dictionary, height: float) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, height)
+	if not scene_path.begins_with("res://"):
+		scene_path = "res://ui/widgets/" + scene_path
+	if not scene_path.ends_with(".tscn"):
+		scene_path += ".tscn"
 	if not ResourceLoader.exists(scene_path):
 		var missing := Label.new()
 		missing.text = "[widget %s missing]" % scene_path
