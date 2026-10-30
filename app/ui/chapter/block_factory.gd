@@ -96,8 +96,26 @@ static func rich_text(text: String) -> RichTextLabel:
 
 ## Wrap |…⟩ and ⟨…| occurrences in a mono/symbol font so arrows and angle brackets render.
 static func ketify(text: String) -> String:
+	# Leave [url=…]…[/url] spans untouched (file names contain underscores).
+	var url_re := RegEx.new()
+	url_re.compile("\\[url=[^\\]]*\\][\\s\\S]*?\\[/url\\]")
+	var out := ""
+	var last := 0
+	for m in url_re.search_all(text):
+		out += _ketify_plain(text.substr(last, m.get_start() - last))
+		out += m.get_string()
+		last = m.get_end()
+	out += _ketify_plain(text.substr(last))
+	return out
+
+
+static func _ketify_plain(text: String) -> String:
+	# subscripts: P_↔, Ψ_0, lost_PA → small raised-baseline text
+	var sub_re := RegEx.new()
+	sub_re.compile("([A-Za-zΨψΦφ⟩])_([A-Za-z0-9↔↕↗↙↘↖±⁺⁻]{1,4})")
+	text = sub_re.sub(text, "$1[font_size=12]$2[/font_size]", true)
 	var re := RegEx.new()
-	re.compile("(\\|[^|\\[\\]⟩]{1,24}⟩|⟨[^|\\[\\]⟨]{1,24}\\|)")
+	re.compile("(\\|[^|\\[\\]⟩]{1,40}⟩|⟨[^|\\[\\]⟨]{1,24}\\|)")
 	var out := ""
 	var last := 0
 	for m in re.search_all(text):

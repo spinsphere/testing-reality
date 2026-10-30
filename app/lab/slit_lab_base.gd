@@ -84,8 +84,8 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 	var light := Palette.wavelength_to_color(wavelength_nm) if Palette.is_visible(wavelength_nm) else Color(0.9, 0.2, 0.25)
 	screen_plane.set_profile(ys, prof.intensity(), light, float(scanner.get_param("range")) * 1e-3)
 
-	var top := HBoxContainer.new()
-	top.add_theme_constant_override("separation", 10)
+	var top := HFlowContainer.new()
+	top.add_theme_constant_override("h_separation", 12)
 	var lbl := Label.new()
 	lbl.text = "Lab data"
 	lbl.theme_type_variation = "Muted"
@@ -99,9 +99,6 @@ func on_rebuilt(_snapshots: Array, result: Dictionary) -> void:
 		overlay_index = i
 		controller.mark_dirty())
 	top.add_child(_overlay_button)
-	var sp := Control.new()
-	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.add_child(sp)
 	var vis := Label.new()
 	vis.text = "singles visibility %.2f" % prof.visibility()
 	vis.theme_type_variation = "Mono"

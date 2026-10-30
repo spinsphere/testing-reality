@@ -205,8 +205,8 @@ func _make_label() -> void:
 	_label3d = Label3D.new()
 	_label3d.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label3d.no_depth_test = true
-	_label3d.font_size = 40
-	_label3d.pixel_size = 0.0006
+	_label3d.font_size = 36
+	_label3d.pixel_size = 0.00055
 	_label3d.outline_size = 8
 	_label3d.modulate = Palette.TEXT
 	_label3d.position = Vector3(0, beam_height + 0.075, 0)

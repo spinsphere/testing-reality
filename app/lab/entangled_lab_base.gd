@@ -56,4 +56,10 @@ func on_idler(app: Apparatus, t: float) -> Apparatus:
 
 func finish_layout() -> void:
 	beam_paths = [pump_path, [bbo] + signal_path, [bbo] + idler_path]
+	# three label heights along the dense arms to limit overlap
+	var i := 0
+	for app in signal_path + idler_path:
+		if app._label3d:
+			app._label3d.position.y = BEAM_HEIGHT + 0.06 + 0.03 * (i % 3)
+		i += 1
 	camera_rig.set_home(Vector3(-0.05, BEAM_HEIGHT, 0.0), 1.5, 150.0, 26.0)
