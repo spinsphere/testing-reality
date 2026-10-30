@@ -38,13 +38,25 @@ cd tools/mathgen && npm install && npm run build:png   # renders every chapter's
 godot --path app                        # run the app
 ```
 
-Headless checks:
+The Quagmire GDExtension binaries (Linux, Windows) are committed in `app/addons/quagmire/bin`,
+so a fresh clone opens in Godot without a Rust toolchain; `tools/build-sdk.sh` rebuilds them.
+
+## Testing
 
 ```bash
-cd quagmire-engine && cargo test                            # engine golden tests (the site's numbers)
-godot --headless --path app -s tests/smoke_quagmire.gd      # engine through GDScript
-xvfb-run -a godot --path app -- --go=lab:exp1 --shot=/tmp/lab.png   # screenshot a lab
+tools/test.sh            # everything below, headless and under xvfb (logs in builds/test-logs)
+tools/test.sh --quick    # skip the xvfb / GL pass
 ```
+
+| Step | What it checks |
+|---|---|
+| `cargo test` in `quagmire-engine/` | 26 golden tests: the site's numbers (12.5 %, fringe visibilities, Bell correlations…) |
+| `godot --headless --import` | every asset imports, the extension registers |
+| `tests/smoke_quagmire.gd`, `tests/smoke_widgets.gd` | engine API through GDScript; every widget with its documented parameters |
+| `tests/run_all.gd` | loads all scripts, instantiates all scenes, then drives the real app: hub cards and settings, every chapter page (table of contents, keys, widgets, equations, figures, progress), every lab (presets, each apparatus parameter through the inspector, measured-data overlays, photons, picking, camera, Esc/back) |
+| screenshots | `--go=<route> --shot=<png>` for the hub, chapter pages and all seven labs |
+
+Any `SCRIPT ERROR` / `ERROR` / `WARNING` line printed by Godot fails the run.
 
 ## How the physics works
 
