@@ -9,16 +9,17 @@ const HUB_SCENE := preload("res://ui/hub/hub.tscn")
 const CHAPTER_SCENE := preload("res://ui/chapter/chapter.tscn")
 
 var _screen: Node
+var _bg: ColorRect
 var _shot_path := ""
 
 
 func _ready() -> void:
 	theme = ThemeBuilder.build()
-	var bg := ColorRect.new()
-	bg.color = Palette.BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
+	_bg = ColorRect.new()
+	_bg.color = Palette.BG
+	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_bg)
 	AppState.route_changed.connect(_on_route_changed)
 	_parse_args()
 	_on_route_changed(AppState.current_route)
@@ -54,6 +55,8 @@ func _on_route_changed(route: Dictionary) -> void:
 	if _screen:
 		_screen.queue_free()
 		_screen = null
+	# The 2D background would hide the 3D world, so only show it for 2D screens.
+	_bg.visible = route.get("screen", "hub") != "lab"
 	match route.get("screen", "hub"):
 		"hub":
 			_screen = HUB_SCENE.instantiate()
