@@ -1,0 +1,226 @@
+{
+  "generated": "2026-10-30T11:24:22.072Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "psi0_pol_pos": {
+      "file": "psi0_pol_pos.svg",
+      "width": 240.02,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi} = \\ket{\\diag}\\ket{S}",
+      "hash": "74e47e7af9f218fd",
+      "png": "psi0_pol_pos.png"
+    },
+    "tensor_distribute": {
+      "file": "tensor_distribute.svg",
+      "width": 660.35,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\diag}\\left(\\ket{A} + \\ket{B}\\right) = \\ket{\\diag}\\ket{A} + \\ket{\\diag}\\ket{B}",
+      "hash": "d66d85955c82f583",
+      "png": "tensor_distribute.png"
+    },
+    "psi0_source": {
+      "file": "psi0_source.svg",
+      "width": 271.92,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} = \\ket{\\diag}\\ket{S}\\,.",
+      "hash": "ff0c845f8edc59df",
+      "png": "psi0_source.png"
+    },
+    "psi1_slits": {
+      "file": "psi1_slits.svg",
+      "width": 602.54,
+      "height": 130.03,
+      "baseline": 55.97,
+      "tex": "\\begin{aligned} \\ket{\\psi_1} &= \\ket{\\diag}\\left(\\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{A}+\\ket{B}\\right)\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{\\diag}\\ket{A} + \\ket{\\diag}\\ket{B}\\right). \\end{aligned}",
+      "hash": "fc332dced67161ad",
+      "png": "psi1_slits.png"
+    },
+    "psi2_polarizers": {
+      "file": "psi2_polarizers.svg",
+      "width": 1051.62,
+      "height": 390.54,
+      "baseline": 186.22,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\PH\\ket{\\diag}\\ket{A} + \\PV\\ket{\\diag}\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\PH\\left(\\frac{\\ket{\\H}+\\ket{\\V}}{\\sqrt{2}}\\right)\\ket{A} + \\PV\\left(\\frac{\\ket{\\H}+\\ket{\\V}}{\\sqrt{2}}\\right)\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\frac{\\ket{\\H}+\\lostA}{\\sqrt{2}}\\ket{A} + \\frac{\\lostB+\\ket{\\V}}{\\sqrt{2}}\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\tfrac{1}{\\sqrt{2}}\\ket{\\H}\\ket{A} + \\tfrac{1}{\\sqrt{2}}\\ket{\\V}\\ket{B} + \\tfrac{1}{\\sqrt{2}}\\lostA + \\tfrac{1}{\\sqrt{2}}\\lostB\\right)\\\\ &= \\tfrac{1}{2}\\,e^{ikl}\\left(\\ket{\\H}\\ket{A} + \\ket{\\V}\\ket{B} + \\lostA + \\lostB\\right) \\end{aligned}",
+      "hash": "4146fd50ec7eeb91",
+      "png": "psi2_polarizers.png"
+    },
+    "psi3_screen": {
+      "file": "psi3_screen.svg",
+      "width": 817.36,
+      "height": 157.65,
+      "baseline": 69.78,
+      "tex": "\\begin{aligned} \\ket{\\psi_3} &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H}\\ket{y} + e^{ikb}\\ket{\\V}\\ket{y}\\right) + \\cdots\\\\ &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y} + \\cdots\\\\ &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}e^{ika}\\ket{\\H}\\ket{y} + \\tfrac{1}{2}\\,e^{ikl}e^{ikb}\\ket{\\V}\\ket{y} + \\cdots \\end{aligned}",
+      "hash": "ce8621d9ce2b06eb",
+      "png": "psi3_screen.png"
+    },
+    "psi3_amplitudes": {
+      "file": "psi3_amplitudes.svg",
+      "width": 838.16,
+      "height": 100.61,
+      "baseline": 67.89,
+      "tex": "\\ket{\\psi_3} = \\cdots + \\underbrace{\\tfrac{1}{2}\\,e^{ikl}e^{ika}}_{\\text{amplitude }A_1}\\ket{\\H}\\ket{y} + \\underbrace{\\tfrac{1}{2}\\,e^{ikl}e^{ikb}}_{\\text{amplitude }A_2}\\ket{\\V}\\ket{y} + \\cdots",
+      "hash": "593e24ee6fb2a47d",
+      "png": "psi3_amplitudes.png"
+    },
+    "orthogonal_norm": {
+      "file": "orthogonal_norm.svg",
+      "width": 940.78,
+      "height": 44.96,
+      "baseline": 9.84,
+      "tex": "\\left|A_1\\ket{\\H}\\ket{y} + A_2\\ket{\\V}\\ket{y}\\right|^{2} = |A_1|^{2} + |A_2|^{2} \\quad\\text{since}\\quad \\braket{\\H}{\\V} = 0",
+      "hash": "b5272bc4ab09d854",
+      "png": "orthogonal_norm.png"
+    },
+    "intensity_sum": {
+      "file": "intensity_sum.svg",
+      "width": 468.06,
+      "height": 215.71,
+      "baseline": 98.82,
+      "tex": "\\begin{aligned} I &= |A_1|^{2} + |A_2|^{2}\\\\ &= \\left|\\tfrac{1}{2}\\,e^{ikl}e^{ika}\\right|^{2} + \\left|\\tfrac{1}{2}\\,e^{ikl}e^{ikb}\\right|^{2}\\\\ &= \\tfrac{1}{4} + \\tfrac{1}{4}\\\\ &= \\tfrac{1}{2} \\end{aligned}",
+      "hash": "2622d490d7fe6b67",
+      "png": "intensity_sum.png"
+    },
+    "pattern_half_envelope": {
+      "file": "pattern_half_envelope.svg",
+      "width": 406.53,
+      "height": 94.02,
+      "baseline": 34.37,
+      "tex": "\\mathrm{Pattern} = \\frac{1}{2}\\times\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}",
+      "hash": "dd6ea20dd8604ca8",
+      "png": "pattern_half_envelope.png"
+    },
+    "alpha_def": {
+      "file": "alpha_def.svg",
+      "width": 213.46,
+      "height": 75.26,
+      "baseline": 25.26,
+      "tex": "\\alpha = \\frac{\\pi\\, w \\sin\\theta}{\\lambda}",
+      "hash": "5194142a7b2ba9bc",
+      "png": "alpha_def.png"
+    },
+    "psi3_before_p1": {
+      "file": "psi3_before_p1.svg",
+      "width": 550.85,
+      "height": 45.36,
+      "baseline": 12.66,
+      "tex": "\\ket{\\psi_3} = \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y}",
+      "hash": "43c970ba2c720704",
+      "png": "psi3_before_p1.png"
+    },
+    "psi3_hv_basis": {
+      "file": "psi3_hv_basis.svg",
+      "width": 550.85,
+      "height": 45.36,
+      "baseline": 12.66,
+      "tex": "\\ket{\\psi_3} = \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y}",
+      "hash": "43c970ba2c720704",
+      "png": "psi3_hv_basis.png"
+    },
+    "hv_in_diagonal": {
+      "file": "hv_in_diagonal.svg",
+      "width": 895.57,
+      "height": 52.66,
+      "baseline": 21.34,
+      "tex": "\\ket{\\H} = \\tfrac{1}{\\sqrt{2}}\\left(\\ket{\\diag} + \\ket{\\antidiag}\\right), \\qquad \\ket{\\V} = \\tfrac{1}{\\sqrt{2}}\\left(\\ket{\\diag} - \\ket{\\antidiag}\\right)",
+      "hash": "32a91390fb680e85",
+      "png": "hv_in_diagonal.png"
+    },
+    "diagonal_rewrite": {
+      "file": "diagonal_rewrite.svg",
+      "width": 943.98,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\psi_3} = \\frac{1}{2\\sqrt{2}}\\,e^{ikl}\\left[\\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag} + \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag}\\right]\\ket{y}",
+      "hash": "0f6a511aa1769640",
+      "png": "diagonal_rewrite.png"
+    },
+    "sum_of_phases": {
+      "file": "sum_of_phases.svg",
+      "width": 459.17,
+      "height": 119.86,
+      "baseline": 50.88,
+      "tex": "\\begin{aligned} \\left|e^{ika} + e^{ikb}\\right|^{2} &= 2\\left(1 + \\cos k\\Delta\\right)\\\\ \\left|e^{ika} - e^{ikb}\\right|^{2} &= 2\\left(1 - \\cos k\\Delta\\right) \\end{aligned}",
+      "hash": "92a3aa84879f3cf4",
+      "png": "sum_of_phases.png"
+    },
+    "p1_0": {
+      "file": "p1_0.svg",
+      "width": 569.7,
+      "height": 45.2,
+      "baseline": 12.5,
+      "tex": "P_1 = 0^{\\circ}:\\qquad e^{ika}\\ket{\\H} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}",
+      "hash": "01eb99d471f05b54",
+      "png": "p1_0.png"
+    },
+    "p1_90": {
+      "file": "p1_90.svg",
+      "width": 567.14,
+      "height": 45.2,
+      "baseline": 12.5,
+      "tex": "P_1 = 90^{\\circ}:\\qquad e^{ikb}\\ket{\\V} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}",
+      "hash": "937562c357ca7220",
+      "png": "p1_90.png"
+    },
+    "p1_45": {
+      "file": "p1_45.svg",
+      "width": 942.38,
+      "height": 45.36,
+      "baseline": 12.66,
+      "tex": "P_1 = 45^{\\circ}:\\qquad \\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}\\left(1 + \\cos k\\Delta\\right)",
+      "hash": "6cb2cfa773c644ad",
+      "png": "p1_45.png"
+    },
+    "p1_m45": {
+      "file": "p1_m45.svg",
+      "width": 970.54,
+      "height": 45.36,
+      "baseline": 12.66,
+      "tex": "P_1 = -45^{\\circ}:\\qquad \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}\\left(1 - \\cos k\\Delta\\right)",
+      "hash": "28e6a0035266c66f",
+      "png": "p1_m45.png"
+    },
+    "delta_def": {
+      "file": "delta_def.svg",
+      "width": 157.36,
+      "height": 28.88,
+      "baseline": 2.98,
+      "tex": "\\Delta = a - b",
+      "hash": "7f5f7ffd11b1d529",
+      "png": "delta_def.png"
+    },
+    "complementary_sum": {
+      "file": "complementary_sum.svg",
+      "width": 582.59,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\frac{1}{4}\\left(1 + \\cos k\\Delta\\right) + \\frac{1}{4}\\left(1 - \\cos k\\Delta\\right) = \\frac{1}{2}",
+      "hash": "177c5218716a0641",
+      "png": "complementary_sum.png"
+    },
+    "complementary_sum_hv": {
+      "file": "complementary_sum_hv.svg",
+      "width": 194.61,
+      "height": 73.41,
+      "baseline": 24.83,
+      "tex": "\\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}",
+      "hash": "80f6929012d7d6e0",
+      "png": "complementary_sum_hv.png"
+    },
+    "general_p1": {
+      "file": "general_p1.svg",
+      "width": 777.86,
+      "height": 43.79,
+      "baseline": 12.5,
+      "tex": "I(\\varphi_1) = \\tfrac{1}{4}\\left[1 + \\sin(2\\varphi_1)\\cos k\\Delta\\right], \\qquad V = \\left|\\sin 2\\varphi_1\\right|",
+      "hash": "cd916cdc4d5b9d45",
+      "png": "general_p1.png"
+    }
+  }
+}

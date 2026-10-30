@@ -1,0 +1,273 @@
+{
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "The three-polarizer paradox",
+          "blocks": [
+            {"type": "section", "text": "Experiment 1"},
+            {"type": "text", "text": "This first experiment is called the three-polarizer paradox. It's not a true paradox — quantum mechanics predicts the result exactly — but the outcome is surprising enough to challenge our classical intuition."},
+            {"type": "callout", "kind": "paradox", "title": "How can adding a filter increase transmission?", "text": "Place two polarizers at 90° to each other: [b]no light passes[/b]. Now insert a third polarizer at 45° between them: suddenly [b]12.5 %[/b] of the light passes through."},
+            {"type": "text", "text": "To resolve the paradox, we will apply the ideas covered in the Introduction — states as kets, evolution via linear operators, and the Born rule for measurement outcomes — to a concrete physical property: the [b]polarization of light[/b]."},
+            {"type": "figure", "src": "res://assets/figures/exp1/setup_exp1.png", "caption": "The three polarizers P1, P2 and P3 on our optical table, seen from above. The violet line marks the 405 nm laser beam.", "height": 300},
+            {"type": "callout", "kind": "note", "title": "What you need from the Introduction", "text": "Arrows in a plane (vectors), adding and scaling arrows, unit length = valid state, perpendicular = distinguishable, and the rule [i]square the amplitude to get a probability[/i]. Everything new — angles, cosines, changing basis, chaining operators — gets its own Maths check-in on the page where it is first needed."}
+          ]
+        },
+        {
+          "title": "What are polarizers? Light has a direction of oscillation",
+          "blocks": [
+            {"type": "text", "text": "As light propagates, its electric field oscillates perpendicular to the direction of travel. The axis of this oscillation is the light's [b]polarization[/b]. A photon can be polarized vertically, horizontally, or at any angle in between."},
+            {"type": "text", "text": "In the language of quantum mechanics, polarization is a quantum property described by a state vector. Two natural basis states are:"},
+            {"type": "equation", "id": "basis_hv", "caption": "E1 — the vertical and horizontal polarization states."},
+            {"type": "text", "text": "These states are orthogonal — a detector can distinguish them with certainty. But a photon can also exist in a superposition, such as the diagonal polarization:"},
+            {"type": "equation", "id": "diag_state", "caption": "E2 — the diagonal state |↗↙⟩ is an equal-weight superposition of |↔⟩ and |↕⟩."},
+            {"type": "text", "text": "This is exactly the kind of linear combination we studied in the Introduction."},
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_fig1_(3).png", "caption": "Three examples of natural basis states. Vertical is purple, horizontal is red, diagonal is black — the site keeps this colour code in every schematic.", "height": 340},
+            {"type": "callout", "kind": "math", "title": "Angles, and the cosine as a shadow", "text": "Why 1/√2 for the diagonal state? Take a unit arrow (length 1) tilted by an angle θ from the horizontal axis. Shine light straight down onto the horizontal axis: the [b]shadow[/b] of the arrow on that axis has length [b]cos θ[/b]; its shadow on the vertical axis has length [b]sin θ[/b]. At θ = 0° the whole arrow is its own shadow (cos 0° = 1); at θ = 90° there is no horizontal shadow at all (cos 90° = 0). At 45° the two shadows are equal, each 1/√2 ≈ 0.707. So |↗↙⟩ = (1/√2)|↔⟩ + (1/√2)|↕⟩ is nothing more than the 45° arrow written out by its two shadows. Drag the arrow below and watch the shadows change."},
+            {"type": "widget", "scene": "res://ui/widgets/vector_playground.tscn", "params": {"labels": ["↔", "↕"], "angle": 45, "mode": "projection", "show_probabilities": false}, "height": 360},
+            {"type": "equation", "id": "state_theta", "caption": "A photon polarized at angle θ, written by its two shadows. Pythagoras guarantees the shadows squared add to 1, so the state is valid for every θ."}
+          ]
+        },
+        {
+          "title": "A polarizer is an operator that can lose photons",
+          "blocks": [
+            {"type": "text", "text": "A polarizer is an optical device that transmits light polarized along its axis and blocks light polarized perpendicular to it. Mathematically, a polarizer acts as a [b]linear operator[/b] on the photon's quantum state — much like the transformation R₄₅ from the Introduction, but with a key difference: polarizers can [i]lose[/i] photons."},
+            {"type": "text", "text": "The transmission probability follows from the amplitudes:"},
+            {"type": "list", "items": [
+              "If the photon's polarization is aligned with the polarizer (e.g., both horizontal), it passes with probability 1.",
+              "If perpendicular (one vertical, one horizontal), it passes with probability 0.",
+              "At 45° misalignment, the probability is cos²(45°) = ½."
+            ]},
+            {"type": "equation", "id": "cos2_45", "caption": "E3"},
+            {"type": "text", "text": "Crucially, the photon that emerges is now polarized [b]along the polarizer's axis[/b] — the polarizer has [i]changed[/i] the quantum state, not merely filtered it."},
+            {"type": "callout", "kind": "math", "title": "cos² as a probability", "text": "Recall the Introduction's rule: [b]square an amplitude to get a probability[/b]. The amplitude of a photon along the polarizer's axis is its shadow on that axis, cos θ, where θ is the angle between the photon's polarization and the polarizer. So the probability of passing is [b]cos² θ[/b]. At 45°: (1/√2)² = ½. At 22.5°: cos² 22.5° ≈ 0.85. At 90°: 0. The shadow on the perpendicular axis, sin θ, is the amplitude for being blocked, and cos² θ + sin² θ = 1 (Pythagoras again) guarantees that [i]pass[/i] and [i]blocked[/i] add up to certainty. Turn the dial below: the shadow shrinks, its square shrinks faster, and the transmission follows the cos² curve."},
+            {"type": "widget", "scene": "res://ui/widgets/malus_widget.tscn", "params": {"input_angle": 45}, "height": 360}
+          ]
+        },
+        {
+          "title": "Try it yourself — and meet the puzzle",
+          "blocks": [
+            {"type": "text", "text": "Explore how light behaves under different polarizer configurations. The simulation starts with a diagonally polarized laser beam (45°). Use the control panel to add polarizers and drag the pink dot to adjust their orientation. The percentage on the right shows how much light reaches the detector relative to the original beam: 100 % means nothing is blocked, 0 % means complete darkness."},
+            {"type": "widget", "scene": "res://ui/widgets/polarizer_chain.tscn", "params": {"polarizers": [0, 90], "input_angle": 45, "max": 3}, "height": 380},
+            {"type": "subheading", "text": "The three polarizer \"paradox\""},
+            {"type": "callout", "kind": "paradox", "title": "Here is the puzzle", "text": "Place a horizontal polarizer followed by a vertical polarizer. Result: [b]0 % transmission[/b]. Their axes are 90° apart, so the second blocks everything from the first.\nNow insert a 45° polarizer [i]between[/i] them. Result: [b]12.5 % transmission[/b].\nAdding a third filter lets light through. This defies classical intuition — more obstacles should mean less transmission, not more. Are we somehow creating photons?"},
+            {"type": "text", "text": "We'll derive the 12.5 % result exactly in [i]Quantum Predictions for the 3-Polarizers Paradox[/i] (the Theory section), using the operator formalism. The resolution lies in how polarizers transform quantum states — but first, let's confirm this effect is real. For more on the 3-polarizer paradox, have a look at this brief video:"},
+            {"type": "video", "title": "3 Polarizing Filters — UMD Physics Videos (University of Maryland)", "url": "https://www.youtube.com/results?search_query=UMD+Physics+Videos+3+Polarizing+Filters"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "In the laboratory: what we measured",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_Diagram.png", "caption": "The four set-ups and their theoretical transmission: no polarizer (100 %), one horizontal polarizer (50 %), two crossed polarizers (0 %), three polarizers at 0°, 45°, 90° (12.5 %). The dashed planes Ψ₀ … Ψ₃ are where we write down the state.", "height": 330},
+            {"type": "text", "text": "We set up the experiment in a laboratory and measured the light intensity at the detector. The gist of the data is represented in the table below, which displays how the transmitted light intensity changes depending on the number and orientation of the polarizers."},
+            {"type": "text", "text": "This table was made using the data we collected in the lab. The column \"lab result\" is the number of photons detected in the center of the beam (which gives the highest number of photons). The intensity is a comparison with the initial beam. We always considered the initial beam (with no optical devices) to be 100 %."},
+            {"type": "table", "header": ["Setup", "Lab results: photons per second", "Lab results: relative %", "Theory: relative %"], "rows": [
+              ["No polarizers", "1159", "100 %", "100 %"],
+              ["1 polarizer (45°)", "1159", "100 %", "100 %"],
+              ["1 polarizer (22.5°)", "884", "67.1 %", "~85 %"],
+              ["1 polarizer (0°)", "616", "35.1 %", "50 %"],
+              ["1 polarizer (−45°)", "322", "0 %", "0 %"],
+              ["2 polarizers (0°, 90°)", "439", "14.0 %", "0 %"],
+              ["3 polarizers (0°, 45°, 90°)", "564", "28.9 %", "12.5 %"]
+            ]},
+            {"type": "callout", "kind": "note", "title": "Why the lab numbers don't match the theory", "text": "The percentages in the lab results are calculated by removing the background noise (of 322 photons) and comparing to the maximum value (1159 photons). Because the data is taken from different set-ups, it is very hard to compare them together. A small reflection off a polarizer or a different background can result in a big change. That is why the data doesn't really fit the theoretical results."},
+            {"type": "text", "text": "The first line is the result with nothing in the way of the laser. The next four values are measured with 1 polarizer, placed at different angles compared to the initial beam. We see the number of photons change for all four angles. Because the incident beam is at 45 degrees, all the photons pass through a 45° polarizer: we consider this value to be 100 %."},
+            {"type": "text", "text": "At −45 degrees, no photon should be able to pass. But we can still detect some photons, which can come from different sources in the lab — any light coming from an instrument, or a misread on the detector. We place its relative value at 0 %."}
+          ]
+        },
+        {
+          "title": "Lab experiment: the optical table",
+          "blocks": [
+            {"type": "text", "text": "Curious what a single-photon optical set-up looks like? Here is a picture of what we have. The beam runs from the laser at the far end of the table, through the beam splitter, the lenses and the three polarizers, to the detector in the foreground."},
+            {"type": "figure", "src": "res://assets/figures/exp1/vue_exp1.png", "caption": "The set-up on the optical breadboard, in beam order: laser, beam splitter, lens, P1, P2, lens, P3, detector. Every element sits in a post holder on the M6 grid; the polarizers are in graduated rotation mounts.", "height": 360},
+            {"type": "subheading", "text": "Technical set-up and equipment"},
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_MontageT.png", "caption": "Technical set-up. BS: beam splitter; BD: beam dump; λ/2: half-wave plate; L1: plano-convex lens (f = 50 cm); P1–P3: polarizers; D1: detector.", "height": 280},
+            {"type": "text", "text": "Here is the representation of the set-up you see in the picture. All of the equipment is shown, but the scaling is not representative."},
+            {"type": "text", "text": "On the left side, the laser emits a beam of photons. We then place a polarizing beam splitter to set the polarization of the beam at 45 degrees. Depending on the orientation of the beam splitter you might not get 45 degrees, so you can add a half-wave plate to rotate it in the orientation you want: 45 degrees for us. Then a set of lenses can be used to concentrate the beam on the detector. The beam is now set to pass through all the polarizers we want. We tested with 0, 1, 2 and 3 polarizers. Finally, on the right side, the detector is placed at the center of the beam."},
+            {"type": "subheading", "text": "Equipment list"},
+            {"type": "table", "header": ["Name", "Description"], "rows": [
+              ["LASER", "Diode laser (405 nm)"],
+              ["Polarizers", "Mounted linear polarizers"],
+              ["Lenses", "Plano-convex lenses kit"],
+              ["Beam splitter", "A cube polarizing beam splitter"],
+              ["Detector", "Single photon detection module"]
+            ]},
+            {"type": "callout", "kind": "note", "title": "You can do this at home", "text": "For this experiment we use high-quality equipment, because it will be needed for the future experiments. This experiment could be very easy and cheap to realise for classes or at home. Any laser in visible light will work, any polarizers would do, and no detector is needed if you don't want to count photons. A white sheet of paper is enough to see the different intensities."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data",
+          "blocks": [
+            {"type": "text", "text": "You can download all our data from the site. The acquisition files are:"},
+            {"type": "list", "items": [
+              "[url=https://testing-reality.webflow.io/experiment-1]Data_1polarizer.csv[/url] — one polarizer, scanned over several angles",
+              "[url=https://testing-reality.webflow.io/experiment-1]Data_2polarizer.csv[/url] — two polarizers, 0° and 90°",
+              "[url=https://testing-reality.webflow.io/experiment-1]Data_3polarizer.csv[/url] — three polarizers, 0°, 45° and 90°"
+            ]},
+            {"type": "text", "text": "The pattern is created by moving the detector from one side of the laser beam to the other. At each step of the detector, we count the number of photons captured in the time allowed (generally 1 or 2 seconds)."},
+            {"type": "text", "text": "All of the acquisitions can be found in those CSV files. They all have 3 columns: the position of the detector, the angle of the polarizers, and the number of photons detected. The table on the [i]In the laboratory[/i] page uses the peak value of each scan — the count at the centre of the beam."},
+            {"type": "callout", "kind": "lab", "title": "Reading the numbers", "text": "Three things to keep in mind when you compare lab and theory:\n• The detector never reads zero. Even with the beam fully blocked (one polarizer at −45°) it counts about [b]322 photons/s[/b] of stray light and dark counts. That is why the site subtracts 322 before computing a percentage.\n• The reference is [b]1159 photons/s[/b], the count with nothing in the beam.\n• The rows come from different days and alignments, so a reflection off one polarizer or a slightly different background shifts a row by tens of percent. The [i]ordering[/i] (100 > 50 > 12.5 > 0, and the three-polarizer row above the two-polarizer row) is what the experiment establishes beyond doubt. In the 3D lab you can switch between the ideal prediction and the measured value for each preset."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "More quantum theory: photons",
+          "blocks": [
+            {"type": "text", "text": "Quantum mechanics describes what happens to individual photons when they pass through an optical set-up like the one described above. The key property of photons to be described here is the [b]polarization[/b] of the photon."},
+            {"type": "subheading", "text": "Completing the polarization basis"},
+            {"type": "text", "text": "Earlier we introduced the horizontal and vertical polarization states, |↔⟩ and |↕⟩, and the diagonal state |↗↙⟩. To complete our toolkit, we introduce the [i]anti-diagonal[/i] polarization:"},
+            {"type": "equation", "id": "antidiag_state", "caption": "E4 — the anti-diagonal state |↘↖⟩, the 45° arrow's perpendicular partner (tilted at −45°)."},
+            {"type": "text", "text": "The states |↗↙⟩ and |↘↖⟩ form an alternative orthogonal basis — just as valid as {|↔⟩, |↕⟩}. We will need this basis in Part 3 when computing the action of a diagonal polarizer."},
+            {"type": "callout", "kind": "note", "title": "Check it with the shadows", "text": "Using the shadow rule from the Abstract: the −45° arrow has horizontal shadow cos(−45°) = +1/√2 and vertical shadow sin(−45°) = −1/√2. That is exactly E4. And |↗↙⟩ and |↘↖⟩ are perpendicular (the angle between 45° and −45° is 90°), so a detector could tell them apart with certainty — which is what makes them a basis."}
+          ]
+        },
+        {
+          "title": "Evolution: polarizers and the |lost⟩ state",
+          "blocks": [
+            {"type": "text", "text": "The quantum state of the photon evolves when light passes through a polarizer. A horizontal polarizer, denoted P↔, allows horizontally polarized photons to pass through, and it absorbs or reflects the vertically polarized photons. When the polarizer absorbs or reflects a photon, the photon is basically lost. Thus, the evolution of a photon passing through a horizontal polarizer is as follows:"},
+            {"type": "equation", "id": "p_h_basis", "caption": "E5 — the horizontal polarizer P↔ defined by its action on the two basis states."},
+            {"type": "text", "text": "In other words, when the evolution operator P↔ acts on the state |↔⟩, it returns the state |↔⟩; and when it acts on the state |↕⟩, it returns |lost⟩."},
+            {"type": "text", "text": "The term |lost⟩ does not represent a polarization state, but rather the state of the photon's [i]availability[/i]. It indicates that the photon won't interact with our detector because it has been absorbed or reflected by the polarizer."},
+            {"type": "text", "text": "We keep track of these lost photons by defining a state called |lost⟩. This maintains a complete mathematical description and keeps the overall state normalized. We bear in mind, however, that a photon in the |lost⟩ state will not be used in any further calculations: the photon has effectively been [i]lost[/i]."},
+            {"type": "text", "text": "Similarly, a vertical polarizer applied to a vertically polarized photon lets it through, or mathematically, P↕|↕⟩ = |↕⟩. And a vertical polarizer applied to a horizontally polarized photon gets it lost, P↕|↔⟩ = |lost⟩."},
+            {"type": "equation", "id": "p_v_basis", "caption": "E6 — the vertical polarizer P↕."},
+            {"type": "figure", "src": "res://assets/figures/exp1/Single_slit.png", "caption": "Effects of horizontal and vertical slits. A polarizer behaves like a slotted plate: only the oscillation along the slot continues (red = horizontal, purple = vertical).", "height": 320}
+          ]
+        },
+        {
+          "title": "A diagonal photon through a horizontal polarizer",
+          "blocks": [
+            {"type": "text", "text": "We have carefully specified what happens to horizontally and vertically polarized photons when they go through filters. But what happens to a [b]diagonally[/b] polarized photon, like |↗↙⟩, when it passes through a horizontal filter?"},
+            {"type": "text", "text": "Recalling the evolution of quantum states in the Introduction, we use the [b]linearity[/b] property of the evolution operator P↔: write the state in the basis, then apply the operator term by term."},
+            {"type": "equation", "id": "p_h_diag", "caption": "E7 — linearity: expand |↗↙⟩, apply P↔ to each term, read off the result."},
+            {"type": "subheading", "text": "Measurement: beam intensity"},
+            {"type": "text", "text": "If this is the quantum state of the photon that reaches the detector, we can calculate the probability that the photon hits the detector. It's the probability that the photon is [i]not lost[/i], or in other words, it's the probability that a measurement of {|↔⟩, |lost⟩} returns |↔⟩. This probability is given by the square of the amplitude of the component |↔⟩ in the expression above."},
+            {"type": "equation", "id": "prob_detection", "caption": "E8 — the Born rule applied to the surviving component."},
+            {"type": "text", "text": "The intensity of a beam of light is proportional to the number of photons in that beam: the more photons, the more intense the light is. If we send a beam of light composed of multiple photons, and if each photon has a 50 % chance of passing through, then the intensity of the outgoing beam shall be half that of the incoming beam."},
+            {"type": "text", "text": "In general, the intensity of the measured beam (I) is equal to the probability of measuring a single photon multiplied by the intensity of the incoming beam:"},
+            {"type": "equation", "id": "intensity_rule", "caption": "E9 — the intensity rule. In our lab I₀ corresponds to 1159 photons per second."}
+          ]
+        },
+        {
+          "title": "Quantum predictions — Part 0: no polarizer",
+          "blocks": [
+            {"type": "text", "text": "We are now equipped to compute what quantum theory predicts in various scenarios. In four parts, we will study the optical set-up with no polarizer, one, two and then three polarizers."},
+            {"type": "callout", "kind": "math", "title": "Chaining operators", "text": "Each optical element acts on the state it [i]receives[/i], not on the original beam. We give the state a name at each dashed plane of the schematics — |ψ₀⟩ just after preparation (time t₀), |ψ₁⟩ after the first polarizer (t₁), |ψ₂⟩ after the second, |ψ₃⟩ after the third — and compute them one after another. Because the operators are applied in sequence, the last one written is the first one applied: P₃P₂P₁|ψ₀⟩ reads right-to-left. Within each step we use linearity (apply the operator term by term), and only at the very end do we square the surviving amplitude to get an intensity."},
+            {"type": "equation", "id": "operator_chain", "caption": "The chain of states. The lab's dashed planes Ψ₀ … Ψ₃ are exactly these four moments."},
+            {"type": "subheading", "text": "Part 0: no polarizer"},
+            {"type": "text", "text": "Let us consider first the simplest scenario, where a prepared photon propagates freely to the detector without encountering any polarizers. (In fact, because we wanted to prepare diagonally polarized photons, we inserted a diagonal filter right at the laser; but this simply amounts to a laser that emits diagonally polarized photons.)"},
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_PolariseurVariable_(1).png", "caption": "A diagonally prepared photon, no polarizers and a detector.", "height": 200},
+            {"type": "text", "text": "After the photon exits the laser (and the diagonal polarizer), it is prepared in a diagonal state of polarization:"},
+            {"type": "equation", "id": "psi0_nopol", "caption": "E10"},
+            {"type": "text", "text": "No polarizer affects the photon, so it propagates freely to the right end of the optical table. Since no component of its quantum state is lost, it will be detected regardless of its polarization state. The measured intensity is, therefore, the whole of the incoming intensity:"},
+            {"type": "equation", "id": "i_no_pol", "caption": "E11 — no polarizer: 100 %."}
+          ]
+        },
+        {
+          "title": "Part 1: one horizontal polarizer",
+          "blocks": [
+            {"type": "text", "text": "In this scenario, we have added a horizontal polarizer between the locations of preparation and detection. This scenario corresponds to what we have studied in the previous section."},
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_pol6.png", "caption": "A diagonally prepared photon passes through a horizontal polarizer before being detected. We denote the prepared state by |ψ₀⟩, which can be interpreted as the state at some time t₀, and we denote the state after the horizontal polarizer by |ψ₁⟩, the state at time t₁.", "height": 220},
+            {"type": "text", "text": "The initial state is given by"},
+            {"type": "equation", "id": "psi0_onepol", "caption": "E12"},
+            {"type": "text", "text": "The state |ψ₁⟩ can be computed by applying the horizontal polarizer, P↔, as we did before:"},
+            {"type": "equation", "id": "psi1_onepol", "caption": "E13"},
+            {"type": "text", "text": "The intensity at the detector is, as we have seen previously,"},
+            {"type": "equation", "id": "i_one_pol", "caption": "E14 — one horizontal polarizer: 50 %."}
+          ]
+        },
+        {
+          "title": "Part 2: two polarizers, horizontal & vertical",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_pol7.png", "caption": "The optical set-up here consists of the preparation, a horizontal polarizer, a vertical polarizer and a detector.", "height": 240},
+            {"type": "text", "text": "We now consider the insertion of a vertical polarizer as depicted in the figure. Again, the initial state is given by |ψ₀⟩ = |↗↙⟩. Applying the first (horizontal) polarizer, we obtain"},
+            {"type": "equation", "id": "psi1_twopol", "caption": "E15"},
+            {"type": "text", "text": "where |lost_P1⟩ denotes a state for the photon where it has been lost at the [i]first[/i] polarizer. Tagging the lost states by the polarizer that absorbed them costs nothing and keeps the bookkeeping honest: distinct ways of being lost are distinguishable outcomes."},
+            {"type": "text", "text": "Applying the second (vertical) polarizer, we find"},
+            {"type": "equation", "id": "psi2_twopol", "caption": "E16 — P↕ turns the surviving |↔⟩ into |lost_P2⟩ and leaves |lost_P1⟩ lost."},
+            {"type": "text", "text": "The probability of measuring a non-lost photon is 0. Therefore, the intensity at the detector is"},
+            {"type": "equation", "id": "i_two_pol", "caption": "E17 — crossed polarizers: nothing passes."},
+            {"type": "callout", "kind": "note", "title": "Where the photons went", "text": "Half the amplitude is in |lost_P1⟩, half in |lost_P2⟩: squaring, 50 % of the photons were absorbed by P1 and the other 50 % by P2. Nothing reaches D1. Keep this picture in mind — in Part 3 we will see the second polarizer [i]rotate[/i] the light instead of killing it."}
+          ]
+        },
+        {
+          "title": "Part 3: three polarizers — changing basis",
+          "blocks": [
+            {"type": "figure", "src": "res://assets/figures/exp1/exp1_pol8.png", "caption": "The three-polarizer set-up: 0°, then 45°, then 90°. (The site's figure labels the last polarizer P2; the text, the lab and this app call the 45° polarizer P2 and the vertical one P3, in beam order.)", "height": 240},
+            {"type": "text", "text": "We now consider the final optical set-up, where a polarizer oriented at 45° is inserted between the horizontal and vertical polarizers. As we have seen before, the initial state |ψ₀⟩ = |↗↙⟩ evolves into |ψ₁⟩ = (1/√2)|↔⟩ + (1/√2)|lost_P1⟩. Then, between time t₁ and t₂, a diagonal polarizer is applied:"},
+            {"type": "equation", "id": "psi2_threepol", "caption": "E18"},
+            {"type": "text", "text": "How do we carry on with this calculation? The second term is easy to compute: P↗↙ applied to a previously lost photon keeps the photon lost, so P↗↙|lost_P1⟩ = |lost_P1⟩. But how do we compute P↗↙|↔⟩? We only know what P↗↙ does to |↗↙⟩ (passes) and |↘↖⟩ (lost). The key is to express the state |↔⟩ in terms of the vectors |↗↙⟩ and |↘↖⟩."},
+            {"type": "callout", "kind": "math", "title": "Changing basis", "text": "A basis is just a pair of perpendicular unit arrows used as axes. The horizontal/vertical pair is convenient, but the diagonal pair |↗↙⟩, |↘↖⟩ is every bit as good: any arrow in the plane can be written by its shadows on [i]those[/i] two axes instead. The arrow itself does not change — only the description does. Which basis to use is a free choice, and the trick of this whole experiment is to pick the basis in which the next polarizer is easy: for P↗↙ that is the diagonal basis. Below, drag the arrow and compare its horizontal/vertical shadows with its diagonal/anti-diagonal shadows; set it horizontal and you will see equal diagonal shadows of 1/√2."},
+            {"type": "widget", "scene": "res://ui/widgets/vector_playground.tscn", "params": {"labels": ["↔", "↕"], "angle": 0, "mode": "basis_change", "show_probabilities": true}, "height": 360},
+            {"type": "text", "text": "Consider what happens when we sum |↗↙⟩ and |↘↖⟩:"},
+            {"type": "equation", "id": "diag_sum", "caption": "E19 — adding the two diagonal states: the vertical parts cancel, the horizontal parts add."},
+            {"type": "figure", "src": "res://assets/figures/exp1/pol3.png", "caption": "Reconstructing |↔⟩ from |↗↙⟩ and |↘↖⟩: the two diagonal arrows, placed tip to tail, form a right angle and their sum points along the horizontal axis.", "height": 300},
+            {"type": "text", "text": "The resulting state is not normalized, but by multiplying each side of the above equation by 1/√2, we obtain"},
+            {"type": "equation", "id": "h_from_diag", "caption": "E20"},
+            {"type": "text", "text": "By the same logic, subtracting the diagonal states gives the vertical state:"},
+            {"type": "equation", "id": "v_from_diag", "caption": "E21"}
+          ]
+        },
+        {
+          "title": "Part 3: three polarizers — the 12.5 % result",
+          "blocks": [
+            {"type": "text", "text": "Applying P↗↙ to |↗↙⟩ leaves it as |↗↙⟩, while applying P↗↙ to |↘↖⟩ makes the photon |lost⟩. Therefore, going back to our previous equation for |ψ₂⟩ we have"},
+            {"type": "equation", "id": "psi2_threepol_final", "caption": "E22 — rewrite |↔⟩ in the diagonal basis, apply P↗↙ term by term, collect."},
+            {"type": "text", "text": "We then apply the third polarizer, P↕. Its action on |↗↙⟩ is the mirror image of E7: half the amplitude goes to |↕⟩, half to a new lost state."},
+            {"type": "equation", "id": "psi3_final", "caption": "E23 — the final state. A photon can be lost at P1, at P2 or at P3, or reach the detector vertically polarized."},
+            {"type": "text", "text": "The intensity at the detector is, therefore,"},
+            {"type": "equation", "id": "i_three_pol", "caption": "E24 — three polarizers: 12.5 %."},
+            {"type": "callout", "kind": "paradox", "title": "The paradox, resolved", "text": "The \"paradox\" in this optical set-up is the following: classically, inserting an additional filter should only make transmission less likely, not more. Yet here, adding a third polarizer — placed between two polarizers that completely block the light — allows some light to pass through.\nThe analysis resolves this puzzle. A polarizer does more than simply block or transmit light: it [b]changes the polarization state[/b] of the photons that pass through it. As a result, the outgoing light is effectively rotated — from horizontal to diagonal, and from diagonal to vertical, which the last polarizer accepts. In quantum mechanics, this behaviour is described using the notion of states and their evolution, followed — only at the end — by a measurement rule that connects these states to observed intensities."},
+            {"type": "subheading", "text": "Summary of products and results"},
+            {"type": "equation", "id": "products_summary", "caption": "Every product used in this chapter. (The site writes + for P↕|↘↖⟩; strictly the |lost⟩ term carries a minus sign there, which changes no intensity.)"},
+            {"type": "table", "header": ["Product", "Result", "Product", "Result"], "rows": [
+              ["P↕|↕⟩", "|↕⟩", "P↕|↔⟩", "|lost⟩"],
+              ["P↔|↔⟩", "|↔⟩", "P↔|↕⟩", "|lost⟩"],
+              ["P↔|↗↙⟩", "(1/√2)|↔⟩ + (1/√2)|lost⟩", "P↕|↗↙⟩", "(1/√2)|↕⟩ + (1/√2)|lost⟩"],
+              ["P↔|↘↖⟩", "(1/√2)|↔⟩ + (1/√2)|lost⟩", "P↕|↘↖⟩", "(1/√2)|↕⟩ + (1/√2)|lost⟩"]
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "literature",
+      "title": "Literature and video",
+      "pages": [
+        {
+          "title": "Literature and video",
+          "blocks": [
+            {"type": "text", "text": "If you want to see the three-polarizer paradox with your own eyes, here are some YouTube videos we found to be accurate and insightful!"},
+            {"type": "video", "title": "Three polarizing filters: a simple demo of a creepy quantum effect — Orion Lawlor", "url": "https://www.youtube.com/watch?v=5SIxEiL8ujA"},
+            {"type": "video", "title": "3 Polarizing Filters — UMD Physics Videos (University of Maryland)", "url": "https://www.youtube.com/results?search_query=UMD+Physics+Videos+3+Polarizing+Filters"},
+            {"type": "text", "text": "Both videos use ordinary photographic polarizing filters and a bright background — no laser, no detector. If you have three polarizing filters (or three lenses from old 3D-cinema glasses) you can reproduce the effect right now."},
+            {"type": "subheading", "text": "Your turn: the three-polarizer lab"},
+            {"type": "text", "text": "The 3D lab reproduces our optical table: LASER (405 nm, prepared at 45°) → L1 → P1 → P2 → P3 → D1. Each polarizer has an [b]angle slider[/b] and an [b]In the beam[/b] toggle. The D1 panel shows the transmission to D1 in %, the predicted count rate (out of 1159 photons/s) and, where we have one, the value we measured in the lab. Press [b]Space[/b] to fire single photons one at a time."},
+            {"type": "equation", "id": "malus_chain", "caption": "What the D1 panel computes: each polarizer keeps cos²(angle difference) of the light that reaches it, and leaves it polarized along its own axis. For 45° → 0° → 45° → 90° the factors are ½ · ½ · ½ = ⅛."},
+            {"type": "callout", "kind": "lab", "title": "Task list", "text": "1. Choose the preset [b]No polarizer[/b]. D1 should read 100 % and about 1159 photons/s. Compare with the lab value in the panel.\n2. Choose [b]One (0°)[/b]: P1 is in the beam at 0°. Confirm 50 % (≈ 580 photons/s). The lab measured 616/s — read the note on the results page to see why these differ.\n3. Drag P1's angle slider to 45°: the beam is already diagonal, so 100 %. Now to −45°: 0 %. Then to 22.5°: about 85 %. This is the cos² curve from the Maths check-in.\n4. Choose [b]Two (0°, 90°)[/b]: P1 at 0°, P3 at 90°, both in the beam. Confirm [b]0 %[/b]. Nothing you do with the P1 slider alone can make light reach D1 as long as P3 stays at 90° — try it.\n5. Choose [b]Three (0°, 45°, 90°)[/b]: P2 is now in the beam at 45°. Confirm [b]12.5 %[/b]. Toggle P2 [i]In the beam[/i] off and on again and watch D1 jump between 0 % and 12.5 %: the extra filter lets light through.\n6. Is 45° the best angle for P2? Try 30° and 60° (about 9.4 %), then 20° and 70°. Convince yourself that the middle polarizer must be exactly half-way between its neighbours to transmit the most.\n7. Press Space repeatedly to fire single photons. Each photon is either detected or lost at P1, P2 or P3 — there is no half-photon. Watch the detected/sent ratio settle near 12.5 %: the intensity rule I = Prob · I₀ in action."},
+            {"type": "lab", "label": "◆  Enter the three-polarizer lab"}
+          ]
+        }
+      ]
+    }
+  ]
+}

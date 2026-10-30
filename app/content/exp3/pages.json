@@ -1,0 +1,717 @@
+{
+  "$comment": "Experiment 3: Double slit + Polarizers (quantum eraser). Transcribed from docs/content/04-experiment-3-polarized-double-slit.md following docs/design/content-authoring.md. The site has no Literature and video content for this page, so that section is omitted.",
+  "sections": [
+    {
+      "id": "abstract",
+      "title": "Abstract",
+      "pages": [
+        {
+          "title": "Double slit + polarizers",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "This experiment combines the previous two: a double-slit setup with polarizers."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_Diagram_(5).png",
+              "height": 300,
+              "caption": "Experimental setup for the quantum eraser experiment. A diagonally polarized laser passes through a double slit, where slit A is covered by a horizontal polarizer (PA, 0°) and slit B by a vertical polarizer (PB, 90°). A rotatable third polarizer P1, here set to 45°, is placed after the slits before the detector D1. The labels Ψ_0 through Ψ_3 indicate the quantum state of the photon at each stage of the setup."
+            },
+            {
+              "type": "text",
+              "text": "More precisely, we cover slit A with a [b]horizontal[/b] polarizer and slit B with a [b]vertical[/b] polarizer, the two polarizers being perpendicular. A third polarizer, which can be rotated, is placed after the slits so it affects photons from both paths."
+            },
+            {
+              "type": "text",
+              "text": "Here is what we observe:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "When the third polarizer is set to 0° or 90° (aligned with one of the slit polarizers): [b]no interference[/b], the pattern looks like single-slit diffraction.",
+                "When the third polarizer is set to 45° or −45° (diagonal): [b]interference returns[/b], we see the characteristic fringes of a double-slit pattern."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Which-way information and the quantum eraser",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "paradox",
+              "title": "Adding a polarizer brings the fringes back",
+              "text": "A polarizer only ever [i]removes[/i] photons. Yet with the slit polarizers in place there are no fringes, and when we put one [i]more[/i] polarizer in the beam, at 45°, the fringes reappear. Taking photons away makes the pattern sharper. Why does this happen?"
+            },
+            {
+              "type": "text",
+              "text": "The perpendicular polarizers on the slits \"tag\" each path: a horizontally polarized photon must have come from slit A, a vertically polarized one from slit B. This is called [b]which-way information[/b]. When which-way information is available, even if we do not actually look at it, interference disappears."
+            },
+            {
+              "type": "text",
+              "text": "The diagonal polarizer erases this tagging. It projects both paths onto the same polarization state, making them indistinguishable again. With no way to tell which slit the photon passed through, interference returns. This is the [b]quantum eraser[/b] effect."
+            },
+            {
+              "type": "subheading",
+              "text": "Why polarizers?"
+            },
+            {
+              "type": "text",
+              "text": "Why use polarizers instead of, say, placing a detector at one slit? A detector would absorb the photon entirely. Polarizers let most photons through, they interact with the photon just enough to tag it, without destroying it."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "Without spoiling the next experiment, polarizers are not the only way to interact with a photon without absorbing it. We will discover a second method in Experiment 4."
+            },
+            {
+              "type": "subheading",
+              "text": "Try it yourself!"
+            },
+            {
+              "type": "text",
+              "text": "Here is an animation of Experiment 3. The light coming out of the laser is diagonally polarized. The polarizers can be rotated using the pink handles, and the slit parameters can be adjusted in the control panel. The dark curve shows the maximum diffraction envelope, and the purple curve shows the result of the current setup."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/eraser_widget.tscn",
+              "params": {
+                "p1_angle": 45,
+                "entangled": false
+              },
+              "height": 400
+            },
+            {
+              "type": "text",
+              "text": "Things to try: set P1 to 0°, then 90°, and watch the fringes vanish into the envelope. Set it to 45° and −45° and compare the two fringe patterns. Then turn PA so it is no longer perpendicular to PB — does the tagging still work?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "Lab experiment",
+      "pages": [
+        {
+          "title": "Our setup",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Curious of what our setup looks like? Here are a few pictures of what we have:"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/photo_exp3.png",
+              "height": 360,
+              "caption": "The optical bench seen from above. The purple line marks the beam path: the 405 nm beam itself is not visible to the camera."
+            },
+            {
+              "type": "text",
+              "text": "Following the purple line from left to right:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[b]LASER[/b] — the 405 nm diode laser, far left.",
+                "[b]Beam splitter[/b] and [b]half-wave plate[/b] — the beam splitter dumps part of the power; the half-wave plate turns the polarization to diagonal, so the photons arrive at the slits as |↗↙⟩.",
+                "[b]Lens[/b] (L1) — conditions the beam before the long free-space run to the slit.",
+                "[b]Double slit[/b] — on an X-Y translation mount mid-bench. The two slit polarizers PA (0°) and PB (90°) are attached directly to the slit holder.",
+                "[b]Lens[/b] and [b]polarizer P1[/b] — P1 sits in a rotation mount so it can be set to 0°, 90°, 45° or −45°.",
+                "[b]Detection stage[/b] — a motorised actuator carries a narrow single slit and a fibre coupler across the pattern; the fibre leads to the single-photon detector D1 (the red electronics boxes at the back)."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Technical set-up and equipment",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Here is a representation of the setup shown in the picture. All of the equipment is displayed, but the scaling is not proportional."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_MontageT.png",
+              "height": 260,
+              "caption": "BS: beam splitter. BD: beam dump. λ/2: half-wave plate. L: plano-convex lens. M: motor. P1 sits on the motor M1."
+            },
+            {
+              "type": "table",
+              "header": [
+                "Name",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "LASER",
+                  "Diode laser (405 nm)"
+                ],
+                [
+                  "BBO",
+                  "Two thin BBO crystals of type 1 placed at 90°"
+                ],
+                [
+                  "Double slit",
+                  "Dimension (200-200-200 μm), made in-house"
+                ],
+                [
+                  "Polarizers",
+                  "Mounted linear polarizers"
+                ],
+                [
+                  "Lenses",
+                  "Plano-convex lenses, L1 has f = 50 cm [LA1908-B]"
+                ],
+                [
+                  "Single slit",
+                  "Adjustable slit (placed near 200 μm)"
+                ],
+                [
+                  "Detectors",
+                  "Single photon detection module"
+                ]
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "See more component details and links in the previous experiment. The BBO crystals are part of the shared equipment list and are not in the beam path of this experiment. The slit dimensions 200-200-200 μm mean: slit width 200 μm, gap 200 μm, slit width 200 μm, so the centre-to-centre separation is 400 μm, the same slit as in Experiment 2."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Result and analysis",
+      "pages": [
+        {
+          "title": "Raw data",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "To recreate a pattern, an actuator was moved along the beam. All data files have four columns. The first two are the angles of the polarizers, but only P1 is used. The third is the distance the actuator has travelled in μm. The last column is the number of counts on D1, the detector. All acquisitions are for a two-second window."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "The raw data in the lab",
+              "text": "The four data files (P1 = 0°, 90°, 45°, −45°) are loaded into this chapter's lab. Switch on a data overlay on the detector plot and run your own scan over it to compare."
+            },
+            {
+              "type": "subheading",
+              "text": "P1 at 45° and −45°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_45.png",
+              "height": 300,
+              "caption": "P1 = 45°. Number of counts on D1 per second against position on the screen (μm). Grey dashed: theory. Blue: fit of the data. Black dots: our data."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_-45.png",
+              "height": 300,
+              "caption": "P1 = −45°. Same axes. Where the 45° scan has a maximum, this one has a minimum."
+            }
+          ]
+        },
+        {
+          "title": "P1 aligned with a slit polarizer",
+          "blocks": [
+            {
+              "type": "subheading",
+              "text": "P1 at 0° and 90°"
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_0.png",
+              "height": 300,
+              "caption": "P1 = 0°. A single smooth diffraction envelope, no fringes."
+            },
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_90.png",
+              "height": 300,
+              "caption": "P1 = 90°. Again a single envelope, no fringes, but its centre is shifted by about half a millimetre relative to the 0° scan."
+            },
+            {
+              "type": "text",
+              "text": "Let us analyze these graphs. First, at 0 degrees and 90 degrees, there is no interference. By placing polarizer P1 at the same angle as one of the slit polarizers, we know for certain through which slit the photon passed. It behaves like a single-slit experiment."
+            },
+            {
+              "type": "text",
+              "text": "The patterns at 0 and 90 degrees show a slight shift relative to each other. This shift represents the spacing between the slits. Since each slit acts as a single slit, each produces a diffraction pattern centered in front of it."
+            }
+          ]
+        },
+        {
+          "title": "Fringes and anti-fringes",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "For the graphs at 45 degrees and −45 degrees, interference is clearly visible, but the two patterns differ. The 45-degree graph has the same shape as the one from Experiment 2, with three large peaks (the pattern is not perfect: there is actually a phase offset in our polarization setup, which will be corrected in the next experiment)."
+            },
+            {
+              "type": "text",
+              "text": "Upon closer inspection, the pattern at −45 degrees is the [b]inverse[/b] of that at 45 degrees: all maxima become minima and vice versa. Summing both plots recovers the full diffraction envelope. (The same phenomenon occurs with the 0 and 90 degree graphs: adding them yields the same diffraction pattern, though less striking since they already showed diffraction individually.)"
+            },
+            {
+              "type": "subheading",
+              "text": "Why are the two diagonal plots inverted?"
+            },
+            {
+              "type": "text",
+              "text": "There are two explanations. The first is about photon counting: polarizers block a portion of the photons. Perpendicular polarizers block complementary portions, so summing them recovers all the photons. The second explanation is the algebra of the next section, where the +45° and −45° patterns appear as the two halves of one and the same state."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "Is that real?",
+              "text": "The measured 45° fringes do not sit exactly on the theory curve and their minima do not reach the floor: the visibility is partial. The cause is a phase offset in the polarization optics. The data are shown as they were taken; the next experiment corrects the offset."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theory",
+      "title": "Theory and equations",
+      "pages": [
+        {
+          "title": "Polarization and position together",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "In the first experiment, we learned how to describe a photon's polarization and how polarizers change it. In the second experiment, we learned how to describe a photon's position, like being at the source, at slit A, or at slit B, and how interference arises from superpositions of paths."
+            },
+            {
+              "type": "text",
+              "text": "In this experiment, we put those two aspects together. A photon has both:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "A polarization",
+                "A position in the setup"
+              ]
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Two labels side by side: the \"and\" list",
+              "text": "So far a state had one label: |↔⟩ for a polarization, or |A⟩ for a position. A photon that is diagonal [i]and[/i] at the source needs both. We simply write the two kets next to each other, |↗↙⟩|S⟩, and read it as \"polarization ↗↙ and position S\". Nothing is multiplied; it is a list.\n\nThe list obeys one rule: if one entry is a sum, you distribute the other entry over it, exactly as with brackets in ordinary algebra. And an operation that acts on one entry (a polarizer acts on polarization, a slit on position) leaves the other entry alone. Play with the widget below: choose amplitudes for each list entry and watch the combined state expand."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/tensor_widget.tscn",
+              "params": {
+                "left": [
+                  "↔",
+                  "↕"
+                ],
+                "right": [
+                  "A",
+                  "B"
+                ]
+              },
+              "height": 340
+            },
+            {
+              "type": "equation",
+              "id": "tensor_distribute",
+              "caption": "The distribution rule: a polarization ket spread over a sum of position kets."
+            },
+            {
+              "type": "text",
+              "text": "To write this compactly, we simply list them side by side. For example, the initial state of a diagonal photon located at source S is denoted as follows:"
+            },
+            {
+              "type": "equation",
+              "id": "psi0_pol_pos"
+            },
+            {
+              "type": "text",
+              "text": "That is all we need — every state will now be described by polarization [i]and[/i] position."
+            }
+          ]
+        },
+        {
+          "title": "The first two polarizers: steps 0 and 1",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_Diagram_(4).png",
+              "height": 280,
+              "caption": "Experimental setup without the third polarizer. A diagonally polarized laser passes through a double slit with perpendicular polarizers on each slit: a horizontal polarizer (PA, 0°) on slit A and a vertical polarizer (PB, 90°) on slit B. Without a third polarizer, the which-way information encoded by the slit polarizers is preserved, and no interference pattern is observed at the detector D1."
+            },
+            {
+              "type": "subheading",
+              "text": "Step 0. Initial state"
+            },
+            {
+              "type": "text",
+              "text": "We start with the photon prepared in a diagonal state at the source:"
+            },
+            {
+              "type": "equation",
+              "id": "psi0_source"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 1. Double slit"
+            },
+            {
+              "type": "text",
+              "text": "At the double slit, the photon can go through slit |A⟩ or |B⟩. We ignore photons that hit the wall (|lost⟩) and keep only the ones that pass. The distance from the source to each slit is l, so:"
+            },
+            {
+              "type": "equation",
+              "id": "psi1_slits"
+            },
+            {
+              "type": "text",
+              "text": "In the above, all we are doing is distributing |↗↙⟩ to |A⟩ and |B⟩."
+            }
+          ]
+        },
+        {
+          "title": "Step 2. Polarization",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Now comes the crucial step, as each slit has a polarizer. Path |A⟩ has a polarizer P_↔, and path |B⟩ has a polarizer P_↕:"
+            },
+            {
+              "type": "equation",
+              "id": "psi2_polarizers"
+            },
+            {
+              "type": "text",
+              "text": "In the above algebra, on the second line, we simply express |↗↙⟩ in terms of |↕⟩ and |↔⟩. On the third line we then apply P_↔ and P_↕ to the terms representing |↗↙⟩. Due to the action of polarizers, we lose |↕⟩ for |A⟩ and |↔⟩ for |B⟩ respectively. On lines four and five we simplify and combine the terms to get a cleaner equation."
+            },
+            {
+              "type": "text",
+              "text": "So after the slits, the surviving photons are either horizontal from |A⟩ or vertical from |B⟩. The terms |lost_PA⟩ and |lost_PB⟩ are just there to account for photons that were lost due to polarization. |lost_PA⟩, for example, describes the photons that tried to go through slit |A⟩ but were blocked by its horizontal polarizer (because their polarization was not aligned). The same applies to |B⟩ in a vertical manner with |lost_PB⟩."
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "text": "Keeping the |lost⟩ terms is bookkeeping, not physics we care about: they make sure the total probability still adds up to 1, so nothing has gone missing from the ledger. Each polarizer acts on the polarization entry of the list only; the position entry |A⟩ or |B⟩ rides along untouched."
+            }
+          ]
+        },
+        {
+          "title": "Step 3. Reaching the detector",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "After the photons pass the slits, they propagate toward the detector. In reality, they can arrive at many points along the vertical axis, but let us focus on one arbitrary position, denoted by |y⟩. The distance from slit |A⟩ to this point is a so the phase factor is e^{ika}, and from slit |B⟩ it is b, so the phase factor is e^{ikb}."
+            },
+            {
+              "type": "text",
+              "text": "In the algebra below, we show how this appears in practice, and factor out |y⟩, which will be useful later on. The \"⋯\" before and after the terms in the definition of |ψ_3⟩ indicates that we are only showing one contribution, as the photons can hit many other places than |y⟩, so there is a whole collection of similar terms. But given we only focus on an arbitrary position |y⟩ here as an example, that is the only one we show."
+            },
+            {
+              "type": "equation",
+              "id": "psi3_screen"
+            },
+            {
+              "type": "subheading",
+              "text": "Step 4. Calculating the intensity"
+            },
+            {
+              "type": "text",
+              "text": "To predict what the detector sees, we calculate the [i]intensity[/i] at |y⟩. Intensity is the brightness at a spot on the detector, or more technically the likelihood of finding a photon there. Intensity comes from taking the squared magnitude of the total amplitude. Here we have two terms in superposition:"
+            },
+            {
+              "type": "equation",
+              "id": "psi3_amplitudes",
+              "caption": "The two coefficients are the amplitudes A_1 (via slit A) and A_2 (via slit B)."
+            }
+          ]
+        },
+        {
+          "title": "Why the fringes disappear",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Orthogonal states add in intensity, not in amplitude",
+              "text": "In Experiment 2 the two paths ended in the [i]same[/i] ket |y⟩, so their amplitudes were added first and squared afterwards: that is where the 1 + cos came from. Here the two paths end in [i]different[/i] kets, |↔⟩|y⟩ and |↕⟩|y⟩, which are perpendicular (⟨↔|↕⟩ = 0). Perpendicular means distinguishable, and the rule from the Introduction applies: the length-squared of a sum of perpendicular arrows is the sum of the lengths-squared (Pythagoras). So each amplitude is squared on its own and the two probabilities are added. There is no cross term, and the cross term is where the cosine lived."
+            },
+            {
+              "type": "equation",
+              "id": "orthogonal_norm"
+            },
+            {
+              "type": "text",
+              "text": "To find the intensity, we compute the squared magnitude of each amplitude. But here is the key point: because |↔⟩|y⟩ and |↕⟩|y⟩ are [b]orthogonal states[/b], they cannot add up or cancel each other, regardless of their phases. Their contribution to the intensity will invariably be the sum of each term's squared amplitude:"
+            },
+            {
+              "type": "equation",
+              "id": "intensity_sum"
+            },
+            {
+              "type": "text",
+              "text": "This is the mathematical reason why marking the paths with perpendicular polarizers destroys interference: the two terms live in orthogonal states, so they can never combine. We simply get the sum of two independent contributions."
+            },
+            {
+              "type": "text",
+              "text": "So the resulting pattern is simply a flat constant at half the brightness of the ordinary double slit. The reason is that the two polarizations are orthogonal: the kets can no longer factorize in a way that lets the complex exponentials add up or cancel each other."
+            },
+            {
+              "type": "text",
+              "text": "In equation form, the observed distribution is just the single-slit diffraction envelope scaled down by a factor of 1/2:"
+            },
+            {
+              "type": "equation",
+              "id": "pattern_half_envelope"
+            },
+            {
+              "type": "equation",
+              "id": "alpha_def",
+              "caption": "with w the slit width and θ the angle from the centre."
+            },
+            {
+              "type": "text",
+              "text": "This is consistent with the intuition: each slit still produces its own diffraction pattern, but because their polarizations are perpendicular, the detector cannot \"add\" them coherently. Instead, we only see the sum of two independent single-slit patterns, resulting in half the overall intensity and no interference."
+            }
+          ]
+        },
+        {
+          "title": "Adding the third polarizer",
+          "blocks": [
+            {
+              "type": "figure",
+              "src": "res://assets/figures/exp3/exp3_Diagram_(6).png",
+              "height": 760,
+              "caption": "Step-by-step summary of the quantum eraser effect. Step 1: a standard double slit with no polarizers produces an interference pattern, as both paths are indistinguishable. Step 2: adding perpendicular polarizers (↔ on slit A, ↕ on slit B) tags each path, destroying interference and yielding a single-slit diffraction envelope at half intensity. Step 3: inserting a diagonal polarizer (P1 at 45°) after the slits projects both paths onto the same polarization state, erasing the which-way information and restoring the interference fringes. The complementary patterns at 45° and −45° are inverses of each other, summing to recover the Step 2 envelope: ¼(1 + cos) + ¼(1 − cos) = ½."
+            },
+            {
+              "type": "text",
+              "text": "We now add a third polarizer P1 after the slits. The result depends entirely on [i]which basis[/i] we use to express the photon's polarization."
+            },
+            {
+              "type": "subheading",
+              "text": "The state before P1"
+            },
+            {
+              "type": "text",
+              "text": "Just before the third polarizer, the photon is in the state:"
+            },
+            {
+              "type": "equation",
+              "id": "psi3_before_p1"
+            },
+            {
+              "type": "text",
+              "text": "The two polarization states |↔⟩ and |↕⟩ are [b]orthogonal[/b]. This is why there is no interference: the terms cannot combine."
+            }
+          ]
+        },
+        {
+          "title": "Choosing a basis",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Here is the key insight: [i]the same state can be written in different bases.[/i]"
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Rewriting in another basis is a free choice",
+              "text": "In Experiment 1 we wrote |↔⟩ as a sum of the two diagonal arrows, |↗↙⟩ and |↘↖⟩, and nothing about the photon changed: it was the same arrow, described with a different pair of perpendicular axes. The same freedom applies here. The polarization entry of our list can be spelled in the ↔/↕ basis or in the ↗↙/↘↖ basis, whichever is convenient. The state is identical either way; only the bookkeeping changes. What is [i]not[/i] free is what P1 does: a polarizer at 45° keeps the |↗↙⟩ component and discards the |↘↖⟩ one, so the diagonal spelling is the one that tells us what survives."
+            },
+            {
+              "type": "widget",
+              "scene": "res://ui/widgets/vector_playground.tscn",
+              "params": {
+                "labels": [
+                  "↔",
+                  "↕"
+                ],
+                "angle": 30,
+                "mode": "basis_change",
+                "show_probabilities": true
+              },
+              "height": 340
+            },
+            {
+              "type": "subheading",
+              "text": "In the H/V basis (horizontal/vertical)"
+            },
+            {
+              "type": "equation",
+              "id": "psi3_hv_basis"
+            },
+            {
+              "type": "text",
+              "text": "The two terms have different polarizations → orthogonal → no interference."
+            },
+            {
+              "type": "subheading",
+              "text": "In the diagonal basis"
+            },
+            {
+              "type": "text",
+              "text": "Using the rewriting of |↔⟩ and |↕⟩ in terms of the diagonals:"
+            },
+            {
+              "type": "equation",
+              "id": "hv_in_diagonal"
+            },
+            {
+              "type": "equation",
+              "id": "diagonal_rewrite"
+            },
+            {
+              "type": "text",
+              "text": "Now each polarization state has [i]both[/i] phase terms → interference is possible."
+            }
+          ]
+        },
+        {
+          "title": "What P1 does",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The third polarizer [b]selects one term[/b] from this superposition:"
+            },
+            {
+              "type": "table",
+              "header": [
+                "P1 angle",
+                "Selects",
+                "Intensity",
+                "Result"
+              ],
+              "rows": [
+                [
+                  "0°",
+                  "e^{ika} |↔⟩",
+                  "I = ¼",
+                  "no interference"
+                ],
+                [
+                  "90°",
+                  "e^{ikb} |↕⟩",
+                  "I = ¼",
+                  "no interference"
+                ],
+                [
+                  "45°",
+                  "(e^{ika} + e^{ikb}) |↗↙⟩",
+                  "I = ¼ (1 + cos kΔ)",
+                  "[b]interference[/b]"
+                ],
+                [
+                  "−45°",
+                  "(e^{ika} − e^{ikb}) |↘↖⟩",
+                  "I = ¼ (1 − cos kΔ)",
+                  "[b]anti-interference[/b]"
+                ]
+              ]
+            },
+            {
+              "type": "equation",
+              "id": "p1_0"
+            },
+            {
+              "type": "equation",
+              "id": "p1_90"
+            },
+            {
+              "type": "equation",
+              "id": "p1_45"
+            },
+            {
+              "type": "equation",
+              "id": "p1_m45"
+            },
+            {
+              "type": "equation",
+              "id": "delta_def",
+              "caption": "where Δ = a − b is the path difference."
+            },
+            {
+              "type": "callout",
+              "kind": "math",
+              "title": "Where the cosine comes from",
+              "text": "The 45° row squares a [i]sum[/i] of two rotating arrows, as in Experiment 2: two unit arrows at angles ka and kb add to a length-squared of 2(1 + cos kΔ). The −45° row squares their [i]difference[/i], which gives 2(1 − cos kΔ). The prefactor 1/(2√2) squared is 1/8, and 2/8 = ¼."
+            },
+            {
+              "type": "equation",
+              "id": "sum_of_phases"
+            },
+            {
+              "type": "subheading",
+              "text": "Why does 45° restore interference?"
+            },
+            {
+              "type": "text",
+              "text": "At 0° or 90°, the polarizer selects photons from [i]one slit only[/i]. We know which path was taken → no interference."
+            },
+            {
+              "type": "text",
+              "text": "At 45°, the polarizer projects [i]both[/i] paths onto the [i]same[/i] final polarization |↗↙⟩. A photon that survives could have come from either slit — we cannot tell. The which-way information has been [b]erased[/b]."
+            },
+            {
+              "type": "text",
+              "text": "This is the [b]quantum eraser[/b] effect."
+            }
+          ]
+        },
+        {
+          "title": "Complementary pairs",
+          "blocks": [
+            {
+              "type": "text",
+              "text": "The 45° and −45° patterns are opposite: maxima ↔ minima. Adding them:"
+            },
+            {
+              "type": "callout",
+              "kind": "note",
+              "title": "The sum rule",
+              "text": "This one line is the whole chapter in miniature. Compare it with the measured scans: the 45° and −45° plots, added point by point, give back the envelope of the 0° and 90° plots."
+            },
+            {
+              "type": "equation",
+              "id": "complementary_sum",
+              "caption": "[b]Complementary pairs:[/b] the two diagonal patterns sum to exactly the pattern from before adding P1."
+            },
+            {
+              "type": "text",
+              "text": "This recovers exactly the pattern from before adding P1. Same for 0° + 90°:"
+            },
+            {
+              "type": "equation",
+              "id": "complementary_sum_hv"
+            },
+            {
+              "type": "text",
+              "text": "The third polarizer does not create or destroy photons. It [b]picks a decomposition[/b]: a way of splitting the photons into two complementary groups that always sum to the same total."
+            },
+            {
+              "type": "callout",
+              "kind": "lab",
+              "title": "Into the laboratory",
+              "text": "Your turn at the bench. The lab has the 405 nm laser, the diagonal preparation, the lens, the double slit with PA (0°) on slit A and PB (90°) on slit B (each with an angle slider and an in/out toggle), the rotatable polarizer P1 and the scanning detector with its pattern plot. Our four data files are available as overlays on the plot.\n\n1. With PA and PB [b]in[/b] and P1 [b]out[/b], scan the detector. Confirm a smooth envelope at half brightness and no fringes.\n2. Set P1 to [b]0°[/b] and scan. Switch on the 0° data overlay and compare. Repeat at [b]90°[/b]: the envelope should shift sideways by about half a millimetre, towards the other slit.\n3. Set P1 to [b]45°[/b]. Scan. Overlay the 45° data: the fringes are back. Repeat at [b]−45°[/b] and check that maxima and minima have swapped places.\n4. Add the 45° and −45° scans in your head (or in the plot): you should recover the envelope from step 1. Do the same for 0° + 90°.\n5. Take PA [b]out[/b] while P1 stays at 0°. What happens to the fringes, and why? Put it back.\n6. Prediction: set P1 to [b]22.5°[/b]. Before scanning, predict the fringe visibility (the contrast between maxima and minima) from the formula below, then scan and check."
+            },
+            {
+              "type": "equation",
+              "id": "general_p1",
+              "caption": "Not on the original site: the natural extension to any P1 angle φ_1. It reproduces all four table rows; the visibility V is 0 at 0° and 90°, 1 at ±45°."
+            },
+            {
+              "type": "lab",
+              "label": "◆  Enter the Experiment 3 lab"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

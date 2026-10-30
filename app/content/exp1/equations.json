@@ -1,0 +1,66 @@
+{
+  "$comment": "Experiment 1 equations E1-E24, transcribed from docs/content/02-experiment-1-polarizers.md, plus the p.30 product summary (products_summary) and three check-in helpers (state_theta, operator_chain, malus_chain) that the site implies but does not print. Rendered by tools/mathgen into app/assets/math/exp1/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "lostp": ["\\ket{\\text{lost}_{P_{#1}}}", 1],
+    "PH": "P_{\\H}",
+    "PV": "P_{\\V}",
+    "PD": "P_{\\diag}"
+  },
+  "equations": {
+    "basis_hv": "\\ket{\\V}\\ \\text{(vertical)} \\qquad\\text{and}\\qquad \\ket{\\H}\\ \\text{(horizontal)}",
+
+    "diag_state": "\\ket{\\diag} = \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\ket{\\V}",
+
+    "cos2_45": "\\cos^2(45^\\circ) = \\tfrac12",
+
+    "antidiag_state": "\\ket{\\antidiag} = \\frac{1}{\\sqrt2}\\left(\\ket{\\H} - \\ket{\\V}\\right).",
+
+    "p_h_basis": "\\PH\\ket{\\H} = \\ket{\\H} \\qquad\\text{and}\\qquad \\PH\\ket{\\V} = \\lost.",
+
+    "p_v_basis": "\\PV\\ket{\\V} = \\ket{\\V}, \\qquad \\PV\\ket{\\H} = \\lost.",
+
+    "p_h_diag": "\\begin{aligned} \\PH\\ket{\\diag} &= \\PH\\,\\frac{1}{\\sqrt2}\\left(\\ket{\\H}+\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\left(\\PH\\ket{\\H} + \\PH\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\left(\\ket{\\H} + \\lost\\right). \\end{aligned}",
+
+    "prob_detection": "\\text{Probability of detection} = \\left(\\frac{1}{\\sqrt2}\\right)^2 = \\frac12.",
+
+    "intensity_rule": "I = \\text{Prob}\\cdot I_0\\,.",
+
+    "psi0_nopol": "\\ket{\\psi_0} = \\ket{\\diag}\\,.",
+
+    "i_no_pol": "I = 100\\%\\cdot I_0\\,.",
+
+    "psi0_onepol": "\\ket{\\psi_0} = \\ket{\\diag}",
+
+    "psi1_onepol": "\\begin{aligned} \\ket{\\psi_1} &= \\PH\\ket{\\psi_0}\\\\ &= \\PH\\ket{\\diag}\\\\ &= \\PH\\,\\frac{1}{\\sqrt2}\\left(\\ket{\\H}+\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lost\\,. \\end{aligned}",
+
+    "i_one_pol": "\\begin{aligned} I &= \\left(\\frac{1}{\\sqrt2}\\right)^2\\cdot I_0\\\\ &= 50\\%\\cdot I_0\\,. \\end{aligned}",
+
+    "psi1_twopol": "\\begin{aligned} \\ket{\\psi_1} &= \\PH\\ket{\\psi_0}\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\,, \\end{aligned}",
+
+    "psi2_twopol": "\\begin{aligned} \\ket{\\psi_2} &= \\PV\\ket{\\psi_1}\\\\ &= \\PV\\left(\\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\PV\\ket{\\H} + \\frac{1}{\\sqrt2}\\PV\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+
+    "i_two_pol": "\\begin{aligned} I &= (0)^2\\cdot I_0\\\\ &= 0\\%\\,. \\end{aligned}",
+
+    "psi2_threepol": "\\begin{aligned} \\ket{\\psi_2} &= \\PD\\ket{\\psi_1}\\\\ &= \\PD\\left(\\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\PD\\ket{\\H} + \\frac{1}{\\sqrt2}\\PD\\lostp{1}\\,. \\end{aligned}",
+
+    "diag_sum": "\\begin{array}{rcl} \\ket{\\diag} &=& \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\ket{\\V}\\\\ +\\ \\ket{\\antidiag} &=& \\tfrac{1}{\\sqrt2}\\ket{\\H} - \\tfrac{1}{\\sqrt2}\\ket{\\V}\\\\ \\hline \\ket{\\diag} + \\ket{\\antidiag} &=& \\tfrac{2}{\\sqrt2}\\ket{\\H} \\end{array}",
+
+    "h_from_diag": "\\ket{\\H} = \\frac{\\ket{\\diag} + \\ket{\\antidiag}}{\\sqrt2}\\,.",
+
+    "v_from_diag": "\\ket{\\V} = \\frac{\\ket{\\diag} - \\ket{\\antidiag}}{\\sqrt2}\\,.",
+
+    "psi2_threepol_final": "\\begin{aligned} \\ket{\\psi_2} &= \\frac{1}{\\sqrt2}\\PD\\ket{\\H} + \\frac{1}{\\sqrt2}\\PD\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\PD\\left(\\frac{1}{\\sqrt2}\\ket{\\diag} + \\frac{1}{\\sqrt2}\\ket{\\antidiag}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\left(\\frac{1}{\\sqrt2}\\PD\\ket{\\diag} + \\frac{1}{\\sqrt2}\\PD\\ket{\\antidiag}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\left(\\frac{1}{\\sqrt2}\\ket{\\diag} + \\frac{1}{\\sqrt2}\\lostp{2}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac12\\ket{\\diag} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+
+    "psi3_final": "\\begin{aligned} \\ket{\\psi_3} &= \\PV\\ket{\\psi_2}\\\\ &= \\frac12 \\PV\\ket{\\diag} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac12\\left(\\frac{1}{\\sqrt2}\\ket{\\V} + \\frac{1}{\\sqrt2}\\lostp{3}\\right) + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{2\\sqrt2}\\ket{\\V} + \\frac{1}{2\\sqrt2}\\lostp{3} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+
+    "i_three_pol": "\\begin{aligned} I &= \\left(\\frac{1}{2\\sqrt2}\\right)^2\\cdot I_0\\\\ &= 0.125\\cdot I_0\\\\ &= 12.5\\%\\cdot I_0\\,. \\end{aligned}",
+
+    "products_summary": "\\begin{aligned} \\PV\\ket{\\V} &= \\ket{\\V}, & \\PV\\ket{\\H} &= \\lost,\\\\ \\PH\\ket{\\H} &= \\ket{\\H}, & \\PH\\ket{\\V} &= \\lost,\\\\ \\PH\\ket{\\diag} &= \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\lost, & \\PV\\ket{\\diag} &= \\tfrac{1}{\\sqrt2}\\ket{\\V} + \\tfrac{1}{\\sqrt2}\\lost,\\\\ \\PH\\ket{\\antidiag} &= \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\lost, & \\PV\\ket{\\antidiag} &= \\tfrac{1}{\\sqrt2}\\ket{\\V} + \\tfrac{1}{\\sqrt2}\\lost. \\end{aligned}",
+
+    "state_theta": "\\ket{\\theta} = \\cos\\theta\\,\\ket{\\H} + \\sin\\theta\\,\\ket{\\V}, \\qquad \\cos^2\\theta + \\sin^2\\theta = 1.",
+
+    "operator_chain": "\\ket{\\psi_0} \\xrightarrow{\\ P_1\\ } \\ket{\\psi_1} \\xrightarrow{\\ P_2\\ } \\ket{\\psi_2} \\xrightarrow{\\ P_3\\ } \\ket{\\psi_3}, \\qquad \\ket{\\psi_3} = P_3\\,P_2\\,P_1\\ket{\\psi_0}.",
+
+    "malus_chain": "\\text{Prob} = \\cos^2(\\theta_1-\\theta_0)\\cdot\\cos^2(\\theta_2-\\theta_1)\\cdot\\cos^2(\\theta_3-\\theta_2) = \\tfrac12\\cdot\\tfrac12\\cdot\\tfrac12 = \\tfrac18 ."
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "generated": "2026-10-30T11:24:19.113Z",
+  "manifest": "equations.json",
+  "color": "#e8e4ff",
+  "displayScale": 1,
+  "pxPerEx": 16,
+  "pngZoom": 3,
+  "equations": {
+    "basis_hv": {
+      "file": "basis_hv.svg",
+      "width": 662.98,
+      "height": 37.79,
+      "baseline": 9.84,
+      "tex": "\\ket{\\V}\\ \\text{(vertical)} \\qquad\\text{and}\\qquad \\ket{\\H}\\ \\text{(horizontal)}",
+      "hash": "a08850a7c114d450",
+      "png": "basis_hv.png"
+    },
+    "diag_state": {
+      "file": "diag_state.svg",
+      "width": 415.42,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\diag} = \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\ket{\\V}",
+      "hash": "97330d1b441f5cac",
+      "png": "diag_state.png"
+    },
+    "cos2_45": {
+      "file": "cos2_45.svg",
+      "width": 221.41,
+      "height": 44.48,
+      "baseline": 12.5,
+      "tex": "\\cos^2(45^\\circ) = \\tfrac12",
+      "hash": "ed4a8df5e78a7cac",
+      "png": "cos2_45.png"
+    },
+    "antidiag_state": {
+      "file": "antidiag_state.svg",
+      "width": 388.74,
+      "height": 85.5,
+      "baseline": 36.93,
+      "tex": "\\ket{\\antidiag} = \\frac{1}{\\sqrt2}\\left(\\ket{\\H} - \\ket{\\V}\\right).",
+      "hash": "68971bb6435804bb",
+      "png": "antidiag_state.png"
+    },
+    "p_h_basis": {
+      "file": "p_h_basis.svg",
+      "width": 669.09,
+      "height": 37.79,
+      "baseline": 9.84,
+      "tex": "\\PH\\ket{\\H} = \\ket{\\H} \\qquad\\text{and}\\qquad \\PH\\ket{\\V} = \\lost.",
+      "hash": "80d616a52de85419",
+      "png": "p_h_basis.png"
+    },
+    "p_v_basis": {
+      "file": "p_v_basis.svg",
+      "width": 510.74,
+      "height": 41.87,
+      "baseline": 13.92,
+      "tex": "\\PV\\ket{\\V} = \\ket{\\V}, \\qquad \\PV\\ket{\\H} = \\lost.",
+      "hash": "4dc0ed7cdc19f74b",
+      "png": "p_v_basis.png"
+    },
+    "p_h_diag": {
+      "file": "p_h_diag.svg",
+      "width": 552.3,
+      "height": 278.22,
+      "baseline": 130.06,
+      "tex": "\\begin{aligned} \\PH\\ket{\\diag} &= \\PH\\,\\frac{1}{\\sqrt2}\\left(\\ket{\\H}+\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\left(\\PH\\ket{\\H} + \\PH\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\left(\\ket{\\H} + \\lost\\right). \\end{aligned}",
+      "hash": "43a6b751294f7a02",
+      "png": "p_h_diag.png"
+    },
+    "prob_detection": {
+      "file": "prob_detection.svg",
+      "width": 645.38,
+      "height": 96.56,
+      "baseline": 36.93,
+      "tex": "\\text{Probability of detection} = \\left(\\frac{1}{\\sqrt2}\\right)^2 = \\frac12.",
+      "hash": "80279f0bb69f9876",
+      "png": "prob_detection.png"
+    },
+    "intensity_rule": {
+      "file": "intensity_rule.svg",
+      "width": 217.58,
+      "height": 31.12,
+      "baseline": 6,
+      "tex": "I = \\text{Prob}\\cdot I_0\\,.",
+      "hash": "cb90b82650889c33",
+      "png": "intensity_rule.png"
+    },
+    "psi0_nopol": {
+      "file": "psi0_nopol.svg",
+      "width": 218.4,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} = \\ket{\\diag}\\,.",
+      "hash": "a914d6254dc94b76",
+      "png": "psi0_nopol.png"
+    },
+    "i_no_pol": {
+      "file": "i_no_pol.svg",
+      "width": 224.96,
+      "height": 33.14,
+      "baseline": 6,
+      "tex": "I = 100\\%\\cdot I_0\\,.",
+      "hash": "2b348dad1364bf22",
+      "png": "i_no_pol.png"
+    },
+    "psi0_onepol": {
+      "file": "psi0_onepol.svg",
+      "width": 202.29,
+      "height": 36.19,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} = \\ket{\\diag}",
+      "hash": "416cc54d1e3c2f8d",
+      "png": "psi0_onepol.png"
+    },
+    "psi1_onepol": {
+      "file": "psi1_onepol.svg",
+      "width": 442.96,
+      "height": 275.98,
+      "baseline": 128.94,
+      "tex": "\\begin{aligned} \\ket{\\psi_1} &= \\PH\\ket{\\psi_0}\\\\ &= \\PH\\ket{\\diag}\\\\ &= \\PH\\,\\frac{1}{\\sqrt2}\\left(\\ket{\\H}+\\ket{\\V}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lost\\,. \\end{aligned}",
+      "hash": "6963fec5a81878ce",
+      "png": "psi1_onepol.png"
+    },
+    "i_one_pol": {
+      "file": "i_one_pol.svg",
+      "width": 258.4,
+      "height": 143.62,
+      "baseline": 62.75,
+      "tex": "\\begin{aligned} I &= \\left(\\frac{1}{\\sqrt2}\\right)^2\\cdot I_0\\\\ &= 50\\%\\cdot I_0\\,. \\end{aligned}",
+      "hash": "4405ccd67fcd7eed",
+      "png": "i_one_pol.png"
+    },
+    "psi1_twopol": {
+      "file": "psi1_twopol.svg",
+      "width": 473.57,
+      "height": 132.56,
+      "baseline": 57.23,
+      "tex": "\\begin{aligned} \\ket{\\psi_1} &= \\PH\\ket{\\psi_0}\\\\ &= \\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\,, \\end{aligned}",
+      "hash": "44f907652cbe9604",
+      "png": "psi1_twopol.png"
+    },
+    "psi2_twopol": {
+      "file": "psi2_twopol.svg",
+      "width": 555.82,
+      "height": 334.05,
+      "baseline": 157.97,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\PV\\ket{\\psi_1}\\\\ &= \\PV\\left(\\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\PV\\ket{\\H} + \\frac{1}{\\sqrt2}\\PV\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+      "hash": "8a6e7e4434c6f34b",
+      "png": "psi2_twopol.png"
+    },
+    "i_two_pol": {
+      "file": "i_two_pol.svg",
+      "width": 186.46,
+      "height": 88.11,
+      "baseline": 35.01,
+      "tex": "\\begin{aligned} I &= (0)^2\\cdot I_0\\\\ &= 0\\%\\,. \\end{aligned}",
+      "hash": "9a8a42dc9ab20810",
+      "png": "i_two_pol.png"
+    },
+    "psi2_threepol": {
+      "file": "psi2_threepol.svg",
+      "width": 628.42,
+      "height": 235.02,
+      "baseline": 108.46,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\PD\\ket{\\psi_1}\\\\ &= \\PD\\left(\\frac{1}{\\sqrt2}\\ket{\\H} + \\frac{1}{\\sqrt2}\\lostp{1}\\right)\\\\ &= \\frac{1}{\\sqrt2}\\PD\\ket{\\H} + \\frac{1}{\\sqrt2}\\PD\\lostp{1}\\,. \\end{aligned}",
+      "hash": "2cca79f21a429f69",
+      "png": "psi2_threepol.png"
+    },
+    "diag_sum": {
+      "file": "diag_sum.svg",
+      "width": 573.76,
+      "height": 189.44,
+      "baseline": 85.68,
+      "tex": "\\begin{array}{rcl} \\ket{\\diag} &=& \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\ket{\\V}\\\\ +\\ \\ket{\\antidiag} &=& \\tfrac{1}{\\sqrt2}\\ket{\\H} - \\tfrac{1}{\\sqrt2}\\ket{\\V}\\\\ \\hline \\ket{\\diag} + \\ket{\\antidiag} &=& \\tfrac{2}{\\sqrt2}\\ket{\\H} \\end{array}",
+      "hash": "484b5c262925ffe1",
+      "png": "diag_sum.png"
+    },
+    "h_from_diag": {
+      "file": "h_from_diag.svg",
+      "width": 365.9,
+      "height": 89.78,
+      "baseline": 36.93,
+      "tex": "\\ket{\\H} = \\frac{\\ket{\\diag} + \\ket{\\antidiag}}{\\sqrt2}\\,.",
+      "hash": "a6bf3ec5c8ddeb27",
+      "png": "h_from_diag.png"
+    },
+    "v_from_diag": {
+      "file": "v_from_diag.svg",
+      "width": 347.81,
+      "height": 89.78,
+      "baseline": 36.93,
+      "tex": "\\ket{\\V} = \\frac{\\ket{\\diag} - \\ket{\\antidiag}}{\\sqrt2}\\,.",
+      "hash": "379632940a346601",
+      "png": "v_from_diag.png"
+    },
+    "psi2_threepol_final": {
+      "file": "psi2_threepol_final.svg",
+      "width": 960.3,
+      "height": 482.62,
+      "baseline": 232.26,
+      "tex": "\\begin{aligned} \\ket{\\psi_2} &= \\frac{1}{\\sqrt2}\\PD\\ket{\\H} + \\frac{1}{\\sqrt2}\\PD\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\PD\\left(\\frac{1}{\\sqrt2}\\ket{\\diag} + \\frac{1}{\\sqrt2}\\ket{\\antidiag}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\left(\\frac{1}{\\sqrt2}\\PD\\ket{\\diag} + \\frac{1}{\\sqrt2}\\PD\\ket{\\antidiag}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{\\sqrt2}\\left(\\frac{1}{\\sqrt2}\\ket{\\diag} + \\frac{1}{\\sqrt2}\\lostp{2}\\right) + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac12\\ket{\\diag} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+      "hash": "b29a9a06f326f985",
+      "png": "psi2_threepol_final.png"
+    },
+    "psi3_final": {
+      "file": "psi3_final.svg",
+      "width": 936.62,
+      "height": 334.05,
+      "baseline": 157.97,
+      "tex": "\\begin{aligned} \\ket{\\psi_3} &= \\PV\\ket{\\psi_2}\\\\ &= \\frac12 \\PV\\ket{\\diag} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac12\\left(\\frac{1}{\\sqrt2}\\ket{\\V} + \\frac{1}{\\sqrt2}\\lostp{3}\\right) + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\\\ &= \\frac{1}{2\\sqrt2}\\ket{\\V} + \\frac{1}{2\\sqrt2}\\lostp{3} + \\frac12\\lostp{2} + \\frac{1}{\\sqrt2}\\lostp{1}\\,. \\end{aligned}",
+      "hash": "fe46ccaa66a0c1f5",
+      "png": "psi3_final.png"
+    },
+    "i_three_pol": {
+      "file": "i_three_pol.svg",
+      "width": 276.5,
+      "height": 190.67,
+      "baseline": 86.29,
+      "tex": "\\begin{aligned} I &= \\left(\\frac{1}{2\\sqrt2}\\right)^2\\cdot I_0\\\\ &= 0.125\\cdot I_0\\\\ &= 12.5\\%\\cdot I_0\\,. \\end{aligned}",
+      "hash": "cc11154d985e4790",
+      "png": "i_three_pol.png"
+    },
+    "products_summary": {
+      "file": "products_summary.svg",
+      "width": 1027.65,
+      "height": 217.54,
+      "baseline": 99.73,
+      "tex": "\\begin{aligned} \\PV\\ket{\\V} &= \\ket{\\V}, & \\PV\\ket{\\H} &= \\lost,\\\\ \\PH\\ket{\\H} &= \\ket{\\H}, & \\PH\\ket{\\V} &= \\lost,\\\\ \\PH\\ket{\\diag} &= \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\lost, & \\PV\\ket{\\diag} &= \\tfrac{1}{\\sqrt2}\\ket{\\V} + \\tfrac{1}{\\sqrt2}\\lost,\\\\ \\PH\\ket{\\antidiag} &= \\tfrac{1}{\\sqrt2}\\ket{\\H} + \\tfrac{1}{\\sqrt2}\\lost, & \\PV\\ket{\\antidiag} &= \\tfrac{1}{\\sqrt2}\\ket{\\V} + \\tfrac{1}{\\sqrt2}\\lost. \\end{aligned}",
+      "hash": "a221a9d84e444b78",
+      "png": "products_summary.png"
+    },
+    "state_theta": {
+      "file": "state_theta.svg",
+      "width": 778.99,
+      "height": 41.84,
+      "baseline": 9.84,
+      "tex": "\\ket{\\theta} = \\cos\\theta\\,\\ket{\\H} + \\sin\\theta\\,\\ket{\\V}, \\qquad \\cos^2\\theta + \\sin^2\\theta = 1.",
+      "hash": "55b684c22b9804b6",
+      "png": "state_theta.png"
+    },
+    "operator_chain": {
+      "file": "operator_chain.svg",
+      "width": 908.67,
+      "height": 56.56,
+      "baseline": 9.06,
+      "tex": "\\ket{\\psi_0} \\xrightarrow{\\ P_1\\ } \\ket{\\psi_1} \\xrightarrow{\\ P_2\\ } \\ket{\\psi_2} \\xrightarrow{\\ P_3\\ } \\ket{\\psi_3}, \\qquad \\ket{\\psi_3} = P_3\\,P_2\\,P_1\\ket{\\psi_0}.",
+      "hash": "56741549c8cf8de7",
+      "png": "operator_chain.png"
+    },
+    "malus_chain": {
+      "file": "malus_chain.svg",
+      "width": 1058.1,
+      "height": 45.06,
+      "baseline": 13.06,
+      "tex": "\\text{Prob} = \\cos^2(\\theta_1-\\theta_0)\\cdot\\cos^2(\\theta_2-\\theta_1)\\cdot\\cos^2(\\theta_3-\\theta_2) = \\tfrac12\\cdot\\tfrac12\\cdot\\tfrac12 = \\tfrac18 .",
+      "hash": "c9fed26cc022f8ab",
+      "png": "malus_chain.png"
+    }
+  }
+}

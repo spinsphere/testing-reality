@@ -1,0 +1,35 @@
+{
+  "$comment": "Experiment 3 (polarized double slit / quantum eraser) equations E1-E13 transcribed from docs/content/04-experiment-3-polarized-double-slit.md, plus the four rows of the P1 table (p1_0, p1_90, p1_45, p1_m45) and short helper equations for the maths check-ins (tensor_distribute, orthogonal_norm, sum_of_phases, hv_in_diagonal, alpha_def, delta_def, general_p1). Rendered by tools/mathgen into app/assets/math/exp3/. \\ket, \\bra, \\braket, \\diag, \\antidiag, \\lost, \\H, \\V are built into mathgen.",
+  "macros": {
+    "lostA": "\\ket{\\mathrm{lost}_{P_A}}",
+    "lostB": "\\ket{\\mathrm{lost}_{P_B}}",
+    "PH": "P_{\\leftrightarrow}",
+    "PV": "P_{\\updownarrow}"
+  },
+  "equations": {
+    "psi0_pol_pos": "\\ket{\\psi} = \\ket{\\diag}\\ket{S}",
+    "tensor_distribute": "\\ket{\\diag}\\left(\\ket{A} + \\ket{B}\\right) = \\ket{\\diag}\\ket{A} + \\ket{\\diag}\\ket{B}",
+    "psi0_source": "\\ket{\\psi_0} = \\ket{\\diag}\\ket{S}\\,.",
+    "psi1_slits": "\\begin{aligned} \\ket{\\psi_1} &= \\ket{\\diag}\\left(\\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{A}+\\ket{B}\\right)\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\ket{\\diag}\\ket{A} + \\ket{\\diag}\\ket{B}\\right). \\end{aligned}",
+    "psi2_polarizers": "\\begin{aligned} \\ket{\\psi_2} &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\PH\\ket{\\diag}\\ket{A} + \\PV\\ket{\\diag}\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\PH\\left(\\frac{\\ket{\\H}+\\ket{\\V}}{\\sqrt{2}}\\right)\\ket{A} + \\PV\\left(\\frac{\\ket{\\H}+\\ket{\\V}}{\\sqrt{2}}\\right)\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\frac{\\ket{\\H}+\\lostA}{\\sqrt{2}}\\ket{A} + \\frac{\\lostB+\\ket{\\V}}{\\sqrt{2}}\\ket{B}\\right)\\\\ &= \\tfrac{1}{\\sqrt{2}}\\,e^{ikl}\\left(\\tfrac{1}{\\sqrt{2}}\\ket{\\H}\\ket{A} + \\tfrac{1}{\\sqrt{2}}\\ket{\\V}\\ket{B} + \\tfrac{1}{\\sqrt{2}}\\lostA + \\tfrac{1}{\\sqrt{2}}\\lostB\\right)\\\\ &= \\tfrac{1}{2}\\,e^{ikl}\\left(\\ket{\\H}\\ket{A} + \\ket{\\V}\\ket{B} + \\lostA + \\lostB\\right) \\end{aligned}",
+    "psi3_screen": "\\begin{aligned} \\ket{\\psi_3} &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H}\\ket{y} + e^{ikb}\\ket{\\V}\\ket{y}\\right) + \\cdots\\\\ &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y} + \\cdots\\\\ &= \\cdots + \\tfrac{1}{2}\\,e^{ikl}e^{ika}\\ket{\\H}\\ket{y} + \\tfrac{1}{2}\\,e^{ikl}e^{ikb}\\ket{\\V}\\ket{y} + \\cdots \\end{aligned}",
+    "psi3_amplitudes": "\\ket{\\psi_3} = \\cdots + \\underbrace{\\tfrac{1}{2}\\,e^{ikl}e^{ika}}_{\\text{amplitude }A_1}\\ket{\\H}\\ket{y} + \\underbrace{\\tfrac{1}{2}\\,e^{ikl}e^{ikb}}_{\\text{amplitude }A_2}\\ket{\\V}\\ket{y} + \\cdots",
+    "orthogonal_norm": "\\left|A_1\\ket{\\H}\\ket{y} + A_2\\ket{\\V}\\ket{y}\\right|^{2} = |A_1|^{2} + |A_2|^{2} \\quad\\text{since}\\quad \\braket{\\H}{\\V} = 0",
+    "intensity_sum": "\\begin{aligned} I &= |A_1|^{2} + |A_2|^{2}\\\\ &= \\left|\\tfrac{1}{2}\\,e^{ikl}e^{ika}\\right|^{2} + \\left|\\tfrac{1}{2}\\,e^{ikl}e^{ikb}\\right|^{2}\\\\ &= \\tfrac{1}{4} + \\tfrac{1}{4}\\\\ &= \\tfrac{1}{2} \\end{aligned}",
+    "pattern_half_envelope": "\\mathrm{Pattern} = \\frac{1}{2}\\times\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^{2}",
+    "alpha_def": "\\alpha = \\frac{\\pi\\, w \\sin\\theta}{\\lambda}",
+    "psi3_before_p1": "\\ket{\\psi_3} = \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y}",
+    "psi3_hv_basis": "\\ket{\\psi_3} = \\tfrac{1}{2}\\,e^{ikl}\\left(e^{ika}\\ket{\\H} + e^{ikb}\\ket{\\V}\\right)\\ket{y}",
+    "hv_in_diagonal": "\\ket{\\H} = \\tfrac{1}{\\sqrt{2}}\\left(\\ket{\\diag} + \\ket{\\antidiag}\\right), \\qquad \\ket{\\V} = \\tfrac{1}{\\sqrt{2}}\\left(\\ket{\\diag} - \\ket{\\antidiag}\\right)",
+    "diagonal_rewrite": "\\ket{\\psi_3} = \\frac{1}{2\\sqrt{2}}\\,e^{ikl}\\left[\\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag} + \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag}\\right]\\ket{y}",
+    "sum_of_phases": "\\begin{aligned} \\left|e^{ika} + e^{ikb}\\right|^{2} &= 2\\left(1 + \\cos k\\Delta\\right)\\\\ \\left|e^{ika} - e^{ikb}\\right|^{2} &= 2\\left(1 - \\cos k\\Delta\\right) \\end{aligned}",
+    "p1_0": "P_1 = 0^{\\circ}:\\qquad e^{ika}\\ket{\\H} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}",
+    "p1_90": "P_1 = 90^{\\circ}:\\qquad e^{ikb}\\ket{\\V} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}",
+    "p1_45": "P_1 = 45^{\\circ}:\\qquad \\left(e^{ika}+e^{ikb}\\right)\\ket{\\diag} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}\\left(1 + \\cos k\\Delta\\right)",
+    "p1_m45": "P_1 = -45^{\\circ}:\\qquad \\left(e^{ika}-e^{ikb}\\right)\\ket{\\antidiag} \\quad\\Rightarrow\\quad I = \\tfrac{1}{4}\\left(1 - \\cos k\\Delta\\right)",
+    "delta_def": "\\Delta = a - b",
+    "complementary_sum": "\\frac{1}{4}\\left(1 + \\cos k\\Delta\\right) + \\frac{1}{4}\\left(1 - \\cos k\\Delta\\right) = \\frac{1}{2}",
+    "complementary_sum_hv": "\\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}",
+    "general_p1": "I(\\varphi_1) = \\tfrac{1}{4}\\left[1 + \\sin(2\\varphi_1)\\cos k\\Delta\\right], \\qquad V = \\left|\\sin 2\\varphi_1\\right|"
+  }
+}
