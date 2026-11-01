@@ -3,26 +3,33 @@ extends Control
 ## Settings, keyboard map and "about" panel, opened from the hub.
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	# set_anchors_preset alone keeps the current (zero) size; this one fills the parent
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dim.gui_input.connect(func(ev: InputEvent) -> void:
 		if ev is InputEventMouseButton and ev.pressed:
 			queue_free())
 	add_child(dim)
 
+	# a centred card, never taller than the window: its contents scroll
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(center)
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = "Card"
-	panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(760, 0)
-	panel.offset_left = -380
-	panel.offset_right = 380
-	panel.offset_top = -300
-	add_child(panel)
+	center.add_child(panel)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.custom_minimum_size = Vector2(720, minf(640.0, get_viewport_rect().size.y - 120.0))
+	panel.add_child(scroll)
 	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	v.add_theme_constant_override("separation", 12)
-	panel.add_child(v)
+	scroll.add_child(v)
 
 	var title := Label.new()
 	title.text = "Settings"

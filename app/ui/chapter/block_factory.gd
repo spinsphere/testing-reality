@@ -220,13 +220,19 @@ static func table(header: Array, rows: Array) -> Control:
 	grid.add_theme_constant_override("h_separation", 24)
 	grid.add_theme_constant_override("v_separation", 8)
 	panel.add_child(grid)
+	# cells need a minimum width: a wrapping RichTextLabel with no width collapses to one
+	# character per line inside a grid (the settings card showed a 4000 px empty box)
+	var cell_w := 150.0
 	for h in header:
 		var l := rich_text("[b]%s[/b]" % str(h))
 		l.add_theme_color_override("default_color", Palette.ACCENT_SOFT)
+		l.custom_minimum_size = Vector2(cell_w, 0)
 		grid.add_child(l)
 	for row in rows:
 		for cell in row:
-			grid.add_child(rich_text(str(cell)))
+			var c := rich_text(str(cell))
+			c.custom_minimum_size = Vector2(cell_w, 0)
+			grid.add_child(c)
 	return panel
 
 

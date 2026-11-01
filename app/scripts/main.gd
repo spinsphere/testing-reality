@@ -21,7 +21,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bg = ColorRect.new()
 	_bg.color = Palette.BG
-	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_bg)
 	AppState.route_changed.connect(_on_route_changed)

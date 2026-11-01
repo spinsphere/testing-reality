@@ -224,6 +224,20 @@ func _drive_hub() -> void:
 			if _is_a(c, "SettingsOverlay"):
 				overlay = c
 		if _ok(overlay != null, "settings overlay did not open"):
+			# compare with the hub's rect: in headless mode the window is a dummy 64×64 while the
+			# scaled content area is the real layout space
+			var area: Rect2 = (overlay.get_parent() as Control).get_global_rect()
+			var orect: Rect2 = (overlay as Control).get_global_rect()
+			_ok(orect.size.x >= area.size.x - 1 and orect.size.y >= area.size.y - 1, "settings overlay does not cover the screen (%s vs %s)" % [orect, area])
+			var card: Control = null
+			for c in _descendants(overlay):
+				if c is PanelContainer and c.get_parent() is CenterContainer:
+					card = c
+					break
+			if _ok(card != null, "settings overlay has no card"):
+				var crect := card.get_global_rect()
+				_ok(area.encloses(crect), "settings card is not inside the screen (%s vs %s)" % [crect, area])
+				_ok(_texts(card).size() >= 8, "settings card looks empty (%d labels)" % _texts(card).size())
 			for c in _descendants(overlay):
 				if c is CheckBox:
 					(c as CheckBox).button_pressed = not (c as CheckBox).button_pressed
@@ -245,6 +259,28 @@ func _drive_hub() -> void:
 		settings.pressed.emit()
 		await _frames(_f)
 		await _action("ui_cancel")
+		await _frames(_f)
+		var still := false
+		for c in _descendants(hub):
+			if _is_a(c, "SettingsOverlay") and not c.is_queued_for_deletion():
+				still = true
+		_ok(not still, "Esc did not close the settings overlay")
+		# open again, clicking the dimmed background closes it
+		settings.pressed.emit()
+		await _frames(_f)
+		for c in _descendants(hub):
+			if _is_a(c, "SettingsOverlay"):
+				var dim: Control = c.get_child(0)
+				var click := InputEventMouseButton.new()
+				click.button_index = MOUSE_BUTTON_LEFT
+				click.pressed = true
+				dim.gui_input.emit(click)
+		await _frames(_f)
+		still = false
+		for c in _descendants(hub):
+			if _is_a(c, "SettingsOverlay") and not c.is_queued_for_deletion():
+				still = true
+		_ok(not still, "clicking outside did not close the settings overlay")
 		# open again, reset progress
 		settings.pressed.emit()
 		await _frames(_f)
