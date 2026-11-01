@@ -456,6 +456,16 @@ func _drive_lab(ch: Dictionary) -> void:
 		_ok((lab.get("stray_beams") as Array).size() >= 1, "lab %s: no stray beam for the splitter's reflection" % id)
 	var hud_texts := _texts(lab.get("hud"))
 	_ok(hud_texts.size() > 5, "lab %s: HUD is empty" % id)
+	# the results panel scrolls: its content (plots, rows) must be reachable
+	var rscroll: ScrollContainer = lab.get("results_scroll")
+	if _ok(rscroll != null and (lab.get("results_box") as Control).get_parent() == rscroll, "lab %s: results are not in a scroll container" % id):
+		await _frames(_f)
+		var content: Control = lab.get("results_box")
+		if content.size.y > rscroll.size.y + 1:
+			rscroll.scroll_vertical = 100000
+			await _frames(_f)
+			_ok(rscroll.scroll_vertical > 0, "lab %s: results panel does not scroll although its content overflows" % id)
+			rscroll.scroll_vertical = 0
 
 	# presets
 	var presets: HBoxContainer = lab.get("presets_box")

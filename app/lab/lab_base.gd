@@ -28,6 +28,7 @@ var state_box: VBoxContainer
 var inspector_box: VBoxContainer
 var inspector_title: Label
 var results_box: VBoxContainer
+var results_scroll: ScrollContainer
 var presets_box: HBoxContainer
 var hint_label: Label
 var _photon_mode := false
@@ -403,14 +404,22 @@ func _build_hud() -> void:
 	res.offset_top = -300
 	res.offset_bottom = -16
 	root.add_child(res)
-	results_box = VBoxContainer.new()
-	results_box.add_theme_constant_override("separation", 6)
-	results_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	res.add_child(results_box)
+	var res_v := VBoxContainer.new()
+	res_v.add_theme_constant_override("separation", 4)
+	res.add_child(res_v)
 	var rt := Label.new()
 	rt.text = "RESULTS"
 	rt.theme_type_variation = "Kicker"
-	results_box.add_child(rt)
+	res_v.add_child(rt)
+	# the results (rows, plots, notes) scroll like the state panel does
+	results_scroll = ScrollContainer.new()
+	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	res_v.add_child(results_scroll)
+	results_box = VBoxContainer.new()
+	results_box.add_theme_constant_override("separation", 6)
+	results_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	results_scroll.add_child(results_box)
 
 	hint_label = Label.new()
 	hint_label.text = "drag: orbit   ·   shift-drag / middle: pan   ·   wheel: zoom   ·   F: reset view   ·   click: select"
@@ -641,8 +650,10 @@ func _fmt_value(val: float, spec: Dictionary) -> String:
 # ---------------------------------------------------------------- results helpers
 
 func clear_results() -> void:
-	for i in range(results_box.get_child_count() - 1, 0, -1):
-		results_box.get_child(i).queue_free()
+	for c in results_box.get_children():
+		c.queue_free()
+	if results_scroll:
+		results_scroll.scroll_vertical = 0
 
 
 func add_result_row(key: String, value: String, color: Color = Palette.TEXT) -> void:
