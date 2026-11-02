@@ -92,6 +92,11 @@ func _init() -> void:
 	if absf(prof2.intensity_at(ys2[300]) - prof2.intensity()[300]) > 1e-12:
 		failures += 1
 		push_error("intensity_at off-grid")
+	var ver := str(QuagmireSystem.engine_version())
+	if ver == "" or ver.split(".").size() != 3 or str(ClassDB.class_call_static("QuagmireSystem", "engine_version")) != ver:
+		failures += 1
+		push_error("engine_version() should be a semver string, got '%s'" % ver)
+	print("engine version ", ver)
 	print("bench helpers: joint ones=%d/200, counts mean=%.2f, fringe spacing %.2f mm, flux back %.0f" % [ones, total / 500.0, g2.fringe_spacing() * 1e3, flux_back])
 	print("SMOKE ", "OK" if failures == 0 else "FAILED (%d)" % failures)
 	quit(0 if failures == 0 else 1)

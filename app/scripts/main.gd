@@ -30,7 +30,13 @@ func _ready() -> void:
 
 
 func _parse_args() -> void:
-	for arg in OS.get_cmdline_user_args():
+	var args := OS.get_cmdline_user_args()
+	if OS.has_feature("web"):
+		# a browser has no command line: `index.html?go=lab:exp1&perf=1` plays the same role
+		args = _query_string_args()
+	print("BOOT platform=%s renderer=%s quagmire=%s" % [OS.get_name(),
+		RenderingServer.get_current_rendering_method(), _engine_version()])
+	for arg in args:
 		if arg.begins_with("--shot="):
 			_shot_path = arg.trim_prefix("--shot=")
 		elif arg == "--perf":
@@ -48,6 +54,29 @@ func _parse_args() -> void:
 		_take_screenshot.call_deferred()
 	elif _perf:
 		_report_perf.call_deferred()
+
+
+## `?go=lab:exp1&perf=1` → ["--go=lab:exp1", "--perf"]; `--shot` has no meaning in a browser.
+func _query_string_args() -> PackedStringArray:
+	var out := PackedStringArray()
+	var q := str(JavaScriptBridge.eval("window.location.search", true)).trim_prefix("?")
+	for pair in q.split("&", false):
+		var kv := pair.split("=", true, 1)
+		match kv[0]:
+			"go":
+				if kv.size() > 1:
+					out.append("--go=" + kv[1].uri_decode())
+			"perf":
+				out.append("--perf")
+	return out
+
+
+## The Quagmire Engine's version, or "none" when the GDExtension did not load (the boot line
+## is what tools/check-web.sh and the harness look for).
+func _engine_version() -> String:
+	if ClassDB.class_exists("QuagmireSystem"):
+		return str(ClassDB.class_call_static("QuagmireSystem", "engine_version"))
+	return "none"
 
 
 func _take_screenshot() -> void:
