@@ -66,9 +66,53 @@ Testing Reality site derives: Malus's law, the 12.5 % three-polarizer result, th
 formula, the Experiment 3 eraser table, `½cos²(α−β)` coincidences, the Experiment 5 flat
 patterns (½ and ¼), the delayed-choice law `1 + sin 2γ cos kΔ`, and the wall/unplugged cases.
 
+## Targets and portability
+
+The engine is layered so that it can serve several game engines:
+
+```
+quagmire-core        pure Rust, no I/O, no threads, no clock, no platform code
+                     → compiles for every Rust target (x86_64, aarch64, wasm32, …)
+sdk-godot            GDExtension; one binary per Godot platform/architecture
+sdk-c (planned)      C ABI (opaque handles, caller-allocated buffers) for Unity / Unreal / C++
+```
+
+Everything platform-specific belongs to an SDK, never to the core: the core is what makes a
+new host cheap, the SDK is what makes it idiomatic. The Godot SDK's own build script
+`sdk-godot/build.sh <linux|windows|web> [release|debug]` prints the artifact for one target;
+host projects copy it where their engine expects it (Testing Reality: `tools/build-sdk.sh`).
+
+| Godot target | Toolchain | Artifact |
+|---|---|---|
+| Linux x86_64 | stable Rust | `libquagmire_godot.so` |
+| Windows x86_64 | stable Rust, `x86_64-pc-windows-gnu`, mingw-w64 | `quagmire_godot.dll` |
+| macOS | stable Rust on a Mac (not built here) | `libquagmire_godot.dylib` |
+| **Web** (wasm32, Emscripten) | nightly Rust + `rust-src`, Emscripten **matching Godot's templates** (4.0.20 for 4.7.2) | `quagmire_godot.wasm` |
+
+Web notes:
+
+- Godot loads the extension as an Emscripten *side module* (its "Extensions Support" /
+  `dlink` templates). The side module must be linked by the same Emscripten version as the
+  main module; the version is embedded in the template's `godot.js`
+  (`_godot_js_emscripten_get_version`) and the build script warns on a mismatch.
+- Features `web` (threaded templates) and `web-nothreads` (single-threaded). Godot 4.7 ships
+  its threaded web template as **wasm64**, which Rust cannot target through Emscripten, so
+  the single-threaded wasm32 build is the one that works today; it also needs no
+  cross-origin-isolation headers from the host site.
+- Built with `-Zbuild-std=std,panic_abort`, `panic=abort` and hidden default visibility
+  (`.cargo/config.toml`, applies only to the wasm target). A panic aborts the page — the SDK
+  never unwraps host input; every error is a `godot_error!` and a neutral return.
+- `QuagmireSystem.engine_version()` (static) returns `quagmire_core::VERSION`, so a host can
+  prove at boot which engine it loaded (Testing Reality prints a `BOOT … quagmire=0.1.0`
+  line that its web check requires).
+- The same `wasm32-unknown-emscripten` core would serve a Unity WebGL build (Unity's native
+  plug-ins for WebGL are Emscripten-compiled too) and an Unreal HTML5 build; only the
+  binding layer (`sdk-c`) differs.
+
 ## Status
 
-Phase 1 (core) complete. Next: the Godot SDK, then a C ABI crate for other engines.
+Core and the Godot SDK (Linux, Windows, web) are complete. Next: the C ABI crate for
+other engines.
 
 
 ## Added for interactive benches (v0.2)

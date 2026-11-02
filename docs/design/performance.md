@@ -62,6 +62,22 @@ For scale: a mid-range laptop GPU of 2015 (Intel HD 520) draws well over 500 M t
 and several thousand draw calls a frame at 60 fps; these benches use under 7 M
 triangles/s at 60 fps.
 
+## Web build (WebGL 2)
+
+The same scenes through Godot's single-threaded web template, measured with
+`tools/check-web.sh lab:exp1` / `lab:exp7` (headless Chromium, SwiftShader software
+rasteriser, so only the counters are meaningful):
+
+| Route | objects | primitives | draw calls | VRAM |
+|---|---|---|---|---|
+| Lab 1 (web) | 1 065 | 43 k | 249 | 54 MB |
+| Lab 7 (web) | 2 183 | 96 k | 754 | 76 MB |
+
+Identical draw calls to the native build; fewer primitives and less VRAM because the web
+export ships S3TC-only textures and no MSAA resolve buffers at 1280×720. On a real browser
+with a GPU the web build is CPU-bound by WebAssembly (single-threaded, no SIMD in the
+official templates): expect roughly half the native frame rate; the *Low* preset applies.
+
 ## If it is ever slow
 
 1. Choose *Low* in Settings (no shadows, no glow, 75 % render scale).

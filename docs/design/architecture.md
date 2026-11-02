@@ -83,7 +83,33 @@ GDExtension built from `quagmire-engine/sdk-godot` with gdext. Exposed classes:
 - `QuagmireScreen` (RefCounted): geometry setters, `profile(system, path_prop, ys, post_select)`, `box_convolve`, `sample(n)`.
 - `QuagmireRng` seed control via `QuagmireSystem.seed`.
 
-Addon layout: `app/addons/quagmire/{quagmire.gdextension, bin/linux/libquagmire_godot.so, bin/windows/quagmire_godot.dll}`.
+Addon layout: `app/addons/quagmire/{quagmire.gdextension, bin/linux/libquagmire_godot.so,
+bin/windows/quagmire_godot.dll, bin/web/quagmire_godot.wasm}`.
+
+### Platform layering (kept engine-agnostic for the split-off)
+
+```
+ host engine        Godot (now)                    Unity / Unreal (later)
+ binding layer      sdk-godot  (gdext, GDExtension) sdk-c (C ABI) + C# / C++ wrappers
+ engine             quagmire-core — pure Rust, no platform code, builds for every target
+ platform binary    .so / .dll / .dylib / .wasm (Emscripten side module)
+```
+
+Rules that keep the web (and any future) target cheap:
+
+- The core never touches the platform: no files, threads, clocks or allocator tricks. The
+  RNG is seeded by the host (`with_seed`, `reseed`), so determinism and replay do not depend
+  on the platform's entropy.
+- Platform build logic lives with the SDK (`quagmire-engine/sdk-godot/build.sh`,
+  `quagmire-engine/.cargo/config.toml`), not in the host's tooling; the host only copies the
+  artifact (`tools/build-sdk.sh`) and registers it (`quagmire.gdextension`).
+- Panics are fatal on wasm (no unwinding), so the SDK validates every input from GDScript
+  and reports with `godot_error!` + neutral values; the core returns `Result` everywhere.
+- The host can always ask which engine loaded: `QuagmireSystem.engine_version()`.
+
+Web specifics: Godot 4.7's threaded web template is wasm64, so the extension is built for the
+single-threaded wasm32 template (`web-nothreads` feature); the export preset therefore has
+Thread Support off. Emscripten must match Godot's templates (4.0.20 for 4.7.2).
 
 ## 3. Testing Reality app (Godot 4.7)
 

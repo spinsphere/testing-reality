@@ -188,3 +188,18 @@ reading a computed result. User request 2026-10-31.
 - [x] Rendering cost: single-cascade 2048 shadow map limited to the table, cheaper glow; acquisition panel updates labels in place instead of rebuilding every frame.
 - [x] `--perf` run mode: objects / primitives / draw calls / VRAM per lab, machine-independent budget checked by `tools/test.sh` (≤ 1500 draw calls, ≤ 2 M triangles per frame).
 - [x] Document the targets and results in `docs/design/performance.md`; commit + push.
+
+## Phase 10 — Web (WebGL 2) export (user request 2026-11-03)
+
+- [x] Engine: `web` / `web-nothreads` features, wasm flags in `.cargo/config.toml`,
+      `sdk-godot/build.sh` per-target build (engine-owned, host copies the artifact)
+- [x] `quagmire_core::VERSION`, `QuagmireSystem.engine_version()`; `BOOT` line in main.gd
+- [x] `bin/web/quagmire_godot.wasm` committed (Emscripten 4.0.20 = Godot 4.7.2 templates)
+- [x] Export preset "Web" (Extensions Support on, Thread Support off) → `builds/webgl/`
+- [x] `tools/export.sh [targets]`, `tools/build-sdk.sh [profile] [targets]`
+- [x] `tools/check-web.sh`: headless Chromium (DevTools protocol, SwiftShader) boots the
+      export, requires `BOOT … quagmire=<version>` and a `PERF` line from the lab
+- [x] Docs: README (builds, hosting), engine README (targets, portability), architecture
+      (platform layering), performance (web counters)
+- [ ] Later: threaded web build if Godot ships a wasm32 threaded template again, or when
+      Rust gains wasm64-emscripten; macOS binary; `sdk-c` for Unity/Unreal

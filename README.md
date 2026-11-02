@@ -41,18 +41,48 @@ cd tools/mathgen && npm install && npm run build:png   # re-render the chapter e
 The tool scripts find Godot on `PATH`, in `~/.local/bin`, or as the Flatpak
 (`org.godotengine.Godot`); set `GODOT=/path/to/godot` to override.
 
-### Desktop builds
+### Builds
 
 ```bash
-tools/export.sh        # builds/linux/testing-reality.x86_64 and builds/windows/testing-reality.exe
+tools/export.sh            # all three: builds/linux/, builds/windows/, builds/webgl/
+tools/export.sh web        # one target (linux | windows | web)
 ```
 
-Needs the Godot 4.7.2 export templates (Editor → Manage Export Templates). The Windows
-build also needs `rustup target add x86_64-pc-windows-gnu` and the `mingw-w64` package; it is
-skipped otherwise.
+| Target | Output | Extra toolchain (otherwise the target is skipped) |
+|---|---|---|
+| Linux x86_64 | `builds/linux/testing-reality.x86_64` | — |
+| Windows x86_64 | `builds/windows/testing-reality.exe` | `rustup target add x86_64-pc-windows-gnu`, `mingw-w64` |
+| Web (WebGL 2) | `builds/webgl/index.html` + `.pck`, `.wasm`, `.js` | nightly Rust with `rust-src`, Emscripten **4.0.20** in `~/emsdk` (see `quagmire-engine/sdk-godot/build.sh`) |
 
-The Quagmire GDExtension binaries (Linux, Windows) are committed in `app/addons/quagmire/bin`,
-so a fresh clone opens in Godot without a Rust toolchain; `tools/build-sdk.sh` rebuilds them.
+All need the Godot 4.7.2 export templates (Editor → Manage Export Templates).
+
+The Quagmire GDExtension binaries (Linux `.so`, Windows `.dll`, web `.wasm`) are committed in
+`app/addons/quagmire/bin`, so a fresh clone opens in Godot and exports without a Rust
+toolchain; `tools/build-sdk.sh release all` rebuilds them.
+
+#### Web build
+
+`builds/webgl/` is a static site: copy the folder to any web server or static host. It is the
+**single-threaded** Godot web build, so it needs no cross-origin-isolation headers (no
+SharedArrayBuffer) and works on GitHub Pages, S3, nginx, … It does not run from a `file://`
+URL; to try it locally:
+
+```bash
+python3 -m http.server --directory builds/webgl 8080     # then open http://localhost:8080/
+```
+
+Routes can be given in the URL for testing: `index.html?go=lab:exp3`, `?go=chapter:exp2:4`,
+`&perf=1` prints the renderer counters to the browser console.
+
+`tools/check-web.sh [route]` boots the exported page in headless Chromium (software WebGL 2
+via SwiftShader, DevTools protocol) and fails unless the Quagmire extension loaded and the lab
+ran; `tools/export.sh` runs it after exporting. Needs `node` ≥ 22 and `chromium` or
+`google-chrome`.
+
+Expectations in a browser: the first load fetches about 100 MB (44 MB engine, 53 MB data,
+0.7 MB Quagmire) — a loading bar, then the hub. Performance is below the native builds;
+choose *Low* in Settings on integrated graphics. Firefox and Safari work but are slower than
+Chromium-based browsers for WebGL 2.
 
 ## Testing
 

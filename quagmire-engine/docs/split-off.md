@@ -6,11 +6,14 @@ To move it out:
 1. `git subtree split --prefix=quagmire-engine -b quagmire-engine-history` (keeps the commit
    history of the folder), then push that branch to the new repository.
 2. In the new repository the workspace root is the old `quagmire-engine/` folder:
-   `Cargo.toml` (workspace), `core/`, `sdk-godot/`, `docs/`, `README.md`, `rust-toolchain.toml`.
+   `Cargo.toml` (workspace), `.cargo/config.toml` (wasm flags), `core/`, `sdk-godot/`
+   (including its `build.sh`, the per-target build), `docs/`, `README.md`,
+   `rust-toolchain.toml`. Nothing in the folder refers to the app.
 3. In this repository, replace the folder with a dependency:
-   - `app/addons/quagmire/` keeps the `.gdextension` file; the binaries come from the engine's
-     releases (or a git submodule + `tools/build-sdk.sh`, which only needs the path to the
-     engine workspace — change `cd "$ROOT/quagmire-engine"` there).
+   - `app/addons/quagmire/` keeps the `.gdextension` file; the binaries (`.so`, `.dll`,
+     `.wasm`) come from the engine's releases, or from a git submodule + `tools/build-sdk.sh`,
+     which only calls `<engine>/sdk-godot/build.sh <target>` and copies what it prints —
+     change the engine path there.
 4. The Godot SDK's `quagmire.gdextension` and the GDScript API (`QuagmireSystem`,
    `QuagmireScreen`, `QuagmireProfile`) are documented in `sdk-godot/src/lib.rs` doc comments;
    the C ABI crate (`capi/`) for Unity/Unreal is the next planned addition and should follow
