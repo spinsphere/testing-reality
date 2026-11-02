@@ -10,3 +10,8 @@ rustflags = [
     "-Z", "link-native-libraries=no",
     "-C", "panic=abort",
 ]
+
+# Reproducible Windows DLL: mingw's linker otherwise stamps the link time into the PE header,
+# so every rebuild of the committed binary would differ.
+[target.x86_64-pc-windows-gnu]
+rustflags = ["-C", "link-arg=-Wl,--no-insert-timestamp"]

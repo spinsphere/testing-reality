@@ -23,7 +23,9 @@ for t in "${TARGETS[@]}"; do
   esac
   mkdir -p "$(dirname "$DEST")"
   cp "$SRC" "$DEST.tmp"
-  if [ "$PROFILE" = "release" ] && [ -n "$STRIP" ] && command -v "${STRIP%% *}" >/dev/null; then $STRIP "$DEST.tmp"; fi
+  # SOURCE_DATE_EPOCH: binutils' strip otherwise stamps the time into the PE header, so the
+  # committed Windows DLL would change on every rebuild (the link itself is reproducible).
+  if [ "$PROFILE" = "release" ] && [ -n "$STRIP" ] && command -v "${STRIP%% *}" >/dev/null; then SOURCE_DATE_EPOCH=0 $STRIP "$DEST.tmp"; fi
   mv -f "$DEST.tmp" "$DEST"
   echo "   installed -> ${DEST#"$ROOT/"} ($(du -h "$DEST" | cut -f1))"
 done
