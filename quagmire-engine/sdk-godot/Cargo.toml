@@ -13,3 +13,13 @@ crate-type = ["cdylib"]
 [dependencies]
 quagmire-core = { path = "../core" }
 godot = { version = "0.5", features = ["api-4-7"] }
+
+# Build targets. Desktop (Linux, Windows, macOS) needs no feature. The web target
+# (wasm32-unknown-emscripten, loaded by Godot's "Extensions Support" web templates) is
+# experimental in gdext and needs nightly Rust + Emscripten; see ../README.md "Targets".
+#   web            threaded web templates (SharedArrayBuffer, cross-origin-isolated host)
+#   web-nothreads  single-threaded web templates — the one Testing Reality ships
+[features]
+default = []
+web = ["godot/experimental-wasm", "godot/lazy-function-tables"]
+web-nothreads = ["web", "godot/experimental-wasm-nothreads"]

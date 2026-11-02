@@ -10,3 +10,8 @@ windows.debug.x86_64 = "res://addons/quagmire/bin/windows/quagmire_godot.dll"
 windows.release.x86_64 = "res://addons/quagmire/bin/windows/quagmire_godot.dll"
 macos.debug = "res://addons/quagmire/bin/macos/libquagmire_godot.dylib"
 macos.release = "res://addons/quagmire/bin/macos/libquagmire_godot.dylib"
+# Web (single-threaded dlink templates; Godot 4.7 ships its threaded web template as wasm64,
+# which Rust cannot target through Emscripten). Export preset "Web": Extensions Support on,
+# Thread Support off.
+web.debug.wasm32 = "res://addons/quagmire/bin/web/quagmire_godot.wasm"
+web.release.wasm32 = "res://addons/quagmire/bin/web/quagmire_godot.wasm"

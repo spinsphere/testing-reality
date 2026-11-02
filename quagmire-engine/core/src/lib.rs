@@ -30,3 +30,6 @@ pub use system::{Property, QuagmireError, System};
 
 /// `1/√2`, used everywhere in two-level optics.
 pub const INV_SQRT2: f64 = std::f64::consts::FRAC_1_SQRT_2;
+
+/// The engine version (the crate version), for hosts to display and log.
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");

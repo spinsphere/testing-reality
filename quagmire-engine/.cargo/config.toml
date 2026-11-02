@@ -1,0 +1,12 @@
+# Flags for the web target only; every other target is unaffected.
+# Emscripten side module for Godot's dlink web templates (single-threaded). For the
+# threaded templates add "-C", "link-args=-pthread", "-C", "target-feature=+atomics".
+# The -Z flags need nightly: `cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten`.
+[target.wasm32-unknown-emscripten]
+rustflags = [
+    "-C", "link-args=-sSIDE_MODULE=2",
+    "-C", "llvm-args=-enable-emscripten-cxx-exceptions=0",
+    "-Z", "default-visibility=hidden",
+    "-Z", "link-native-libraries=no",
+    "-C", "panic=abort",
+]

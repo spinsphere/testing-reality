@@ -115,6 +115,13 @@ impl QuagmireSystem {
 
 #[godot_api]
 impl QuagmireSystem {
+    /// Version of the Quagmire Engine this extension was built from (`quagmire-core`'s
+    /// crate version). Static: `QuagmireSystem.engine_version()`.
+    #[func]
+    fn engine_version() -> GString {
+        GString::from(quagmire_core::VERSION)
+    }
+
     /// New system with a specific RNG seed.
     #[func]
     fn with_seed(seed: i64) -> Gd<Self> {
