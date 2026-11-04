@@ -99,7 +99,7 @@ independent of each other once Phases 2–4 exist; Experiment 1 is built first a
 ### Phase 6 — Polish and release
 - [x] Settings (reduce motion, quality), save progress, keyboard map
 - [x] Linux x86_64 and Windows x86_64 exports (`tools/export.sh`), smoke-run Linux build
-- [x] README with screenshots, engine docs ready for split-off (`quagmire-engine/docs/split-off.md`)
+- [x] README with screenshots, engine docs ready for split-off (now `quagmire-engine/docs/hosting.md`; engine split out to spinsphere/quagmire-engine as a submodule, 2026-11-04)
 - [x] Final commit
 
 ## Resume notes (updated 2026-10-31)

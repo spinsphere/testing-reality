@@ -1,9 +1,9 @@
 # Architecture
 
-Three layers, three folders, one repository (for now):
+Three layers, three folders; the engine is its own repository, pulled in as a git submodule:
 
 ```
-quagmire-engine/            reusable quantum physics engine (Rust)        ─┐ split off later
+quagmire-engine/            reusable quantum physics engine (Rust)        ─┐ submodule: spinsphere/quagmire-engine
   core/      quagmire-core  pure library, no engine deps                    │
   sdk-godot/ quagmire-godot GDExtension (godot-rust gdext 0.5, api-4-7)    ─┘
 app/                        Testing Reality, Godot 4.7 project
@@ -86,7 +86,7 @@ GDExtension built from `quagmire-engine/sdk-godot` with gdext. Exposed classes:
 Addon layout: `app/addons/quagmire/{quagmire.gdextension, bin/linux/libquagmire_godot.so,
 bin/windows/quagmire_godot.dll, bin/web/quagmire_godot.wasm}`.
 
-### Platform layering (kept engine-agnostic for the split-off)
+### Platform layering (kept engine-agnostic)
 
 ```
  host engine        Godot (now)                    Unity / Unreal (later)

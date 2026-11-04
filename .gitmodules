@@ -1,0 +1,3 @@
+[submodule "quagmire-engine"]
+	path = quagmire-engine
+	url = git@github.com:spinsphere/quagmire-engine.git

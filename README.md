@@ -12,7 +12,7 @@ quantum engine computing exactly what the real detectors would count, next to th
 published data.
 
 ```
-quagmire-engine/   Quagmire Engine (Rust core + Godot SDK) — reusable, to be split off
+quagmire-engine/   Quagmire Engine (Rust core + Godot SDK) — git submodule of [spinsphere/quagmire-engine](https://github.com/spinsphere/quagmire-engine)
 app/               the Godot 4.7 project (Testing Reality)
 blender/           headless Blender scripts that build the apparatus models (→ app/assets/models)
 tools/             mathgen (TeX → SVG/PNG), build and export scripts, lab-data summariser
@@ -58,7 +58,13 @@ All need the Godot 4.7.2 export templates (Editor → Manage Export Templates).
 
 The Quagmire GDExtension binaries (Linux `.so`, Windows `.dll`, web `.wasm`) are committed in
 `app/addons/quagmire/bin`, so a fresh clone opens in Godot and exports without a Rust
-toolchain; `tools/build-sdk.sh release all` rebuilds them.
+toolchain; `tools/build-sdk.sh release all` rebuilds them. Rebuilding (and `tools/test.sh`)
+needs the engine submodule checked out:
+
+```bash
+git clone --recurse-submodules git@github.com:spinsphere/testing-reality.git
+git submodule update --init      # in an existing clone
+```
 
 #### Web build
 
