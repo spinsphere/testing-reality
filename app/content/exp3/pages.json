@@ -102,10 +102,21 @@
               "text": "Curious of what our setup looks like? Here are a few pictures of what we have:"
             },
             {
-              "type": "figure",
-              "src": "res://assets/figures/exp3/photo_exp3.png",
-              "height": 360,
-              "caption": "The optical bench seen from above. The purple line marks the beam path: the 405 nm beam itself is not visible to the camera."
+              "type": "carousel",
+              "slides": [
+                {
+                  "src": "res://assets/figures/exp3/photo_exp3.png",
+                  "caption": "The optical bench seen from above. The purple line marks the beam path: the 405 nm beam itself is not visible to the camera."
+                },
+                {
+                  "src": "res://assets/figures/exp3/pol_exp3.png",
+                  "caption": "The polarizer P1 is added, mounted on a motor: the rotation mount (red circuit board) sits in front of the detection stage."
+                },
+                {
+                  "src": "res://assets/figures/exp3/slit_exp3.png",
+                  "caption": "The double slit with the polarizer films PA and PB taped over the mask, with a magnified view of the slits."
+                }
+              ]
             },
             {
               "type": "text",
@@ -145,11 +156,11 @@
               ],
               "rows": [
                 [
-                  "LASER",
+                  "[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=DL5146-101S]LASER[/url]",
                   "Diode laser (405 nm)"
                 ],
                 [
-                  "BBO",
+                  "[url=https://eksmaoptics.com/nonlinear-and-laser-crystals/nonlinear-crystals/beta-barium-borate-bbo-crystals/]BBO[/url]",
                   "Two thin BBO crystals of type 1 placed at 90°"
                 ],
                 [
@@ -157,19 +168,19 @@
                   "Dimension (200-200-200 μm), made in-house"
                 ],
                 [
-                  "Polarizers",
+                  "[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=LPVIS050-MP2]Polarizers[/url]",
                   "Mounted linear polarizers"
                 ],
                 [
-                  "Lenses",
+                  "[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=LA1908]Lenses[/url]",
                   "Plano-convex lenses, L1 has f = 50 cm [LA1908-B]"
                 ],
                 [
-                  "Single slit",
+                  "[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=VS100/M]Single slit[/url]",
                   "Adjustable slit (placed near 200 μm)"
                 ],
                 [
-                  "Detectors",
+                  "[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=SPDMH3F]Detectors[/url]",
                   "Single photon detection module"
                 ]
               ]
@@ -192,7 +203,16 @@
           "blocks": [
             {
               "type": "text",
-              "text": "To recreate a pattern, an actuator was moved along the beam. All data files have four columns. The first two are the angles of the polarizers, but only P1 is used. The third is the distance the actuator has travelled in μm. The last column is the number of counts on D1, the detector. All acquisitions are for a two-second window."
+              "text": "To recreate a pattern, an actuator was moved along the beam. All data files have four columns. The first two are the angles of the polarizers, but only P1 is used. The third is the distance the actuator has travelled in μm. The last column is the number of counts on D1, the detector. All acquisitions are for a two-second window. You can download all our data here:"
+            },
+            {
+              "type": "list",
+              "items": [
+                "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67086bb3f79ac7299c4dcff7_Data_exp3%20-%20data_0.csv]data_00deg.csv[/url] — P1 at 0°",
+                "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67086bafa5dd10fa8768c84a_Data_exp3%20-%20data_90.csv]data_90deg.csv[/url] — P1 at 90°",
+                "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67086bb37ad02c23b51134ac_Data_exp3%20-%20data_45.csv]data_45deg.csv[/url] — P1 at 45°",
+                "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67086bb57373c1a1cdb9a0a1_Data_exp3%20-%20data_-45.csv]data_-45deg.csv[/url] — P1 at −45°"
+              ]
             },
             {
               "type": "callout",

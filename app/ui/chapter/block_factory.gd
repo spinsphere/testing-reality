@@ -7,7 +7,8 @@ class_name BlockFactory
 ##   subheading {text}                    H2
 ##   text     {text}                      BBCode paragraph; inline kets like |↔⟩ render in the symbol font
 ##   equation {id, caption?}              rendered equation from assets/math/<chapter>/
-##   figure   {src, caption?, height?}    image (res:// path)
+##   figure   {src, caption?}             image (res:// path) at the width of the text
+##   carousel {slides: [{src, caption?}]} lab-photo slider (arrows, dots, auto-rotation, swipe)
 ##   table    {header: [..], rows: [[..]]}
 ##   callout  {kind: math|note|paradox|lab, title?, text}
 ##   widget   {scene, params?, height?}   an interactive widget scene (must have `configure(params)`)
@@ -17,6 +18,8 @@ class_name BlockFactory
 ##   spacer   {height}
 
 const WIDGET_DEFAULT_HEIGHT := 360.0
+## A portrait figure at the text width would be taller than the window: cap the height.
+const FIGURE_MAX_HEIGHT := 720.0
 
 
 static func make(block: Dictionary, chapter_id: String) -> Control:
@@ -52,7 +55,11 @@ static func make(block: Dictionary, chapter_id: String) -> Control:
 		"equation":
 			return equation(chapter_id, block.get("id", ""), block.get("caption", ""))
 		"figure":
-			return figure(block.get("src", ""), block.get("caption", ""), float(block.get("height", 320.0)))
+			return figure(block.get("src", ""), block.get("caption", ""))
+		"carousel":
+			var car := Carousel.new()
+			car.setup(block.get("slides", []))
+			return car
 		"table":
 			return table(block.get("header", []), block.get("rows", []))
 		"callout":
@@ -88,7 +95,10 @@ static func rich_text(text: String) -> RichTextLabel:
 	r.bbcode_enabled = true
 	r.fit_content = true
 	r.scroll_active = false
-	r.selection_enabled = true
+	# On a touch screen a drag must scroll the page, not select text; PASS lets the press
+	# reach the ScrollContainer (a RichTextLabel stops mouse events by default).
+	r.selection_enabled = not Layout.touch()
+	r.mouse_filter = Control.MOUSE_FILTER_PASS
 	r.meta_clicked.connect(func(meta: Variant) -> void: OS.shell_open(str(meta)))
 	r.text = ketify(text)
 	return r
@@ -185,23 +195,30 @@ static func equation(chapter_id: String, eq_id: String, caption: String = "") ->
 	return v
 
 
-static func figure(src: String, caption: String, height: float) -> Control:
+## An image at the full width of the text column (the site shows its figures that way), the
+## height following from the aspect ratio. Portrait images are capped at FIGURE_MAX_HEIGHT.
+static func figure(src: String, caption: String) -> Control:
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 8)
-	var center := CenterContainer.new()
-	v.add_child(center)
 	if ResourceLoader.exists(src):
+		var t: Texture2D = load(src)
+		var aspect := float(t.get_width()) / maxf(1.0, float(t.get_height()))
 		var tr := TextureRect.new()
-		tr.texture = load(src)
+		tr.texture = t
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		tr.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-		var t: Texture2D = tr.texture
-		var aspect := float(t.get_width()) / maxf(1.0, float(t.get_height()))
-		var w := minf(820.0, height * aspect)
-		tr.custom_minimum_size = Vector2(w, w / aspect)
-		center.add_child(tr)
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var frame := FitWidthBox.new()
+		frame.ratio = aspect
+		frame.max_height = FIGURE_MAX_HEIGHT   # tall images are letterboxed in a capped box
+		frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		frame.add_child(tr)
+		v.add_child(frame)
 	else:
+		var center := CenterContainer.new()
+		v.add_child(center)
 		var missing := Label.new()
 		missing.text = "[figure %s missing]" % src
 		missing.theme_type_variation = "Mono"
@@ -215,6 +232,7 @@ static func figure(src: String, caption: String, height: float) -> Control:
 
 static func table(header: Array, rows: Array) -> Control:
 	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	var grid := GridContainer.new()
 	grid.columns = maxi(1, header.size() if not header.is_empty() else (rows[0].size() if not rows.is_empty() else 1))
 	grid.add_theme_constant_override("h_separation", 24)
@@ -239,6 +257,7 @@ static func table(header: Array, rows: Array) -> Control:
 static func callout(kind: String, title: String, text: String) -> Control:
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = "Callout"
+	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 6)
 	panel.add_child(v)

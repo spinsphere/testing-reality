@@ -97,13 +97,28 @@
             },
             {
               "type": "subheading",
-              "text": "Graphics"
+              "text": "Photos of the bench"
             },
             {
-              "type": "figure",
-              "src": "res://assets/figures/exp5/double_slit.png",
-              "height": 320,
-              "caption": "The home-made double slit: a clear acrylic plate held by four hex bolts over a thin metal foil with a stadium-shaped aperture. The two fine vertical lines inside the aperture are the slits (200 μm wide, 200 μm apart). The plate sits on a rotation mount on the optical breadboard."
+              "type": "text",
+              "text": "The three stages of this experiment on the table: the bare double slit, the slit covered by the two polarizer films, and the third polarizer P1 added after it."
+            },
+            {
+              "type": "carousel",
+              "slides": [
+                {
+                  "src": "res://assets/figures/exp5/P1.png",
+                  "caption": "The addition of P1 after the double slit. The double slit is hidden behind the lens mounts; P1 sits in a rotatable mount on the right."
+                },
+                {
+                  "src": "res://assets/figures/exp5/slit_exp4.png",
+                  "caption": "The double slit covered by two polarizers, with a close-up of the two film polarizers meeting over the slits."
+                },
+                {
+                  "src": "res://assets/figures/exp5/double_slit.png",
+                  "caption": "The home-made double slit: a clear acrylic plate held by four hex bolts over a thin metal foil with a stadium-shaped aperture. The two fine vertical lines inside the aperture are the slits (200 μm wide, 200 μm apart). The plate sits on a rotation mount on the optical breadboard."
+                }
+              ]
             }
           ]
         },
@@ -227,7 +242,7 @@
             },
             {
               "type": "text",
-              "text": "The data file data5_1.csv contains seven columns: polarizer angle 1 (not applicable here), polarizer angle 2 (not applicable here), actuator position, sweep number, counts at D_1, counts at D_2, and coincidences between D_1 and D_2. All counts are recorded over 20-second windows; the plots show counts per second."
+              "text": "The data file [url=https://cdn.prod.website-files.com/62f169875514947cce769885/66f5838c9fd0db216da8a7a9_Data4_1%20-%20Feuille%201.csv]data5_1.csv[/url] contains seven columns: polarizer angle 1 (not applicable here), polarizer angle 2 (not applicable here), actuator position, sweep number, counts at D_1, counts at D_2, and coincidences between D_1 and D_2. All counts are recorded over 20-second windows; the plots show counts per second."
             },
             {
               "type": "callout",
@@ -266,7 +281,7 @@
             },
             {
               "type": "text",
-              "text": "You can download the data as data5_2.csv. The column format is identical to Exp 5.1. All counts are recorded over 20-second windows."
+              "text": "You can download the data as [url=https://cdn.prod.website-files.com/62f169875514947cce769885/66f5838a3a5b47f568368d1c_Data4_2%20-%20Feuille%201.csv]data5_2.csv[/url]. The column format is identical to Exp 5.1. All counts are recorded over 20-second windows."
             }
           ]
         },
@@ -305,7 +320,7 @@
             },
             {
               "type": "text",
-              "text": "You can download the data as data5_3.csv. The column format is identical to the previous experiments; the first two columns (polarizer angles) can be ignored. All counts are recorded over 20-second windows."
+              "text": "You can download the data as [url=https://cdn.prod.website-files.com/62f169875514947cce769885/66f584c73174fa02d047582d_Data4_3%20-%20Feuille%201%20(1).csv]data5_3.csv[/url]. The column format is identical to the previous experiments; the first two columns (polarizer angles) can be ignored. All counts are recorded over 20-second windows."
             }
           ]
         }

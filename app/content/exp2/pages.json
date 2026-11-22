@@ -45,10 +45,7 @@
           "title": "What the setup looks like",
           "blocks": [
             {"type": "text", "text": "Curious of what an optical setup looks like? Here are some pictures of the double slit and the single slit setup (same setup, we just change the slit)."},
-            {"type": "figure", "src": "res://assets/figures/exp2/setup_exp2.png", "caption": "The whole table seen from above, with the beam path drawn in: LASER → half-wave plate → beam splitter → lens → double slit → detection stage.", "height": 340},
-            {"type": "figure", "src": "res://assets/figures/exp2/laser_exp2.png", "caption": "The source end: the 808 nm laser, the polarizing beam-splitter cube with its beam dump, and the half-wave plate in a rotation mount.", "height": 300},
-            {"type": "figure", "src": "res://assets/figures/exp2/slit_exp2.png", "caption": "The double-slit mask, made in-house, with a magnified view of the two slits.", "height": 300},
-            {"type": "figure", "src": "res://assets/figures/exp2/detector_exp2.png", "caption": "The detection stage: a fibre collimator and a stack of filters on a motorized linear actuator, feeding the single-photon counting module (red box) through an orange fibre.", "height": 300}
+            {"type": "carousel", "slides": [{"src": "res://assets/figures/exp2/setup_exp2.png", "caption": "The whole table seen from above, with the beam path drawn in: LASER → half-wave plate → beam splitter → lens → double slit → detection stage."}, {"src": "res://assets/figures/exp2/laser_exp2.png", "caption": "The source end: the 808 nm laser, the polarizing beam-splitter cube with its beam dump, and the half-wave plate in a rotation mount."}, {"src": "res://assets/figures/exp2/detector_exp2.png", "caption": "The detection stage: a fibre collimator and a stack of filters on a motorized linear actuator, feeding the single-photon counting module (red box) through an orange fibre."}, {"src": "res://assets/figures/exp2/slit_exp2.png", "caption": "The double-slit mask, made in-house, with a magnified view of the two slits."}]}
           ]
         },
         {
@@ -63,13 +60,13 @@
             {"type": "text", "text": "For the single-slit measurements, we used the same double-slit mask with one of the slits covered, allowing us to isolate the contribution of each slit individually. A dedicated single slit could also be used, but covering one slit allows for direct comparison under otherwise identical conditions. Our approach allows us to observe the contribution of each individual slit and clearly visualize the spacing between them in the resulting graph."},
             {"type": "subheading", "text": "Equipment list"},
             {"type": "table", "header": ["Name", "Description"], "rows": [
-              ["LASER", "Laser diode (808 nm)"],
-              ["Half-wave plate", "Zero-Order Half-Wave plate [WPH05M-808]"],
-              ["Beam splitter", "30 mm Mounted Polarizing Beamsplitting Cube"],
-              ["Lens", "Plano-convex lenses, L1 has f = 50 cm [LA1908-B]"],
+              ["[url=https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=5260]LASER[/url]", "Laser diode (808 nm)"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=WPH05M-808]Half-wave plate[/url]", "Zero-Order Half-Wave plate [WPH05M-808]"],
+              ["[url=https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=4137]Beam splitter[/url]", "30 mm Mounted Polarizing Beamsplitting Cube"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=LPVIS050-MP2]Lens[/url]", "Plano-convex lenses, L1 has f = 50 cm [LA1908-B]"],
               ["Double slit", "Dimension (200-200-200 µm), made in-house"],
-              ["Single slit", "Adjustable slit (placed near 200 µm)"],
-              ["Detectors", "Single photon detection module"]
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=VS100/M]Single slit[/url]", "Adjustable slit (placed near 200 µm)"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=SPDMH3F]Detectors[/url]", "Single photon detection module"]
             ]}
           ]
         }
@@ -85,9 +82,9 @@
             {"type": "subheading", "text": "Raw data"},
             {"type": "text", "text": "You can download all our data here — in the app, the same three files ship with the lab and can be overlaid on the pattern your own scan builds:"},
             {"type": "table", "header": ["File", "What it contains"], "rows": [
-              ["Single_slit_-_left_slit.csv", "Left slit only — 51 points, 100 µm steps"],
-              ["Single_slit_-_right_slit.csv", "Right slit only — 51 points, 100 µm steps"],
-              ["double_slit_-_calib_123_(1).csv", "Both slits open — 121 points, 50 µm steps"]
+              ["[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67085b11b76c8ce529168921_9ee32ace0f9299163977ec3f8dbb1006_Single%20slit%20-%20left%20slit.csv]SingleSlit_left.csv[/url]", "Left slit only — 51 points, 100 µm steps"],
+              ["[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67085b1292fe953a99b373f8_23b323c6e590837b1fbf112034e6013b_Single_slit%20-%20right%20slit.csv]SingleSlit_right.csv[/url]", "Right slit only — 51 points, 100 µm steps"],
+              ["[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67085c634193483ccc3a53f7_7b32708c5e656e231269758c5002bf01_double%20slit%20-%20calib_123%20%281%29.csv]DoubleSlit.csv[/url]", "Both slits open — 121 points, 50 µm steps"]
             ]},
             {"type": "text", "text": "The files have 3 columns. The first one is the distance travelled by the actuator in µm. The second column is the number of counts seen by the detector, in a range of 2 seconds. The last column is the same number of counts, but per second."},
             {"type": "subheading", "text": "Graphics"},

@@ -87,18 +87,18 @@
           "title": "Lab experiment: the optical table",
           "blocks": [
             {"type": "text", "text": "Curious what a single-photon optical set-up looks like? Here is a picture of what we have. The beam runs from the laser at the far end of the table, through the beam splitter, the lenses and the three polarizers, to the detector in the foreground."},
-            {"type": "figure", "src": "res://assets/figures/exp1/vue_exp1.png", "caption": "The set-up on the optical breadboard, in beam order: laser, beam splitter, lens, P1, P2, lens, P3, detector. Every element sits in a post holder on the M6 grid; the polarizers are in graduated rotation mounts.", "height": 360},
+            {"type": "carousel", "slides": [{"src": "res://assets/figures/exp1/vue_exp1.png", "caption": "The set-up on the optical breadboard, in beam order: laser, beam splitter, lens, P1, P2, lens, P3, detector. Every element sits in a post holder on the M6 grid; the polarizers are in graduated rotation mounts."}, {"src": "res://assets/figures/exp1/laser_exp1.png", "caption": "The source end: the 405 nm laser head (black heat-sinked module), the polarizing beam-splitter cube and the half-wave plate, both in rotation mounts."}, {"src": "res://assets/figures/exp1/setup_exp1.png", "caption": "The whole table seen from above, with the beam path drawn in violet and the three polarizers P1, P2 and P3 labelled."}, {"src": "res://assets/figures/exp1/lens_exp1.png", "caption": "At table height: a lens, P1 in its rotation mount, a black beam block, P3 and the single-photon detector (red circuit board)."}]},
             {"type": "subheading", "text": "Technical set-up and equipment"},
             {"type": "figure", "src": "res://assets/figures/exp1/exp1_MontageT.png", "caption": "Technical set-up. BS: beam splitter; BD: beam dump; λ/2: half-wave plate; L1: plano-convex lens (f = 50 cm); P1–P3: polarizers; D1: detector.", "height": 280},
             {"type": "text", "text": "Here is the representation of the set-up you see in the picture. All of the equipment is shown, but the scaling is not representative."},
             {"type": "text", "text": "On the left side, the laser emits a beam of photons. We then place a polarizing beam splitter to set the polarization of the beam at 45 degrees. Depending on the orientation of the beam splitter you might not get 45 degrees, so you can add a half-wave plate to rotate it in the orientation you want: 45 degrees for us. Then a set of lenses can be used to concentrate the beam on the detector. The beam is now set to pass through all the polarizers we want. We tested with 0, 1, 2 and 3 polarizers. Finally, on the right side, the detector is placed at the center of the beam."},
             {"type": "subheading", "text": "Equipment list"},
             {"type": "table", "header": ["Name", "Description"], "rows": [
-              ["LASER", "Diode laser (405 nm)"],
-              ["Polarizers", "Mounted linear polarizers"],
-              ["Lenses", "Plano-convex lenses kit"],
-              ["Beam splitter", "A cube polarizing beam splitter"],
-              ["Detector", "Single photon detection module"]
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=DL5146-101S]LASER[/url]", "Diode laser (405 nm)"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=LPVIS050-MP2]Polarizers[/url]", "Mounted linear polarizers"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=LSB01-A]Lenses[/url]", "Plano-convex lenses kit"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=CCM1-PBS252/M]Beam splitter[/url]", "A cube polarizing beam splitter"],
+              ["[url=https://www.thorlabs.com/thorproduct.cfm?partnumber=SPDMH3F]Detectors[/url]", "Single photon detection module"]
             ]},
             {"type": "callout", "kind": "note", "title": "You can do this at home", "text": "For this experiment we use high-quality equipment, because it will be needed for the future experiments. This experiment could be very easy and cheap to realise for classes or at home. Any laser in visible light will work, any polarizers would do, and no detector is needed if you don't want to count photons. A white sheet of paper is enough to see the different intensities."}
           ]
@@ -114,9 +114,9 @@
           "blocks": [
             {"type": "text", "text": "You can download all our data from the site. The acquisition files are:"},
             {"type": "list", "items": [
-              "[url=https://testing-reality.webflow.io/experiment-1]Data_1polarizer.csv[/url] — one polarizer, scanned over several angles",
-              "[url=https://testing-reality.webflow.io/experiment-1]Data_2polarizer.csv[/url] — two polarizers, 0° and 90°",
-              "[url=https://testing-reality.webflow.io/experiment-1]Data_3polarizer.csv[/url] — three polarizers, 0°, 45° and 90°"
+              "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67c3220962d9bc846f9a44df_e4290dd9b7f32c70cac13c78f7052027_Data1_1pol.csv]Data_1polarizer.csv[/url] — one polarizer, scanned over several angles",
+              "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67c32209a53da7ec0839dc26_90b99f91a87e41e7cff4c7688aa61df2_Data1_2pol.csv]Data_2polarizer.csv[/url] — two polarizers, 0° and 90°",
+              "[url=https://cdn.prod.website-files.com/62f169875514947cce769885/67c32209176ea57a01fa179d_762f665b4449f571bd8ab7894fd5540b_Data1_3pol.csv]Data_3polarizer.csv[/url] — three polarizers, 0°, 45° and 90°"
             ]},
             {"type": "text", "text": "The pattern is created by moving the detector from one side of the laser beam to the other. At each step of the detector, we count the number of photons captured in the time allowed (generally 1 or 2 seconds)."},
             {"type": "text", "text": "All of the acquisitions can be found in those CSV files. They all have 3 columns: the position of the detector, the angle of the polarizers, and the number of photons detected. The table on the [i]In the laboratory[/i] page uses the peak value of each scan — the count at the centre of the beam."},
