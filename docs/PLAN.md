@@ -220,25 +220,10 @@ reading a computed result. User request 2026-10-31.
       orientation = sensor. Debug: `godot --resolution 480x960 -- --touch --go=lab:exp1`
 - [ ] Polish: in the compact lab sheet the state rows are wider than the sheet (the
       percentage column is clipped); widgets have not been reviewed one by one at 450 px
-- [ ] Android export — toolchain is ready on momogata, nothing wired yet:
-      - SDK at `~/Android/Sdk` (cmdline-tools, platform-tools, build-tools 35.0.0,
-        platforms android-35, ndk 28.1.13356709), JDK 21 at /usr/bin/java, Godot 4.7.2
-        `android_release.apk` template present; editor settings already point
-        `export/android/android_sdk_path` at `~/Android/Sdk` (set `java_sdk_path` too)
-      - Engine (submodule + github:spinsphere/quagmire-engine): `sdk-godot/build.sh android`
-        → `rustup target add aarch64-linux-android`, linker
-        `$NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang`
-        passed as `CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER`, link arg
-        `-Wl,-z,max-page-size=16384` (16 KB pages) in `.cargo/config.toml`; artifact
-        `target/aarch64-linux-android/release/libquagmire_godot.so`
-      - App: `quagmire.gdextension` entries `android.release.arm64` / `android.debug.arm64`
-        → `res://addons/quagmire/bin/android/libquagmire_godot.so` (commit the binary);
-        `export_presets.cfg` preset 3 "Android" (platform Android, gradle build off,
-        arm64-v8a only, `package/unique_name` e.g. `space.quagmire.testingreality`,
-        orientation sensor, `export_path="../builds/android/testing-reality.apk"`);
-        release signing through `GODOT_ANDROID_KEYSTORE_RELEASE_PATH/USER/PASSWORD` with a
-        keystore generated once by keytool under `~/.local/share/godot/keystores/`
-      - Tools: `tools/build-sdk.sh … android`, `tools/export.sh android` →
-        `builds/android/`, `tools/check-android.sh` (apksigner verify, the two .so files
-        in `lib/arm64-v8a/`, `aapt dump badging`); no emulator here (user not in kvm group)
-      - Docs: README builds table, engine README target table, architecture platform layering
+- [x] Android export: engine `build.sh android` (NDK clang, 16 KB pages, pushed as
+      a152b49), `android.*.arm64` gdextension entries + committed `bin/android/*.so`,
+      preset "Android" (arm64-v8a, gradle off, `space.quagmire.testingreality`, sensor
+      orientation), `tools/export.sh android`, `tools/check-android.sh` (ANDROID OK),
+      distribution packages in `builds/dist/testing-reality-quagmire-<platform>.*`
+- [ ] Later: run the APK on a device (no emulator on the server); Play Store icons
+      (`launcher_icons/*` are empty, Godot's default icon is used)

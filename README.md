@@ -44,19 +44,23 @@ The tool scripts find Godot on `PATH`, in `~/.local/bin`, or as the Flatpak
 ### Builds
 
 ```bash
-tools/export.sh            # all three: builds/linux/, builds/windows/, builds/webgl/
-tools/export.sh web        # one target (linux | windows | web)
+tools/export.sh            # all four: builds/linux/, builds/windows/, builds/webgl/, builds/android/
+tools/export.sh web        # one target (linux | windows | web | android)
 ```
+
+Each export is also packaged for distribution in `builds/dist/`:
+`testing-reality-quagmire-linux.tgz`, `-windows.zip`, `-webgl.zip`, `-android.apk`.
 
 | Target | Output | Extra toolchain (otherwise the target is skipped) |
 |---|---|---|
 | Linux x86_64 | `builds/linux/testing-reality.x86_64` | — |
 | Windows x86_64 | `builds/windows/testing-reality.exe` | `rustup target add x86_64-pc-windows-gnu`, `mingw-w64` |
 | Web (WebGL 2) | `builds/webgl/index.html` + `.pck`, `.wasm`, `.js` | nightly Rust with `rust-src`, Emscripten **4.0.20** in `~/emsdk` (see `quagmire-engine/sdk-godot/build.sh`) |
+| Android (arm64-v8a, API 24+) | `builds/android/testing-reality.apk` | `rustup target add aarch64-linux-android`, Android SDK in `~/Android/Sdk` (build-tools 35, platform 35, an NDK), a JDK; the editor's Android SDK / Java paths set. Signed with `GODOT_ANDROID_KEYSTORE_RELEASE_*`, or a self-signed keystore created once in `~/.local/share/godot/keystores/`. `tools/check-android.sh` verifies the APK (signature, libraries, 16 KB pages, package). |
 
 All need the Godot 4.7.2 export templates (Editor → Manage Export Templates).
 
-The Quagmire GDExtension binaries (Linux `.so`, Windows `.dll`, web `.wasm`) are committed in
+The Quagmire GDExtension binaries (Linux `.so`, Windows `.dll`, web `.wasm`, Android `.so`) are committed in
 `app/addons/quagmire/bin`, so a fresh clone opens in Godot and exports without a Rust
 toolchain; `tools/build-sdk.sh release all` rebuilds them. Rebuilding (and `tools/test.sh`)
 needs the engine submodule checked out:

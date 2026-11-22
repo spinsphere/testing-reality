@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build the Quagmire Godot SDK and install it into the app's addon folder.
-#   tools/build-sdk.sh [release|debug] [linux|windows|web|all ...]      (default: release linux)
+#   tools/build-sdk.sh [release|debug] [linux|windows|web|android|all ...]   (default: release linux)
 # The compile step is the engine's own (quagmire-engine/sdk-godot/build.sh); this script only
 # knows where Testing Reality keeps the binaries. They are committed so a fresh clone opens in
 # Godot without a Rust toolchain. Each file is installed through a temporary file + rename so
@@ -9,7 +9,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROFILE="${1:-release}"; shift || true
 TARGETS=("$@"); [ ${#TARGETS[@]} -eq 0 ] && TARGETS=(linux)
-[ "${TARGETS[0]}" = "all" ] && TARGETS=(linux windows web)
+[ "${TARGETS[0]}" = "all" ] && TARGETS=(linux windows web android)
 BIN="$ROOT/app/addons/quagmire/bin"
 for t in "${TARGETS[@]}"; do
   echo "== Quagmire SDK ($t, $PROFILE)"
@@ -20,6 +20,9 @@ for t in "${TARGETS[@]}"; do
     linux)   DEST="$BIN/linux/libquagmire_godot.so";   STRIP="strip --strip-unneeded" ;;
     windows) DEST="$BIN/windows/quagmire_godot.dll";   STRIP="x86_64-w64-mingw32-strip --strip-unneeded" ;;
     web)     DEST="$BIN/web/quagmire_godot.wasm";      STRIP="" ;;   # already minimal (panic=abort, hidden symbols)
+    android) DEST="$BIN/android/libquagmire_godot.so"
+             NDK_BIN="$(ls -d "${ANDROID_HOME:-$HOME/Android/Sdk}"/ndk/*/toolchains/llvm/prebuilt/linux-x86_64/bin 2>/dev/null | sort -V | tail -1)"
+             STRIP="$NDK_BIN/llvm-strip --strip-unneeded" ;;
   esac
   mkdir -p "$(dirname "$DEST")"
   cp "$SRC" "$DEST.tmp"
