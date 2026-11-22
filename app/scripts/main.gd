@@ -3,7 +3,8 @@ extends Control
 ##
 ## Debug command line (after `--`): `--go=hub|chapter:exp1:3|lab:exp1` jumps to a route,
 ## `--shot=/path/file.png` saves a screenshot after a few frames and quits (used with
-## xvfb-run for headless verification).
+## xvfb-run for headless verification), `--touch` pretends the screen is a touch screen
+## (phone layouts; combine with `--resolution 480x960`).
 
 const HUB_SCENE := preload("res://ui/hub/hub.tscn")
 const CHAPTER_SCENE := preload("res://ui/chapter/chapter.tscn")
@@ -12,9 +13,12 @@ var _screen: Node
 var _bg: ColorRect
 var _shot_path := ""
 var _perf := false
+var _compact := false
 
 
 func _ready() -> void:
+	_parse_args()
+	_setup_display()
 	theme = ThemeBuilder.build()
 	# This full-screen Control must not swallow mouse events: in the laboratory the camera rig
 	# and the apparatus picking read them from _unhandled_input.
@@ -25,8 +29,41 @@ func _ready() -> void:
 	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_bg)
 	AppState.route_changed.connect(_on_route_changed)
-	_parse_args()
 	_on_route_changed(AppState.current_route)
+	if _shot_path != "":
+		_take_screenshot.call_deferred()
+	elif _perf:
+		_report_perf.call_deferred()
+
+
+## Desktop windows keep the project's 1600×900 canvas scaled to fit (stretch mode
+## canvas_items). A touch screen instead gets a 1:1 canvas scaled by the screen density
+## (Layout.scale), so text has a readable physical size and the screens lay themselves out
+## for the real width (Layout.compact). The window size is watched for rotation / resizing.
+func _setup_display() -> void:
+	if Layout.touch():
+		var w := get_window()
+		w.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+		w.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+		w.content_scale_factor = Layout.scale()
+		if not AppState.settings.has("quality"):
+			AppState.settings["quality"] = 0   # phones start on the Low 3D preset
+	_compact = Layout.compact(self)
+	get_viewport().size_changed.connect(_on_size_changed)
+
+
+func _on_size_changed() -> void:
+	var compact := Layout.compact(self)
+	if _screen == null:
+		return
+	if compact != _compact:
+		_compact = compact
+		if _screen.has_method("relayout"):
+			_screen.call("relayout")      # the lab keeps its scene and re-arranges the HUD
+		else:
+			_on_route_changed(AppState.current_route)   # 2D screens rebuild for the new width
+	elif _screen.has_method("on_resized"):
+		_screen.call("on_resized")
 
 
 func _parse_args() -> void:
@@ -41,6 +78,8 @@ func _parse_args() -> void:
 			_shot_path = arg.trim_prefix("--shot=")
 		elif arg == "--perf":
 			_perf = true
+		elif arg == "--touch":
+			Layout._touch_override = 1
 		elif arg.begins_with("--go="):
 			var parts := arg.trim_prefix("--go=").split(":")
 			match parts[0]:
@@ -50,10 +89,6 @@ func _parse_args() -> void:
 					AppState.current_route = {"screen": "chapter", "id": parts[1], "page": int(parts[2]) if parts.size() > 2 else 0}
 				"lab":
 					AppState.current_route = {"screen": "lab", "id": parts[1]}
-	if _shot_path != "":
-		_take_screenshot.call_deferred()
-	elif _perf:
-		_report_perf.call_deferred()
 
 
 ## `?go=lab:exp1&perf=1` → ["--go=lab:exp1", "--perf"]; `--shot` has no meaning in a browser.
@@ -138,9 +173,24 @@ func _on_route_changed(route: Dictionary) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		match AppState.current_route.get("screen", "hub"):
-			"chapter":
-				AppState.go_hub()
-			"lab":
-				AppState.go_chapter(AppState.current_route["id"])
+		_back()
 		get_viewport().set_input_as_handled()
+
+
+## Android's back button / gesture (quit_on_go_back is off in project.godot).
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if not _back():
+			get_tree().quit()
+
+
+## One step up: lab → reading, reading → experiments. False on the hub.
+func _back() -> bool:
+	match AppState.current_route.get("screen", "hub"):
+		"chapter":
+			AppState.go_hub()
+		"lab":
+			AppState.go_chapter(AppState.current_route["id"])
+		_:
+			return false
+	return true

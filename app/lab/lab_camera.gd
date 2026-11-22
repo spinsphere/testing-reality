@@ -2,6 +2,7 @@ class_name LabCamera
 extends Node3D
 ## Orbit / pan / zoom camera rig for the laboratory.
 ## Left or right drag = orbit, middle drag or Shift+drag = pan, wheel = zoom, F = refocus.
+## Touch: one finger = orbit, two fingers = pan, pinch = zoom.
 
 @export var target := Vector3(0.0, 0.1, 0.0)
 @export var distance := 1.6
@@ -15,6 +16,9 @@ extends Node3D
 @export var smoothing := 14.0
 
 var camera: Camera3D
+## Fraction of the view height the scene is pushed up by (a phone's bottom sheet covers
+## the lower part of the screen); set by LabBase._apply_hud_layout.
+var screen_shift := 0.0
 var _dragging := false
 var _panning := false
 var _target_goal: Vector3
@@ -22,6 +26,7 @@ var _distance_goal: float
 var _yaw_goal: float
 var _pitch_goal: float
 var _home := {}
+var _touches: Dictionary = {}   # finger index -> last position (touch screens)
 
 
 func _ready() -> void:
@@ -76,9 +81,23 @@ func _apply(_instant: bool) -> void:
 	var offset := rot * Vector3(0.0, 0.0, distance)
 	camera.global_position = target + offset
 	camera.look_at(target, Vector3.UP)
+	# a portrait window keeps the table's width in view (the fov then applies to the width)
+	var vp := get_viewport().get_visible_rect().size
+	var portrait := vp.y > vp.x
+	camera.keep_aspect = Camera3D.KEEP_WIDTH if portrait else Camera3D.KEEP_HEIGHT
+	var half_tan := tan(deg_to_rad(camera.fov * 0.5))
+	if portrait:
+		half_tan /= maxf(vp.x / maxf(vp.y, 1.0), 0.01)
+	camera.v_offset = -screen_shift * 2.0 * distance * half_tan
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		_touch_input(event)
+		return
+	# a touch also arrives as an emulated mouse event (device -1): the fingers drive the camera
+	if event is InputEventMouse and (event as InputEventMouse).device == InputEvent.DEVICE_ID_EMULATION:
+		return
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		match mb.button_index:
@@ -106,3 +125,39 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey and event.pressed and not event.echo:
 		if (event as InputEventKey).keycode == KEY_F:
 			go_home()
+
+
+## One finger orbits, two fingers pan with their midpoint and zoom with their spacing.
+func _touch_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		var st := event as InputEventScreenTouch
+		if st.pressed:
+			_touches[st.index] = st.position
+		else:
+			_touches.erase(st.index)
+		return
+	var sd := event as InputEventScreenDrag
+	if not _touches.has(sd.index):
+		_touches[sd.index] = sd.position
+		return
+	var keys := _touches.keys()
+	if _touches.size() == 1:
+		_yaw_goal -= sd.relative.x * orbit_speed
+		_pitch_goal = clampf(_pitch_goal + sd.relative.y * orbit_speed, -5.0, 85.0)
+	elif _touches.size() >= 2:
+		var a: Vector2 = _touches[keys[0]]
+		var b: Vector2 = _touches[keys[1]]
+		var old_mid := (a + b) * 0.5
+		var old_dist := maxf(a.distance_to(b), 1.0)
+		if sd.index == keys[0]:
+			a = sd.position
+		elif sd.index == keys[1]:
+			b = sd.position
+		var mid := (a + b) * 0.5
+		var dist := maxf(a.distance_to(b), 1.0)
+		var d := mid - old_mid
+		var right := camera.global_transform.basis.x
+		var up := camera.global_transform.basis.y
+		_target_goal -= (right * d.x - up * d.y) * pan_speed * distance
+		_distance_goal = clampf(_distance_goal * old_dist / dist, min_distance, max_distance)
+	_touches[sd.index] = sd.position

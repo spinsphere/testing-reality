@@ -2,9 +2,21 @@ extends Control
 ## Home screen: the site's hero text and the experiment grid as cards.
 
 var _cards: Array[PanelContainer] = []
+var _compact := false
+var _column: VBoxContainer
+
+
+## Called by main.gd when the window changes size without crossing the compact threshold.
+func on_resized() -> void:
+	_column.custom_minimum_size.x = _column_width()
+
+
+func _column_width() -> float:
+	return Layout.page_width(self) if _compact else 1180.0
 
 
 func _ready() -> void:
+	_compact = Layout.compact(self)
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -16,11 +28,12 @@ func _ready() -> void:
 	scroll.add_child(center)
 
 	var column := VBoxContainer.new()
-	column.custom_minimum_size = Vector2(1180, 0)
+	_column = column
+	column.custom_minimum_size = Vector2(_column_width(), 0)
 	column.add_theme_constant_override("separation", 18)
 	center.add_child(column)
 
-	column.add_child(_spacer(40))
+	column.add_child(_spacer(16 if _compact else 40))
 	var head := HBoxContainer.new()
 	var kicker := Label.new()
 	kicker.text = "TESTING REALITY"
@@ -28,7 +41,8 @@ func _ready() -> void:
 	kicker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(kicker)
 	var settings := Button.new()
-	settings.text = "⚙  Settings & keys"
+	settings.text = "⚙" if _compact else "⚙  Settings & keys"
+	settings.tooltip_text = "Settings"
 	settings.theme_type_variation = "GhostButton"
 	settings.pressed.connect(func() -> void: add_child(SettingsOverlay.new()))
 	head.add_child(settings)
@@ -37,7 +51,8 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "Quantum Experiments"
 	title.theme_type_variation = "H1"
-	title.add_theme_font_size_override("font_size", 56)
+	title.add_theme_font_size_override("font_size", 38 if _compact else 56)
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(title)
 
 	var tagline := Label.new()
@@ -64,7 +79,7 @@ func _ready() -> void:
 	column.add_child(grid_title)
 
 	var grid := GridContainer.new()
-	grid.columns = 2
+	grid.columns = 1 if _compact else 2
 	grid.add_theme_constant_override("h_separation", 18)
 	grid.add_theme_constant_override("v_separation", 18)
 	column.add_child(grid)
@@ -90,7 +105,8 @@ func _spacer(h: float) -> Control:
 func _make_card(chapter: Dictionary) -> Control:
 	var card := PanelContainer.new()
 	card.theme_type_variation = "Card"
-	card.custom_minimum_size = Vector2(560, 150)
+	card.custom_minimum_size = Vector2(0, 120) if _compact else Vector2(560, 150)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.mouse_filter = Control.MOUSE_FILTER_STOP
 	card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
@@ -99,6 +115,8 @@ func _make_card(chapter: Dictionary) -> Control:
 	card.add_child(row)
 
 	var thumb := _make_thumbnail(chapter["id"])
+	if _compact:
+		thumb.custom_minimum_size = Vector2(96, 72)
 	row.add_child(thumb)
 
 	var v := VBoxContainer.new()
@@ -113,7 +131,8 @@ func _make_card(chapter: Dictionary) -> Control:
 	var title := Label.new()
 	title.text = chapter["title"]
 	title.theme_type_variation = "H2"
-	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_font_size_override("font_size", 22 if _compact else 26)
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(title)
 	var sub := Label.new()
 	sub.text = chapter["subtitle"]
@@ -126,7 +145,7 @@ func _make_card(chapter: Dictionary) -> Control:
 	bottom.add_theme_constant_override("separation", 10)
 	v.add_child(bottom)
 	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(160, 6)
+	bar.custom_minimum_size = Vector2(90 if _compact else 160, 6)
 	bar.show_percentage = false
 	bar.max_value = 1.0
 	bar.value = AppState.completion(chapter["id"])

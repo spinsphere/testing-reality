@@ -20,6 +20,8 @@ class_name BlockFactory
 const WIDGET_DEFAULT_HEIGHT := 360.0
 ## A portrait figure at the text width would be taller than the window: cap the height.
 const FIGURE_MAX_HEIGHT := 720.0
+## Width of the column the blocks are laid out in; the chapter sets it before rendering.
+static var column_width := 820.0
 
 
 static func make(block: Dictionary, chapter_id: String) -> Control:
@@ -183,8 +185,8 @@ static func equation(chapter_id: String, eq_id: String, caption: String = "") ->
 		var w := float(meta.get("width", tex.get_width()))
 		var h := float(meta.get("height", tex.get_height()))
 		var scale := 1.15
-		if w * scale > 820.0:
-			scale = 820.0 / w
+		if w * scale > column_width:
+			scale = column_width / w
 		tr.custom_minimum_size = Vector2(w * scale, h * scale)
 		tr.tooltip_text = str(meta.get("tex", ""))
 		center.add_child(tr)
@@ -240,7 +242,7 @@ static func table(header: Array, rows: Array) -> Control:
 	panel.add_child(grid)
 	# cells need a minimum width: a wrapping RichTextLabel with no width collapses to one
 	# character per line inside a grid (the settings card showed a 4000 px empty box)
-	var cell_w := 150.0
+	var cell_w := minf(150.0, (column_width - 40.0) / grid.columns)
 	for h in header:
 		var l := rich_text("[b]%s[/b]" % str(h))
 		l.add_theme_color_override("default_color", Palette.ACCENT_SOFT)

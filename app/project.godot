@@ -15,6 +15,7 @@ config/description="Quantum experiments, from polarizers to the delayed-choice q
 config/version="0.1.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+config/quit_on_go_back=false
 
 [autoload]
 
@@ -29,6 +30,7 @@ window/size/window_width_override=1600
 window/size/window_height_override=900
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=6
 
 [importer_defaults]
 

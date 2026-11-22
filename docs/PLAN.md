@@ -203,3 +203,42 @@ reading a computed result. User request 2026-10-31.
       (platform layering), performance (web counters)
 - [ ] Later: threaded web build if Godot ships a wasm32 threaded template again, or when
       Rust gains wasm64-emscripten; macOS binary; `sdk-c` for Unity/Unreal
+
+## Phase 11 — Mobile UI, site parity, Android (user request 2026-11-22)
+
+- [x] Content: real CSV download links (CDN URLs) and vendor equipment links in every
+      experiment, as on testing-reality.webflow.io
+- [x] `carousel` block (arrows, dots, caption, 5 s auto-rotation, swipe) for the lab photos
+      of Exp 1–6; the four photos the app lacked added from docs/site-assets
+- [x] Figures at the width of the text column (`FitWidthBox`), mipmaps on all figure imports
+- [x] Touch: pages scroll by finger (RichTextLabel PASS + no selection on touch screens),
+      lab camera one-finger orbit / two-finger pan / pinch zoom, Android back button
+- [x] Phone layouts (`ui/layout.gd`: `touch()`, `compact()` under 1000 px, `scale()` from
+      screen density; main.gd switches touch screens to a 1:1 canvas): hub single column,
+      chapter top bar + contents overlay, settings fits the window, lab HUD as a tabbed
+      sheet (bottom in portrait, right in landscape) with presets in a scrolling row;
+      orientation = sensor. Debug: `godot --resolution 480x960 -- --touch --go=lab:exp1`
+- [ ] Polish: in the compact lab sheet the state rows are wider than the sheet (the
+      percentage column is clipped); widgets have not been reviewed one by one at 450 px
+- [ ] Android export — toolchain is ready on momogata, nothing wired yet:
+      - SDK at `~/Android/Sdk` (cmdline-tools, platform-tools, build-tools 35.0.0,
+        platforms android-35, ndk 28.1.13356709), JDK 21 at /usr/bin/java, Godot 4.7.2
+        `android_release.apk` template present; editor settings already point
+        `export/android/android_sdk_path` at `~/Android/Sdk` (set `java_sdk_path` too)
+      - Engine (submodule + github:spinsphere/quagmire-engine): `sdk-godot/build.sh android`
+        → `rustup target add aarch64-linux-android`, linker
+        `$NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang`
+        passed as `CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER`, link arg
+        `-Wl,-z,max-page-size=16384` (16 KB pages) in `.cargo/config.toml`; artifact
+        `target/aarch64-linux-android/release/libquagmire_godot.so`
+      - App: `quagmire.gdextension` entries `android.release.arm64` / `android.debug.arm64`
+        → `res://addons/quagmire/bin/android/libquagmire_godot.so` (commit the binary);
+        `export_presets.cfg` preset 3 "Android" (platform Android, gradle build off,
+        arm64-v8a only, `package/unique_name` e.g. `space.quagmire.testingreality`,
+        orientation sensor, `export_path="../builds/android/testing-reality.apk"`);
+        release signing through `GODOT_ANDROID_KEYSTORE_RELEASE_PATH/USER/PASSWORD` with a
+        keystore generated once by keytool under `~/.local/share/godot/keystores/`
+      - Tools: `tools/build-sdk.sh … android`, `tools/export.sh android` →
+        `builds/android/`, `tools/check-android.sh` (apksigner verify, the two .so files
+        in `lib/arm64-v8a/`, `aapt dump badging`); no emulator here (user not in kvm group)
+      - Docs: README builds table, engine README target table, architecture platform layering

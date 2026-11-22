@@ -31,6 +31,20 @@ var results_box: VBoxContainer
 var results_scroll: ScrollContainer
 var presets_box: HBoxContainer
 var hint_label: Label
+## Compact (phone) HUD: the four panels live in one sheet with tabs; see _apply_hud_layout.
+var _hud_root: Control
+var _hud_top: HBoxContainer
+var _hud_panels: Dictionary = {}        # "state" | "counting" | "apparatus" | "results" -> PanelContainer
+var _sheet: VBoxContainer
+var _hud_tabs: HBoxContainer
+var _hud_tab_buttons: Dictionary = {}
+var _hud_active := "state"
+var _hud_collapsed := false
+var _presets_row: ScrollContainer
+var _back_btn: Button
+var _title_label: Label
+var _photons_btn: Button
+var _hud_compact := false
 var _photon_mode := false
 var _photon_timer := 0.0
 var _photons: Array = []  # [{mesh, path, seg, t, dies_after, kind, outcome, pair?}]
@@ -263,17 +277,22 @@ func _build_hud() -> void:
 	top.add_theme_constant_override("separation", 14)
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(top)
+	_hud_root = root
+	_hud_top = top
 	var back := Button.new()
 	back.text = "‹  Back to reading   (Esc)"
 	back.theme_type_variation = "GhostButton"
 	back.pressed.connect(func() -> void: AppState.go_chapter(chapter_id))
 	top.add_child(back)
+	_back_btn = back
 	var ch := AppState.chapter(chapter_id)
 	var title := Label.new()
 	title.text = "%s — %s" % [ch.get("kicker", ""), ch.get("title", "")]
 	title.theme_type_variation = "H3"
 	title.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	top.add_child(title)
+	_title_label = title
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -286,17 +305,19 @@ func _build_hud() -> void:
 	photons.theme_type_variation = "GhostButton"
 	photons.pressed.connect(toggle_photons)
 	top.add_child(photons)
+	_photons_btn = photons
+	# compact layouts move the presets into their own scrolling row under the bar
+	_presets_row = ScrollContainer.new()
+	_presets_row.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_presets_row.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_presets_row.visible = false
+	root.add_child(_presets_row)
 
 	# left: state panel
 	var left := PanelContainer.new()
 	left.theme_type_variation = "Hud"
-	left.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	left.offset_left = 16
-	left.offset_bottom = -16
-	left.offset_top = -300
-	left.offset_right = 560
-	left.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	root.add_child(left)
+	_hud_panels["state"] = left
 	var left_v := VBoxContainer.new()
 	left_v.add_theme_constant_override("separation", 4)
 	left.add_child(left_v)
@@ -316,13 +337,8 @@ func _build_hud() -> void:
 	# right, top: counting (acquisition)
 	var acq := PanelContainer.new()
 	acq.theme_type_variation = "Hud"
-	acq.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	acq.offset_left = -360
-	acq.offset_right = -16
-	acq.offset_top = 64
-	acq.offset_bottom = 64 + 150
-	acq.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	root.add_child(acq)
+	_hud_panels["counting"] = acq
 	var acq_v := VBoxContainer.new()
 	acq_v.add_theme_constant_override("separation", 4)
 	acq.add_child(acq_v)
@@ -368,12 +384,8 @@ func _build_hud() -> void:
 	# right: inspector
 	var right := PanelContainer.new()
 	right.theme_type_variation = "Hud"
-	right.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
-	right.offset_left = -360
-	right.offset_right = -16
-	right.offset_top = 64 + 150 + 10
-	right.offset_bottom = -340
 	root.add_child(right)
+	_hud_panels["apparatus"] = right
 	var right_v := VBoxContainer.new()
 	right_v.add_theme_constant_override("separation", 8)
 	right.add_child(right_v)
@@ -398,12 +410,8 @@ func _build_hud() -> void:
 	# bottom right: results
 	var res := PanelContainer.new()
 	res.theme_type_variation = "Hud"
-	res.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	res.offset_left = -results_width
-	res.offset_right = -16
-	res.offset_top = -300
-	res.offset_bottom = -16
 	root.add_child(res)
+	_hud_panels["results"] = res
 	var res_v := VBoxContainer.new()
 	res_v.add_theme_constant_override("separation", 4)
 	res.add_child(res_v)
@@ -431,6 +439,142 @@ func _build_hud() -> void:
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(hint_label)
+
+	# compact: one sheet holding the panels, with a tab row
+	_sheet = VBoxContainer.new()
+	_sheet.add_theme_constant_override("separation", 4)
+	_sheet.visible = false
+	root.add_child(_sheet)
+	_hud_tabs = HBoxContainer.new()
+	_hud_tabs.add_theme_constant_override("separation", 4)
+	_sheet.add_child(_hud_tabs)
+	_sheet.clip_contents = true
+	for key in ["state", "counting", "apparatus", "results"]:
+		var b := Button.new()
+		b.text = {"state": "State", "counting": "Count", "apparatus": "Parts", "results": "Results"}[key]
+		b.add_theme_font_size_override("font_size", 15)
+		b.theme_type_variation = "GhostButton"
+		b.toggle_mode = true
+		b.focus_mode = Control.FOCUS_NONE
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.pressed.connect(func() -> void: show_hud_tab(key))
+		_hud_tabs.add_child(b)
+		_hud_tab_buttons[key] = b
+	var fold := Button.new()
+	fold.text = "▾"
+	fold.theme_type_variation = "GhostButton"
+	fold.focus_mode = Control.FOCUS_NONE
+	fold.tooltip_text = "Hide / show the panel"
+	fold.pressed.connect(func() -> void:
+		_hud_collapsed = not _hud_collapsed
+		fold.text = "▴" if _hud_collapsed else "▾"
+		_apply_hud_layout())
+	_hud_tabs.add_child(fold)
+	_apply_hud_layout()
+
+
+## Wide windows: state panel bottom-left, counting and apparatus down the right, results
+## bottom-right, presets in the top bar. Compact windows (Layout.compact): the panels share
+## one sheet — along the bottom in portrait, down the right in landscape — shown one at a
+## time through tabs, the presets scroll in a row under the bar, and the 3D view is pushed
+## up so the table stays clear of the sheet.
+func _apply_hud_layout() -> void:
+	var compact := Layout.compact(self)
+	var portrait := Layout.portrait(self)
+	var win := Layout.window_size(self)
+	_hud_compact = compact
+	_back_btn.text = "‹" if compact else "‹  Back to reading   (Esc)"
+	_photons_btn.text = "▶" if compact else "▶  Photons  (Space)"
+	var ch := AppState.chapter(chapter_id)
+	_title_label.text = str(ch.get("kicker", "")) if compact else "%s — %s" % [ch.get("kicker", ""), ch.get("title", "")]
+	hint_label.visible = not compact
+	# presets: in the bar, or in their own row
+	if compact and presets_box.get_parent() != _presets_row:
+		presets_box.reparent(_presets_row)
+	elif not compact and presets_box.get_parent() != _hud_top:
+		presets_box.reparent(_hud_top)
+		_hud_top.move_child(presets_box, _photons_btn.get_index())
+	_presets_row.visible = compact
+	_presets_row.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_presets_row.offset_left = 16
+	_presets_row.offset_right = -16
+	_presets_row.offset_top = 58
+	_presets_row.offset_bottom = 58 + 44
+	_sheet.visible = compact
+	var screen_shift := 0.0
+	if compact:
+		for key in _hud_panels:
+			var p: PanelContainer = _hud_panels[key]
+			if p.get_parent() != _sheet:
+				p.reparent(_sheet)
+			p.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			p.clip_contents = true
+			p.visible = key == _hud_active and not _hud_collapsed
+			_hud_tab_buttons[key].button_pressed = key == _hud_active
+		if portrait:
+			var h := 0.0 if _hud_collapsed else win.y * 0.36
+			_sheet.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+			_sheet.offset_left = 8
+			_sheet.offset_right = -8
+			_sheet.offset_top = -(h + 44)
+			_sheet.offset_bottom = -8
+			screen_shift = 0.0 if _hud_collapsed else 0.18
+		else:
+			var w := 0.0 if _hud_collapsed else win.x * 0.46
+			_sheet.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+			_sheet.offset_left = -(w + 8)
+			_sheet.offset_right = -8
+			_sheet.offset_top = -(win.y - 110)
+			_sheet.offset_bottom = -8
+			_sheet.custom_minimum_size = Vector2(w, 0)
+	else:
+		for key in _hud_panels:
+			var p: PanelContainer = _hud_panels[key]
+			if p.get_parent() != _hud_root:
+				p.reparent(_hud_root)
+			p.visible = true
+		var left: PanelContainer = _hud_panels["state"]
+		left.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+		left.offset_left = 16
+		left.offset_bottom = -16
+		left.offset_top = -300
+		left.offset_right = 560
+		var acq: PanelContainer = _hud_panels["counting"]
+		acq.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		acq.offset_left = -360
+		acq.offset_right = -16
+		acq.offset_top = 64
+		acq.offset_bottom = 64 + 150
+		var right: PanelContainer = _hud_panels["apparatus"]
+		right.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
+		right.offset_left = -360
+		right.offset_right = -16
+		right.offset_top = 64 + 150 + 10
+		right.offset_bottom = -340
+		var res: PanelContainer = _hud_panels["results"]
+		res.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		res.offset_left = -results_width
+		res.offset_right = -16
+		res.offset_top = -300
+		res.offset_bottom = -16
+	if camera_rig:
+		camera_rig.screen_shift = screen_shift
+
+
+## Compact HUD: bring one panel to the front.
+func show_hud_tab(key: String) -> void:
+	_hud_active = key
+	_hud_collapsed = false
+	_apply_hud_layout()
+
+
+## main.gd: the window crossed the compact threshold (rotation) or changed size.
+func relayout() -> void:
+	_apply_hud_layout()
+
+
+func on_resized() -> void:
+	_apply_hud_layout()
 
 
 func _on_rebuilt_internal(snapshots: Array, result: Dictionary) -> void:
@@ -545,6 +689,8 @@ func select(app: Apparatus) -> void:
 	selected = app
 	if app:
 		app.set_selected(true)
+		if _hud_compact:
+			show_hud_tab("apparatus")
 	_refresh_inspector()
 	_refresh_state_panel(controller.snapshots)
 
@@ -553,7 +699,7 @@ func _refresh_inspector() -> void:
 	for c in inspector_box.get_children():
 		c.queue_free()
 	if selected == null:
-		inspector_title.text = "Click a component on the table"
+		inspector_title.text = "Tap a component on the table" if Layout.touch() else "Click a component on the table"
 		return
 	inspector_title.text = "%s  ·  %s" % [selected.label, selected.display_name]
 	if selected.description != "":

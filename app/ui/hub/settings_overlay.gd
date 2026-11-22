@@ -18,13 +18,14 @@ func _ready() -> void:
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(center)
+	var win := Layout.window_size(self)
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = "Card"
-	panel.custom_minimum_size = Vector2(760, 0)
+	panel.custom_minimum_size = Vector2(minf(760.0, win.x - 24.0), 0)
 	center.add_child(panel)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.custom_minimum_size = Vector2(720, minf(640.0, get_viewport_rect().size.y - 120.0))
+	scroll.custom_minimum_size = Vector2(minf(720.0, win.x - 64.0), minf(640.0, win.y - 80.0))
 	panel.add_child(scroll)
 	var v := VBoxContainer.new()
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -38,13 +39,17 @@ func _ready() -> void:
 
 	v.add_child(_toggle("Reduce motion (no camera smoothing, no photon animation)", "reduce_motion"))
 	v.add_child(_toggle("Show LaTeX source as equation tooltips", "show_latex"))
-	var quality := HBoxContainer.new()
+	var compact := Layout.compact(self)
+	var quality: BoxContainer = VBoxContainer.new() if compact else HBoxContainer.new()
 	var ql := Label.new()
 	ql.text = "3D quality (applies when a lab opens)"
 	ql.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ql.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	quality.add_child(ql)
 	var qo := OptionButton.new()
-	for o in ["Low — integrated graphics: no shadows or glow, 75 % render scale", "Medium — 2× MSAA, shadows, glow", "High — 4× MSAA"]:
+	qo.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_SHRINK_END
+	for o in (["Low — phones, integrated graphics", "Medium — shadows, glow", "High — 4× MSAA"] if compact else
+			["Low — integrated graphics: no shadows or glow, 75 % render scale", "Medium — 2× MSAA, shadows, glow", "High — 4× MSAA"]):
 		qo.add_item(o)
 	qo.selected = AppState.quality()
 	qo.item_selected.connect(func(i: int) -> void:
@@ -53,6 +58,18 @@ func _ready() -> void:
 	quality.add_child(qo)
 	v.add_child(quality)
 
+	if Layout.touch():
+		var touch := Label.new()
+		touch.text = "Touch"
+		touch.theme_type_variation = "H3"
+		v.add_child(touch)
+		v.add_child(BlockFactory.table(["Gesture", "Reading", "Laboratory"], [
+			["swipe up / down", "scroll the page", "scroll a panel"],
+			["swipe left / right on a photo", "next / previous picture", "—"],
+			["one finger drag", "—", "orbit the camera"],
+			["two fingers drag / pinch", "—", "pan / zoom"],
+			["tap a component", "—", "select it (Apparatus tab)"],
+		]))
 	var keys := Label.new()
 	keys.text = "Keyboard"
 	keys.theme_type_variation = "H3"
