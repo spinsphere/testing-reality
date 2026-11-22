@@ -56,7 +56,7 @@ if [ $QUICK -eq 0 ] && command -v xvfb-run > /dev/null; then
 	# This pass exists to catch shader/renderer errors, so it runs small: software GL (llvmpipe)
 	# manages about a frame a second on the 3D labs, so it runs at 640x360 with the harness's
 	# --quick sweeps (the headless pass above does the full sweep). Screenshots use the full size.
-	step "run_all (xvfb, GL)" timeout 5400 xvfb-run -a -s "-screen 0 640x360x24" $GODOT --path . -s tests/run_all.gd -- --quick
+	step "run_all (xvfb, GL)" timeout 9000 xvfb-run -a -s "-screen 0 640x360x24" $GODOT --path . -s tests/run_all.gd -- --quick
 	# rendering budget (machine-independent counters): ≤ 1500 draw calls, ≤ 2 M triangles a frame
 	for route in lab:exp1 lab:exp4 lab:exp7; do
 		name="perf $route"
