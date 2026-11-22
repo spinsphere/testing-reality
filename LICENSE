@@ -1,0 +1,48 @@
+# Licenses and Attribution
+
+This repository contains both software code and educational content with separate licensing:
+
+## Software License (MIT)
+
+The software code in this repository (including GDScript, Blender automation scripts, tools, and shaders) is licensed under the MIT License:
+
+Copyright (c) 2026 Spinsphere
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Content and Educational Materials License (Creative Commons)
+
+The course curriculum, experimental write-ups, theoretical explanations, lab data, and conceptual figures in this project are based on the:
+
+- **Testing Reality Initiative**: [https://testing-reality.webflow.io/](https://testing-reality.webflow.io/)
+- **CUSAC** (Center for the Unification of Science and Consciousness): [https://www.cusac.org/](https://www.cusac.org/)
+
+Copyright (c) 2018–2026 CUSAC / Testing Reality.  
+This educational material is shared and adapted under the terms of the Creative Commons Attribution-NonCommercial (CC BY-NC 4.0) License:  
+https://creativecommons.org/licenses/by-nc/4.0/
+
+You are free to:
+- **Share** — copy and redistribute the material in any medium or format.
+- **Adapt** — remix, transform, and build upon the material.
+
+Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- **NonCommercial** — You may not use the material for commercial purposes.

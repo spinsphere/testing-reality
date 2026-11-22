@@ -66,7 +66,7 @@ toolchain; `tools/build-sdk.sh release all` rebuilds them. Rebuilding (and `tool
 needs the engine submodule checked out:
 
 ```bash
-git clone --recurse-submodules git@github.com:spinsphere/testing-reality.git
+git clone --recurse-submodules https://github.com/spinsphere/testing-reality.git
 git submodule update --init      # in an existing clone
 ```
 
@@ -146,7 +146,10 @@ every element. Detector patterns come from
 `I(y) = Σ_env |Σ_path c · φ_path(y)|²`, which gives diffraction, which-way marking, erasure and
 coincidence post-selection with no special cases. See `quagmire-engine/README.md`.
 
-## Credits
+## Credits and Attribution
 
-Course content, experiments and data: Testing Reality (© 2018–2026, Creative Commons).
-Interactive edition: built with Godot, Rust (godot-rust), Blender and MathJax.
+- **Course content, experiments, and lab data:** Based on the [Testing Reality](https://testing-reality.webflow.io/) initiative by [CUSAC](https://www.cusac.org/) (Center for the Unification of Science and Consciousness), licensed under Creative Commons ([CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)).
+- **Interactive laboratory & visualization:** Built with [Godot Engine](https://godotengine.org/), [Rust](https://www.rust-lang.org/) via [godot-rust](https://godot-rust.github.io/), [Blender](https://www.blender.org/), and [MathJax](https://www.mathjax.org/).
+- **Physics simulation core:** [Quagmire Engine](https://github.com/spinsphere/quagmire-engine) (MIT License).
+
+See [LICENSE](LICENSE) for full licensing terms and attribution details.
